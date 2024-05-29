@@ -1,2 +1,2 @@
-export { ArrowLeft } from "lucide-react";
+export { ArrowLeft, EllipsisVertical } from "lucide-react";
 

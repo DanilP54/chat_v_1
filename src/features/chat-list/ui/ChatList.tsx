@@ -25,8 +25,6 @@ export default function ChatList({ chat }: ChatListProps) {
             </li>
           ))
         }
-
-
       </ul>
     </div>
   )

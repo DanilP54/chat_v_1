@@ -6,6 +6,7 @@ export default function ChatRoom() {
       <header className="w-full">
         <TopBar />
       </header>
+      {/* chat details */}
     </div>
   )
 }

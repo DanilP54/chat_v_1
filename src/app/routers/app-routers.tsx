@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import RootLayout from "../RootLayout"
 import { HomePage } from "@/pages/home";
 import { ChatRoom } from "@/pages/chat-room";
+import { ChatDetails } from "@/pages/chat-details";
 
 export function AppRouters() {
 
@@ -18,10 +19,10 @@ export function AppRouters() {
                     path: 'chat/:id',
                     element: <ChatRoom />
                 },
-                // {
-                //     path: 'userdetails',
-                //     element: <UserDetails />
-                // }
+                {
+                    path: 'chatdetails/:id',
+                    element: <ChatDetails />
+                }
             ]
         },
     ])

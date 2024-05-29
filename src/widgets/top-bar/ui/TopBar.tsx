@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "./icons";
+import { ArrowLeft, EllipsisVertical } from "./icons";
 import { ClientAvatar } from "@/entities/client";
 import PopupMenu from "@/shared/ui/popup-menu";
+import { ChatActionsMenu } from "@/features/chat-actions-menu";
 
 export default function TopBar() {
   return (
@@ -12,7 +13,7 @@ export default function TopBar() {
         </Link>
       </div>
       <div className="flex items-center gap-3 w-full">
-        <Link to="/userdetails" className="flex gap-3 items-center">
+        <Link to="/chatdetails/8e9nx9e38xnn8" state={{ prevId: "8e9nx9e38xnn8" }} className="flex gap-3 items-center">
           <ClientAvatar src="https://api.dicebear.com/8.x/pixel-art/svg?seed=Bandit" />
           <div className="flex flex-col">
             <h3>Danil Putro</h3>
@@ -20,7 +21,10 @@ export default function TopBar() {
           </div>
         </Link>
         <div className="ml-auto">
-          <PopupMenu />
+          <PopupMenu
+            buttonIcon={<EllipsisVertical className='ml-auto w-full' />}
+            items={<ChatActionsMenu />}
+          />
         </div>
       </div>
     </div>
