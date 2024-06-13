@@ -40,8 +40,11 @@ module.exports = {
         boxShadowX: '4px',
         boxShadowY: '4px',
       },
-      minHeight: {
-        fh: "3.5rem"
+      height: {
+        ["base-height"]: "var(--text-box-height)"
+      },
+      padding: {
+        ["base-padding"]: "var(--base-padding)"
       },
       fontWeight: {
         base: '500',

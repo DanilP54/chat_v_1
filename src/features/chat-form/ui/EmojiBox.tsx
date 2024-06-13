@@ -6,15 +6,18 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu'
+import { useFormContext } from "react-hook-form"
+
 
 
 export default function EmojiBox() {
 
- 
+    const { getValues, setValue,  } = useFormContext()
 
     const handleEmojiClick = (e) => {
-       
-        console.log(e)
+        const currentValue = getValues().text || ""
+        console.log(currentValue)
+        setValue("text", currentValue + e.emoji)
     }
 
 
@@ -23,10 +26,11 @@ export default function EmojiBox() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
+                        type="button"
                         variant={"link"}
                         className="rounded-lg p-0 w-10 h-8"
                     >
-                        <Smile />
+                        <Smile size={23} />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="border-none p-0 rounded-lg m-3">
@@ -36,12 +40,9 @@ export default function EmojiBox() {
                         searchDisabled={true}
                         reactions={[]}
                         allowExpandReactions={true}
-                        width={280}
                         height={300}
                         onEmojiClick={handleEmojiClick}
-                        style={{
-                            borderRadius: 0,
-                        }}
+                        className="w-full rounded-none h-80"
                     />
                 </DropdownMenuContent>
             </DropdownMenu>

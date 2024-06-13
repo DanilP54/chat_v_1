@@ -79,11 +79,14 @@
 @layer base {
 
   :root {
-    --padding: 2px
+    --base-padding: 2px;
+    --base-text-size: 1rem;
+    --base-line-height: 1.375;
+    --text-box-height: 56px;
   }
 
   body {
-    @apply w-screen h-svh bg-[#E0E7F1] dark:bg-zinc-900;
+    @apply w-screen text-base h-svh bg-[#E0E7F1] dark:bg-zinc-900;
 
     & #root {
       @apply h-full
@@ -94,5 +97,25 @@
 @layer components {
   .home_header {
     @apply flex justify-between;
+  }
+
+  .text_box {
+    background: transparent;
+    overflow: auto;
+    max-height: 300px;
+    line-height: var(--base-line-height);
+    white-space: pre-wrap;
+    outline: none;
+    height: auto;
+    padding: calc((3.5rem - 1rem * 1.375) / 2) 0;
+    /*padding: calc((var(--text-box-height) - var(--base-text-size) * var(--base-line-height)) / 2) 0;*/
+  }
+  .text_box__placeholder {
+    position: absolute;
+    line-height: var(--base-line-height);
+    top: calc((var(--text-box-height) - var(--base-text-size) * var(--base-line-height)) / 2);
+    color: rgb(107 114 128);
+    pointer-events: none;
+    transition: opacity .2s ease-in-out;
   }
 }

@@ -6,7 +6,7 @@ export default function FileInput() {
     return (
         <>
             <Button onClick={() => document.getElementById('uploud-file')?.click()} variant={'link'} className="rounded-lg p-0 w-10 h-8">
-                <Paperclip size={20} />
+                <Paperclip size={23} />
             </Button>
             <Input type="file" className="hidden" id="uploud-file" />
         </>

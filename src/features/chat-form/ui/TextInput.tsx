@@ -1,39 +1,59 @@
 import { ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
 import { FormSchema } from "../lib/form-schema";
-import { FormEvent } from "react";
+import { FormEvent, useRef } from "react";
+
 
 interface TextInputProps {
     placeholder: string;
     field: ControllerRenderProps<z.infer<typeof FormSchema>, "text">;
 }
 
-export default function TextInput({
-    placeholder,
-    field,
-}: TextInputProps) {
 
-  
+const checkResizeTextBox = (property: string, currentValue: number): void => {
+    try {
+        const main = document.querySelector('#messages');
+        let prevScrollTop;
+        if (main) {
+            prevScrollTop = main.scrollTop;
+        }
+        console.log(prevScrollTop)
+        const propertyValue = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue(`${property}`))
 
-    const handleChangeValue = (e: FormEvent<HTMLDivElement>) => {
-        field.onChange(e.currentTarget.textContent)
-        console.log(e.target.scrollHeight)
+        if (currentValue !== propertyValue) {
+            document.documentElement.style.setProperty('--text-box-height', `${currentValue}px`);
+            if (main) {
+                main.scrollTop = prevScrollTop; 
+            }
+        }
+    } catch (error) {
+        console.log(error)
     }
+}
 
+export default function TextInput({ placeholder, field }: TextInputProps) {
+
+    const textBoxRef = useRef<HTMLDivElement>(null)
+
+    const handleInput = (e: FormEvent<HTMLDivElement>) => {
+
+        checkResizeTextBox("--text-box-height", e.currentTarget.scrollHeight)
+        field.onChange(e.currentTarget.textContent)
+    }
 
     return (
         <div className="h-full relative">
             <div
-                className="bg-transparent caret-gray-800 pl-2 py-5 outline-none h-full text-base absolute top-0 left-0 w-full z-10"
+                ref={textBoxRef}
                 contentEditable={true}
+                className="text_box"
                 tabIndex={0}
                 role="textbox"
                 dir="auto"
-                onInput={handleChangeValue}
-            // {...field}
+                onInput={handleInput}
             ></div>
             <span
-                className={`absolute top-1/2 left-2 -translate-y-1/2 text-gray-500 z-0 pointer-events-none ${field.value ? 'opacity-0' : 'opacity-85'} transition-opacity duration-200 ease-in-out`}
+                className={`text_box__placeholder ${field.value ? 'opacity-0' : 'opacity-85'}`}
             >{placeholder}</span>
         </div>
     )

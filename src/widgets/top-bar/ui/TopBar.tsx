@@ -6,7 +6,7 @@ import { ChatActionsMenu } from "@/features/chat-actions-menu";
 
 export default function TopBar() {
   return (
-    <header>
+    <header className="px-4 py-2 absolute bg-white w-full top-0 left-0">
       <div className="flex items-center gap-7 w-full">
         <div>
           <Link to="/home">
