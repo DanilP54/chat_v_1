@@ -1,5 +1,4 @@
-export { ChatCard } from './ui';
-export type { Chat } from './domain';
+export type { Chat } from './domain/chat';
 
 
 

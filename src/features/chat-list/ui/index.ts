@@ -1,3 +1,3 @@
-import ChatList from './ChatList.tsx'
+import ChatPreviewList from './ChatPreviewList.tsx'
 
-export { ChatList }
+export { ChatPreviewList }

@@ -22,7 +22,7 @@ module.exports = {
       padding: "1rem",
       screens: {
         "3xl": "1440px",
-      },   
+      },
     },
     extend: {
       colors: {
@@ -39,6 +39,9 @@ module.exports = {
       translate: {
         boxShadowX: '4px',
         boxShadowY: '4px',
+      },
+      minHeight: {
+        fh: "3.5rem"
       },
       fontWeight: {
         base: '500',

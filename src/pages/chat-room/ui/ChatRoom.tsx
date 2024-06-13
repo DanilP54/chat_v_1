@@ -1,12 +1,12 @@
+import { ChatContent } from "@/widgets/chat-content";
 import { TopBar } from "@/widgets/top-bar";
 
 export default function ChatRoom() {
   return (
-    <div className="flex items-center p-5 gap-4">
-      <header className="w-full">
-        <TopBar />
-      </header>
-      {/* chat details */}
+    <div className="flex flex-col h-full p-5 gap-2">
+      <TopBar />
+      <ChatContent />
     </div>
   )
 }
+

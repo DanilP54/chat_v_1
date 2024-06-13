@@ -1,24 +1,10 @@
-import { Client } from "@/entities/client";
+import type {Message} from "@/entities/message";
+
 
 export type Chat = {
-    chatId: UniqueId;
-    receiverId: Client.User["id"];
-    avatar: Client.User["avatar"];
-    name: Client.User["name"];
-    lastMessage: string;
-    isSeen: boolean;
+    chatId: string;
+    messages: Message[];
 }
-
-
-
-
-// export type Chat = {
-//     chatId: UniqueId;
-//     receiverId: ClientId;
-//     updateAt: UpdateAt;
-//     isSeen: boolean;
-//     lastMessage: string;
-// }
 
 
 

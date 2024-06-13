@@ -1,11 +1,12 @@
-import {Button} from "@/shared/ui/button";
-import {ArrowLeft} from "lucide-react";
-import {Link, useLocation} from "react-router-dom";
-import {ClientAvatar} from "@/entities/client";
+import { Button } from "@/shared/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { ClientAvatar } from "@/entities/client";
+import { TabsControl } from "@/widgets/tabs-control";
 
 export default function ChatDetails() {
 
-    const {state} = useLocation()
+    const { state } = useLocation()
 
 
     return (
@@ -13,7 +14,7 @@ export default function ChatDetails() {
             <header className="flex flex-col p-4 shrink">
                 <div className="p-2">
                     <Link to={`/chat/${state.prevId}`}>
-                        <ArrowLeft/>
+                        <ArrowLeft />
                     </Link>
                 </div>
                 <div className="flex flex-col justify-center items-center mt-7">
@@ -26,7 +27,7 @@ export default function ChatDetails() {
                 </div>
             </header>
             <main className="flex-1">
-                {/* <UserDetailsAccordeoin /> */}
+                <TabsControl />
             </main>
             <footer className="mb-8 m-auto">
                 <Button variant="noShadow" className='bg-red-500 border-none'>Block User</Button>
