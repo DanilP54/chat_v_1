@@ -4,6 +4,8 @@ import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyDokmSQFKlbID5QzkafWABDlAjAN4lFtiw",
     authDomain: "talkwave-bf8ef.firebaseapp.com",
@@ -19,6 +21,8 @@ const database = getDatabase(app);
 const storage = getStorage(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+
 
 export { auth, database, storage, db }
 

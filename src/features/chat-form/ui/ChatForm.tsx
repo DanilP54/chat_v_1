@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "../lib/form-schema";
 import { z } from "zod";
 
-
 export default function ChatForm() {
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -17,7 +16,7 @@ export default function ChatForm() {
             file: null,
         }
     })
-    console.log(form.watch("text"))
+   
     const onSubmit = (value: z.infer<typeof FormSchema>) => {
         console.log(value)
     }
@@ -27,7 +26,7 @@ export default function ChatForm() {
             <FormProvider {...form}>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className='flex items-center gap-4'>
-                        <div className="flex items-center shadow-amber-950 shadow-2xl h-base-height overflow-hidden gap-2 w-full bg-slate-50 rounded-lg px-1">
+                        <div id={"messages"} className="flex items-center shadow-amber-950 shadow-2xl h-base-height max-h-80 overflow-auto gap-2 w-full bg-slate-50 rounded-lg px-1">
                             <div className="self-end h-[56px] flex items-center justify-center">
                                 <EmojiBox key="emoji" />
                             </div>

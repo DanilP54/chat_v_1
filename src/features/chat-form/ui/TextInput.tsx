@@ -12,19 +12,10 @@ interface TextInputProps {
 
 const checkResizeTextBox = (property: string, currentValue: number): void => {
     try {
-        const main = document.querySelector('#messages');
-        let prevScrollTop;
-        if (main) {
-            prevScrollTop = main.scrollTop;
-        }
-        console.log(prevScrollTop)
         const propertyValue = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue(`${property}`))
 
-        if (currentValue !== propertyValue) {
+        if (currentValue !== propertyValue && currentValue < 300) {
             document.documentElement.style.setProperty('--text-box-height', `${currentValue}px`);
-            if (main) {
-                main.scrollTop = prevScrollTop; 
-            }
         }
     } catch (error) {
         console.log(error)
@@ -36,7 +27,6 @@ export default function TextInput({ placeholder, field }: TextInputProps) {
     const textBoxRef = useRef<HTMLDivElement>(null)
 
     const handleInput = (e: FormEvent<HTMLDivElement>) => {
-
         checkResizeTextBox("--text-box-height", e.currentTarget.scrollHeight)
         field.onChange(e.currentTarget.textContent)
     }
