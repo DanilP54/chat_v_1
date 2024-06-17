@@ -4,15 +4,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 
 // доделать fallback!!!!!!!
 
-export type ClientAvatarProps = {
-    src: ClientAvatar,
+export type UserAvatarProps = {
+    src: UserAvatar,
     className?: string,
 }
 
-export default function ClientAvatar({
+export default function UserAvatar({
     src,
     className,
-}: ClientAvatarProps) {
+}: UserAvatarProps) {
 
     return (
         <>

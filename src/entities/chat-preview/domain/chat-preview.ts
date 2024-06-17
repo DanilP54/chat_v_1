@@ -1,8 +1,7 @@
-import { Client } from '../../client/index';
-
 type Receiver = {
-    name: Client.User["name"];
-    avatar: Client.User["avatar"];
+    firstName: UserFirstName;
+    lastName: UserLastName;
+    avatar: UserAvatar | null;
 }
 
 export type ChatPreview = {
@@ -11,7 +10,3 @@ export type ChatPreview = {
     lastMessage: string;
     isSeen: boolean;
 }
-
-
-
-
