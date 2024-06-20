@@ -3,7 +3,7 @@ import { ChatPreview } from "@/entities/chat-preview";
 export type Viewer = {
     firstName: ViewerFirstName;
     lastName: ViewerLastName;
-    avatar: ViewerAvatar | null;
+    avatar: ViewerAvatar | undefined;
     userchats: ChatPreview[];
     blocked: UserId[];
 }

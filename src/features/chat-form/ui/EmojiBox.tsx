@@ -12,11 +12,11 @@ import { useFormContext } from "react-hook-form"
 
 export default function EmojiBox() {
 
-    const { getValues, setValue,  } = useFormContext()
+    const { getValues, setValue, } = useFormContext()
 
     const handleEmojiClick = (e) => {
         const currentValue = getValues().text || ""
-        console.log(currentValue)
+        console.log(e)
         setValue("text", currentValue + e.emoji)
     }
 

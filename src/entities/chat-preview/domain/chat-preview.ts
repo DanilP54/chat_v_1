@@ -1,12 +1,6 @@
-type Receiver = {
-    firstName: UserFirstName;
-    lastName: UserLastName;
-    avatar: UserAvatar | null;
-}
-
 export type ChatPreview = {
     chatId: string;
-    receiver: Receiver;
+    receiver: ReceiverId;
     lastMessage: string;
     isSeen: boolean;
 }

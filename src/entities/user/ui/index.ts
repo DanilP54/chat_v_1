@@ -1,3 +1,3 @@
-import UserAvatar from "./client-avatar";
+import UserAvatar from "./user-avatar";
 
 export { UserAvatar }

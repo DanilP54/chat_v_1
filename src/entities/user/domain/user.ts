@@ -1,10 +1,5 @@
 export type User = {
-    firstName: UserFirstName; /* change type name */
+    firstName: UserFirstName; 
     lastName: UserLastName;
-    avatar: UserAvatar | null;
+    avatar: UserAvatar | undefined;
 }
-
-export function createNewUser(user: User): User {
-    return user;
-}
-
