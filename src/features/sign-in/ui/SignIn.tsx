@@ -1,8 +1,10 @@
+
 import { auth, db } from "@/shared/config/firebase";
+import { Button } from "@/shared/ui/button";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
-import PhoneInput from "react-phone-input-2";
+import { useEffect, useState } from "react";
+
 import 'react-phone-input-2/lib/style.css'
 
 const codeNumerCountry = {
@@ -19,9 +21,6 @@ const codeNumerCountry = {
     phoneNumberLength: 9,
   }
 };
-
-
-
 
 const registrationUser = async (uid: UserId) => {
   try {
@@ -44,8 +43,6 @@ const registrationUser = async (uid: UserId) => {
 
 export default function SignIn() {
 
-  const [phone, setPhone] = useState('');
-  console.log(phone)
 
 
   const handleAuth = async () => {
@@ -68,25 +65,8 @@ export default function SignIn() {
     }
   }
 
-  return (
-    <div className="w-full h-full flex flex-col justify-center">
-      {/* <div id="recaptcha-container"></div> */}
-      <div>
-        <PhoneInput
-          country={'us'}
-          value={phone}
-          containerStyle={{
-            margin: '20px',
-            height: '50px'
-          }}
-          inputStyle={{
-            backgroundColor: 'transparent',
-            height: '100%',
-          }}
-          onChange={phone => setPhone(phone)}
-        />
-      </div>
 
-    </div>
+  return (
+    <></>
   )
 }
