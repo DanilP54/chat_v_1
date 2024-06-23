@@ -1,17 +1,16 @@
-import { createContext, useContext } from "react";
+import React from "react";
 
 type AuthProviderProps = {
     children: React.ReactNode
-}
+};
 
-
-
-
-
-const AuthContext = createContext({})
+const AuthContext = React.createContext<{} | null>(null);
 
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+    
+    
+    
     const value = {}
 
     return (
@@ -20,9 +19,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         </AuthContext.Provider>
     )
 
-}
+};
 
-export const useAuth = useContext(AuthContext)
+// export const useAuth = useContext(AuthContext);
 
 
 
