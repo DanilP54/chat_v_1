@@ -1,9 +1,14 @@
 import { PhoneNumberInput } from "@/features/phone-number-input";
 import { Button } from "@/shared/ui/button";
+import React, { SetStateAction } from "react";
 
+type Step = 'step-one' | 'step-two';
 
-
-export default function PhoneNumberRegistration() {
+export default function PhoneNumberRegistration({
+  setStep,
+}: {
+  setStep: React.Dispatch<React.SetStateAction<Step>>
+}) {
 
 
   return (
@@ -15,7 +20,7 @@ export default function PhoneNumberRegistration() {
       <div className="flex flex-col items-center gap-5">
         <PhoneNumberInput />
         <div>
-          <Button variant="noShadow">Далее</Button>
+          <Button onClick={() => setStep('step-two')} variant="noShadow">Далее</Button>
         </div>
       </div>
     </div>

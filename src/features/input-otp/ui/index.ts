@@ -1,3 +1,3 @@
-import InputOtp from "./InputOtp" './InputOtp.tsx'
+import InputOtp from "./InputOtp";
 
 export { InputOtp }

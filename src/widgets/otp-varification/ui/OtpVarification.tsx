@@ -2,6 +2,8 @@ import { InputOtp } from "@/features/input-otp";
 import { Button } from "@/shared/ui/button";
 import { formatTime } from "../lib/formatTime";
 
+
+
 export default function OtpVarification() {
   return (
     <div className="w-full h-full flex flex-col items-center gap-10 justify-center">
