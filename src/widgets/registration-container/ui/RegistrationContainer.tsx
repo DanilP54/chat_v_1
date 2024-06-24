@@ -3,10 +3,11 @@ import {
   OTPVarification,
   useRegistrationContext
 } from "@/features/registration";
+import { EntryViewerInfo } from "@/features/registration";
 
 
 export default function RegistrationContainer() {
-  
+
   const { state, dispatch } = useRegistrationContext();
 
   if (state.step === 'step-one') {
@@ -33,7 +34,7 @@ export default function RegistrationContainer() {
   if (state.step === 'step-three') {
     return (
       <div className="h-full">
-        Пусто
+        <EntryViewerInfo />
       </div >
     )
   }
