@@ -3,7 +3,8 @@ import {
   OTPVarification,
   useRegistrationContext
 } from "@/features/registration";
-import { EntryViewerInfo } from "@/features/registration";
+
+import ViewerInfoForm from "./viewer-info-form";
 
 
 export default function RegistrationContainer() {
@@ -34,7 +35,7 @@ export default function RegistrationContainer() {
   if (state.step === 'step-three') {
     return (
       <div className="h-full">
-        <EntryViewerInfo />
+        <ViewerInfoForm />
       </div >
     )
   }
