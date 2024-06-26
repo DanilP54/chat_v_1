@@ -1,4 +1,4 @@
-import { z } from "zod";
+import {  z } from "zod";
 
 
 const fileSchema = z.object({
@@ -15,5 +15,5 @@ const fileSchema = z.object({
 
 export const FormSchema = z.object({
     text: z.string(),
-    file: z.union([z.null(),z.array(fileSchema)]).optional(),
+    file: z.union([z.null(), z.array(fileSchema)]).optional(),
 })

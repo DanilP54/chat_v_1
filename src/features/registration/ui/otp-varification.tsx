@@ -5,7 +5,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/shared/ui/input-otp";
-import { formatTime } from "../lib/halpers/formatTime";
+import { formatTime } from "../lib/formatTime";
 import React, { useEffect, useState } from "react";
 import { Action } from "../model";
 import clsx from "clsx";

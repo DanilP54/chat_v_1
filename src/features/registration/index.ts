@@ -3,7 +3,5 @@ export {
     RegistrationProvider,
     OTPVarification,
     PhoneNumber,
-    UploadAvatar,
-    FirstNameInput,
-    LastNameInput
+    ViewerInfoForm
 } from './ui'

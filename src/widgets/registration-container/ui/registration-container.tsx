@@ -1,10 +1,9 @@
 import {
   PhoneNumber,
   OTPVarification,
-  useRegistrationContext
+  useRegistrationContext,
+  ViewerInfoForm
 } from "@/features/registration";
-
-import ViewerInfoForm from "./viewer-info-form";
 
 
 export default function RegistrationContainer() {

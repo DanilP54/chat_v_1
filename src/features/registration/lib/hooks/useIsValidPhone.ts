@@ -47,7 +47,7 @@ export const useIsValidPhone = () => {
                 isValid: false,
                 error: {
                     title: 'Неверный формат номера',
-                    description: `Номер телефона должен начинаться с ${country.dialCode}`
+                    description: `Номер телефона должен начинаться с +${country.dialCode}`
                 }
             }
             return false
