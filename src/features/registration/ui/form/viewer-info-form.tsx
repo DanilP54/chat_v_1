@@ -2,11 +2,12 @@ import UploadAvatar from "./upload-avatar";
 import FirstNameInput from "./first-name-input";
 import LastNameInput from "./last-name-input";
 import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Form, FormControl, FormField, FormItem } from "@/shared/ui/form";
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { ViewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
+import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
+import { useToast } from "@/shared/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -15,8 +16,10 @@ import { ViewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
 
 export default function ViewerInfoForm() {
 
-    const form = useForm<z.infer<typeof ViewerInfoSchema>>({
-        resolver: zodResolver(ViewerInfoSchema),
+    const { toast } = useToast()
+    const navigate = useNavigate()
+
+    const form = useForm<z.infer<typeof viewerInfoSchema>>({
         defaultValues: {
             firstname: "",
             lastname: "",
@@ -25,9 +28,21 @@ export default function ViewerInfoForm() {
         mode: "onSubmit",
     })
 
-    function onSubmit(values: z.infer<typeof ViewerInfoSchema>) {
-        const result = ViewerInfoSchema.safeParse(values)
-        console.log(result)
+    function onSubmit(values: z.infer<typeof viewerInfoSchema>) {
+
+        const { success, error } = viewerInfoSchema.safeParse(values)
+
+        if (success) {
+            navigate('/home')
+        }
+
+        if (error) {
+            console.log(error.formErrors)
+            toast({
+                title: 'Ошибка',
+                description: 'Возникла ошибка некая'
+            })
+        }
         console.log(values)
     }
 
