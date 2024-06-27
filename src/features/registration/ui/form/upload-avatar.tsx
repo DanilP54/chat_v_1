@@ -15,8 +15,7 @@ const defaultAvatar: string = 'https://api.dicebear.com/9.x/avataaars-neutral/sv
 export default function UploadAvatar({ field }: UploadAvatarProps) {
 
     const [uploadedAvatar, setUploadedAvatar] = useState<string>(defaultAvatar)
-    console.log(uploadedAvatar)
-    console.log(field.value)
+    
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         field.onChange(file)

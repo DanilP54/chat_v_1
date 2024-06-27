@@ -32,7 +32,7 @@ export default function ViewerInfoForm() {
     })
 
     function onSubmit(values: z.infer<typeof viewerInfoSchema>) {
-        console.log(values)
+
         const isValid = viewerInfoSchema.safeParse(values)
 
         if (isValid.success) {
@@ -40,11 +40,12 @@ export default function ViewerInfoForm() {
         }
 
         if (isValid.error) {
-            console.log(isValid.error.formErrors)
+            const messages = isValid.error.issues
+
             toast({
                 title: 'Невалидное имя',
                 variant: 'destructive',
-                description: isValid.error.formErrors.fieldErrors.firstname?.join(', \n'),
+                description: messages.map(issue => issue.message).join(', ')
             })
         }
     }
