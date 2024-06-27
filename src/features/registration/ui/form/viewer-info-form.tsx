@@ -30,20 +30,20 @@ export default function ViewerInfoForm() {
 
     function onSubmit(values: z.infer<typeof viewerInfoSchema>) {
 
-        const { success, error } = viewerInfoSchema.safeParse(values)
+        const isValid = viewerInfoSchema.safeParse(values)
 
-        if (success) {
+        if (isValid.success) {
             navigate('/home')
         }
 
-        if (error) {
-            console.log(error.formErrors)
+        if (isValid.error) {
+            console.log(isValid.error.formErrors)
             toast({
-                title: 'Ошибка',
-                description: 'Возникла ошибка некая'
+                title: 'Невалидное имя',
+                variant: 'destructive',
+                description: isValid.error.formErrors.fieldErrors.firstname?.join(', \n'),
             })
         }
-        console.log(values)
     }
 
 
@@ -86,7 +86,7 @@ export default function ViewerInfoForm() {
                     />
                 </div>
                 <div>
-                    <Button type="submit">Завершить регистрацию</Button>
+                    <Button variant="noShadow" className="bg-emerald-700" type="submit">Завершить регистрацию</Button>
                 </div>
             </form>
         </Form >

@@ -27,7 +27,7 @@ export default function OTPVarification({
       setTimer(t => t - 1)
     }, 1000)
     return () => {
-      clearTimeout(id)
+      clearInterval(id)
     }
   }, [timer])
 
@@ -42,9 +42,9 @@ export default function OTPVarification({
   return (
     <div className="w-full h-full flex flex-col items-center gap-10 justify-center">
       <div className="flex flex-col items-center gap-2">
-        <h2 className=" font-thin text-lg">Активация учётная записи</h2>
+        <h2 className=" font-thin text-lg text-gray-400">Активация учётная записи</h2>
         <span
-          className={clsx('text-gray-900 font-thin', timer < 11 && 'text-red-500 font-bold')}
+          className={clsx('text-yellow-600 font-thin', timer < 11 && 'text-red-900 font-bold')}
         >{formatTime(timer)}</span>
       </div>
       <div className="flex flex-col items-center gap-8">
@@ -61,7 +61,7 @@ export default function OTPVarification({
             <InputOTPSlot index={5} />
           </InputOTPGroup>
         </InputOtpBox>
-        <Button disabled={otp.length < 6} onClick={handleClick} variant="default" className="bg-yellow-100">Активировать</Button>
+        <Button disabled={otp.length < 6} onClick={handleClick} variant="default" className="bg-emerald-700">Активировать</Button>
       </div>
     </div>
 

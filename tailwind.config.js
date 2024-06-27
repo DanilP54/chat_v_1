@@ -30,6 +30,12 @@ module.exports = {
         main: '#c4a1ff',
         mainAccent: '#9e66ff', // not needed for shadcn
       },
+      backgroundColor: {
+        destructive: 'hsl(var(--destructive))'
+      },
+      textColor: {
+        'destructive-foreground': 'hsl(var(--destructive-foreground))'
+      },
       borderRadius: {
         base: '5px'
       },

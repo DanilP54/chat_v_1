@@ -34,7 +34,7 @@ export default function UploadAvatar({ field }: UploadAvatarProps) {
                     onClick={() => document.getElementById('avatar')?.click()}
                     type="button"
                     variant="neutral"
-                    className="bg-transparent hover:bg-gray-300 border border-black p-4text-white rounded-md text-sm"
+                    className="bg-gray-300 hover:bg-gray-400 border border-black px-4 py-[3px] h-8 text-black rounded-md text-sm"
                 >Загрузить фото</Button>
                 <input
                     id="avatar"

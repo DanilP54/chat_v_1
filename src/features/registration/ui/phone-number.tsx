@@ -58,9 +58,16 @@ export default function PhoneNumberInput({
               const result = checkValidPhone(inputNumber, country)
               return result
             }}
+            containerStyle={{
+              backgroundColor: 'transparent'
+            }}
+            inputStyle={{
+              backgroundColor: 'transparent',
+              color: 'white'
+            }}
           />
           <div>
-            <Button onClick={handleClick} variant="noShadow">Далее</Button>
+            <Button className="bg-emerald-700" onClick={handleClick} variant="noShadow">Далее</Button>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Providers>
             <AppRouters />
-            <Toaster />
+            <Toaster  />
         </Providers>
     </React.StrictMode>,
 )
