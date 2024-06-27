@@ -1,13 +1,14 @@
 import { Button } from "@/shared/ui/button";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
-import { Action } from "../model";
+import { Action as ActionType, setPhoneNumber } from "../model";
 import { useToast } from "@/shared/ui/use-toast";
 import { useIsValidPhone } from "../lib/hooks/useIsValidPhone";
 
+
 type PhoneNumberProps = {
   phone: string,
-  dispatch: React.Dispatch<Action>
+  dispatch: React.Dispatch<ActionType>
 }
 
 export default function PhoneNumberInput({
@@ -20,7 +21,7 @@ export default function PhoneNumberInput({
   const { isValid, error, checkValidPhone } = useIsValidPhone()
 
   const handleChangePhone = (value: string) => {
-    dispatch({ type: 'SET_PHONE_NUMBER', payload: value })
+    dispatch(setPhoneNumber(value))
   }
 
   const handleClick = () => {

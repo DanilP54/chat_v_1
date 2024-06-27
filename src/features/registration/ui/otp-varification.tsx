@@ -7,11 +7,11 @@ import {
 } from "@/shared/ui/input-otp";
 import { formatTime } from "../lib/formatTime";
 import React, { useEffect, useState } from "react";
-import { Action } from "../model";
+import { Action as ActionType, nextStep } from "../model";
 import clsx from "clsx";
 
 type OTPVarificationProps = {
-  dispatch: React.Dispatch<Action>
+  dispatch: React.Dispatch<ActionType>
 }
 
 export default function OTPVarification({
@@ -31,8 +31,8 @@ export default function OTPVarification({
     }
   }, [timer])
 
-  const handleClick = () => {
-    dispatch({ type: 'NEXT_STEP' })
+  const handleNextStep = () => {
+    dispatch(nextStep())
   }
 
   const handleChangeOtp = (value: string) => {
@@ -61,7 +61,7 @@ export default function OTPVarification({
             <InputOTPSlot index={5} />
           </InputOTPGroup>
         </InputOtpBox>
-        <Button disabled={otp.length < 6} onClick={handleClick} variant="default" className="bg-emerald-700">Активировать</Button>
+        <Button disabled={otp.length < 6} onClick={handleNextStep} variant="default" className="bg-emerald-700">Активировать</Button>
       </div>
     </div>
 

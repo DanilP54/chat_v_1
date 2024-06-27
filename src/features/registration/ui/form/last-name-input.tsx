@@ -8,5 +8,5 @@ type LastNameInputProps = {
 }
 
 export default function LastNameInput({ field }: LastNameInputProps) {
-    return <Input className="bg-transparent outline-none rounded-none border-l-0 border-r-0 border-t-0 border-b-2" type="text" {...field} placeholder="Введите фамилию" />
+    return <Input className="bg-transparent outline-none rounded-none border-l-0 border-r-0 text-white placeholder:text-gray-300 border-t-0 border-b-2" type="text" {...field} placeholder="Введите фамилию" />
 }

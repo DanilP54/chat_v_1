@@ -8,6 +8,7 @@ import { z } from "zod"
 import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
 import { useToast } from "@/shared/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 
@@ -19,6 +20,8 @@ export default function ViewerInfoForm() {
     const { toast } = useToast()
     const navigate = useNavigate()
 
+    const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null)
+
     const form = useForm<z.infer<typeof viewerInfoSchema>>({
         defaultValues: {
             firstname: "",
@@ -29,11 +32,11 @@ export default function ViewerInfoForm() {
     })
 
     function onSubmit(values: z.infer<typeof viewerInfoSchema>) {
-
+        console.log(values)
         const isValid = viewerInfoSchema.safeParse(values)
 
         if (isValid.success) {
-            navigate('/home')
+            // navigate('/home')
         }
 
         if (isValid.error) {
@@ -86,7 +89,7 @@ export default function ViewerInfoForm() {
                     />
                 </div>
                 <div>
-                    <Button variant="noShadow" className="bg-emerald-700" type="submit">Завершить регистрацию</Button>
+                    <Button variant="default" className="bg-emerald-700" type="submit">Завершить регистрацию</Button>
                 </div>
             </form>
         </Form >

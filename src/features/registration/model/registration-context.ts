@@ -1,26 +1,6 @@
 import { Dispatch, createContext, useContext } from "react";
-
-type User = {
-    avatar: string,
-    firstName: string,
-    lastName: string,
-}
-
-export type Status = 'pending' | 'success' | 'error' | 'idle'
-
-type State = {
-    phoneNumber: string,
-    status: Status,
-    user: User | undefined,
-    step: 'step-one' | 'step-two' | 'step-three'
-}
-
-export type Action =
-    { type: 'NEXT_STEP' } |
-    { type: 'SET_PHONE_NUMBER', payload: string } |
-    { type: 'SET_USER', payload: User } |
-    { type: 'SET_STATUS', payload: Status }
-
+import type { State } from "./types";
+import type { Action } from "./actions";
 
 export const INITIAL_STATE: State = {
     phoneNumber: '',
