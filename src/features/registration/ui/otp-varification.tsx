@@ -9,6 +9,7 @@ import { formatTime } from "../lib/formatTime";
 import React, { useEffect, useState } from "react";
 import { Action as ActionType, nextStep } from "../model";
 import clsx from "clsx";
+import { sendOtp } from "../api";
 
 type OTPVarificationProps = {
   dispatch: React.Dispatch<ActionType>
@@ -31,8 +32,13 @@ export default function OTPVarification({
     }
   }, [timer])
 
-  const handleNextStep = () => {
-    dispatch(nextStep())
+  const handleNextStep = async () => {
+    const result = await sendOtp(otp)
+    if (result) {
+      console.log(result)
+      dispatch(nextStep())
+    }
+
   }
 
   const handleChangeOtp = (value: string) => {

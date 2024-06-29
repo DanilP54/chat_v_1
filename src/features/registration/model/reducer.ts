@@ -1,4 +1,3 @@
-import { Dispatch, createContext, useContext } from "react";
 import type { State } from "./types";
 import type { Action } from "./actions";
 
@@ -24,17 +23,4 @@ export function reducer(state: State, action: Action): State {
         default:
             return state;
     }
-}
-
-export const RegistrationContext = createContext<{ state: State, dispatch: Dispatch<Action> } | undefined>(undefined)
-
-
-export const useRegistrationContext = () => {
-    const context = useContext(RegistrationContext)
-
-    if (!context) {
-        throw new Error('useRegistrationContext must be used within a RegistrationProvider')
-    }
-
-    return context
 }

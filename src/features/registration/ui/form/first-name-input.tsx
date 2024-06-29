@@ -14,4 +14,4 @@ export default function FirstNameInput({ field }: FirstNameInputProps) {
         {...field}
         placeholder="Введите имя"
     />
-}
+};

@@ -4,6 +4,7 @@ import 'react-phone-input-2/lib/bootstrap.css';
 import { Action as ActionType, setPhoneNumber } from "../model";
 import { useToast } from "@/shared/ui/use-toast";
 import { useIsValidPhone } from "../lib/hooks/useIsValidPhone";
+import { anyFn } from "../api";
 
 
 type PhoneNumberProps = {
@@ -24,15 +25,19 @@ export default function PhoneNumberInput({
     dispatch(setPhoneNumber(value))
   }
 
-  const handleClick = () => {
-    if (isValid) {
-      dispatch({ type: 'NEXT_STEP' })
-    } else {
-      toast({
+  const handleClick = async () => {
+    if (!isValid) {
+      return toast({
         variant: 'destructive',
         title: error.title,
         description: error.description
       })
+    }
+    const p = '+' + phone
+    console.log(p)
+    const response = await anyFn(p)
+    if (response) {
+      dispatch({ type: 'NEXT_STEP' })
     }
   }
 
@@ -40,6 +45,7 @@ export default function PhoneNumberInput({
   return (
     <>
       <div className="w-full h-full flex flex-col items-center gap-10 justify-center">
+        {/* <div id="recaptcha-container" className="w-full h-full"></div> */}
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-lg">Введите свой номер телефона</h2>
           <p className="text-sm w-56 text-center text-gray-700">Проверьте, что этот номер может SMS - мы используем их для отправки кода активации</p>
@@ -68,7 +74,7 @@ export default function PhoneNumberInput({
             }}
           />
           <div>
-            <Button className="bg-emerald-700" onClick={handleClick} variant="noShadow">Далее</Button>
+            <Button id="send-phone-number" className="bg-emerald-700" onClick={handleClick} variant="noShadow">Далее</Button>
           </div>
         </div>
       </div>

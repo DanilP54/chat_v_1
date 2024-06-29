@@ -19,7 +19,7 @@ export default function RegistrationContainer() {
         />
       </div>
     )
-  }
+  };
 
   if (state.step === 'step-two') {
     return (
@@ -29,7 +29,7 @@ export default function RegistrationContainer() {
         />
       </div>
     )
-  }
+  };
 
   if (state.step === 'step-three') {
     return (
@@ -37,5 +37,5 @@ export default function RegistrationContainer() {
         <ViewerInfoForm />
       </div >
     )
-  }
+  };
 }

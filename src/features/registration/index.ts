@@ -1,7 +1,7 @@
-export { useRegistrationContext } from './model'
 export {
     RegistrationProvider,
     OTPVarification,
     PhoneNumber,
-    ViewerInfoForm
+    ViewerInfoForm,
+    useRegistrationContext
 } from './ui'

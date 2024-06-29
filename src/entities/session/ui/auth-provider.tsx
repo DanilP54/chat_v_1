@@ -1,7 +1,5 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Viewer } from "../../viewer/domain/viewer"
+import { Viewer } from "../../viewer/domain/viewer";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext<Viewer | null>(null)
 
@@ -11,22 +9,16 @@ export const useAuth = () => {
 
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-    const auth = getAuth()
-    const navigation = useNavigate()
+
     const [currentViewer, setCurrentViewer] = useState<Viewer | null>(null)
 
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log(user)
-                return
-            }
-            navigation('/signin')
-        })
+        // запрос на сервер для получения данных о текущем пользователe
+
+        
+
     }, [])
-
-
 
     const value = currentViewer
 

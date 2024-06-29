@@ -29,8 +29,9 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
-, "src/shared/ui/popup-menu.tsx"  ],
+    "src",
+    "src/shared/ui/popup-menu.tsx",
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

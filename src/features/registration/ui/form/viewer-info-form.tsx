@@ -36,10 +36,11 @@ export default function ViewerInfoForm() {
         const isValid = viewerInfoSchema.safeParse(values)
 
         if (isValid.success) {
-            // navigate('/home')
+            navigate('/home')
         }
 
         if (isValid.error) {
+
             const messages = isValid.error.issues
 
             toast({
