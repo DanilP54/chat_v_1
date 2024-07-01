@@ -2,7 +2,6 @@ import { Button } from "@/shared/ui/button";
 import {
   InputOTP as InputOtpBox,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/shared/ui/input-otp";
 import { formatTime } from "../lib/formatTime";
@@ -10,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { confirmPhone } from "../api/requests";
 import { ActionCreators, Actions } from "@/shared/types";
+import { toast } from "@/shared/ui/use-toast";
 
 type OTPVarificationProps = {
   dispatch: React.Dispatch<Actions>
@@ -17,15 +17,19 @@ type OTPVarificationProps = {
   isPending: boolean
 }
 
+const DEFAULT_TIME = 60
+const MAX_LENGTH_OTP = 6
+
+
 export default function OTPVarification({
   dispatch,
   actions,
   isPending
 }: OTPVarificationProps) {
 
-  const [timer, setTimer] = useState(10)
+  const [timer, setTimer] = useState(DEFAULT_TIME)
   const [otp, setOtp] = useState('')
-
+  console.log(timer)
   useEffect(() => {
     if (!timer) return
     const id = setInterval(() => {
@@ -38,7 +42,12 @@ export default function OTPVarification({
 
   const handleNextStep = async () => {
     const res = await confirmPhone(otp)
-    console.log(res?.user.uid)
+    if (res) {
+      const { user } = res
+      dispatch(actions.setUserId(user.uid))
+      dispatch(actions.nextStep())
+    }
+
   }
 
   const handlePrevStep = () => {
@@ -60,25 +69,23 @@ export default function OTPVarification({
       <div className="flex flex-col items-center gap-2">
         <h2 className=" font-thin text-lg text-gray-400">Активация учётная записи</h2>
         <span
-          className={clsx('text-yellow-600 font-thin', timer < 11 && 'text-red-900 font-bold')}
+          className={clsx('text-blue-600 font-thin', timer < 11 && 'text-red-900 font-bold')}
         >{formatTime(timer)}</span>
         {timer === 0 && <span onClick={handlePrevStep}>Время истекло, повторить попытку</span>}
       </div>
       <div className="flex flex-col items-center gap-8">
-        <InputOtpBox value={otp} onChange={handleChangeOtp} maxLength={6}>
+        <InputOtpBox value={otp} onChange={handleChangeOtp} maxLength={MAX_LENGTH_OTP}>
           <InputOTPGroup>
-            <InputOTPSlot index={0} />
-            <InputOTPSlot index={1} />
-            <InputOTPSlot index={2} />
-          </InputOTPGroup>
-          <InputOTPSeparator />
-          <InputOTPGroup>
-            <InputOTPSlot index={3} />
-            <InputOTPSlot index={4} />
-            <InputOTPSlot index={5} />
+            {
+              Array.from({ length: MAX_LENGTH_OTP }, (_, index) => (
+                <InputOTPSlot key={index} index={index} />
+              ))
+            }
           </InputOTPGroup>
         </InputOtpBox>
-        <Button disabled={otp.length < 6} onClick={handleNextStep} variant="default" className="bg-emerald-700">Активировать</Button>
+        <Button
+          disabled={otp.length < MAX_LENGTH_OTP}
+          onClick={handleNextStep} variant="default" className="bg-emerald-700">Активировать</Button>
       </div>
     </div>
 

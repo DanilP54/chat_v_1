@@ -1,6 +1,7 @@
 import { ChatPreview } from "@/entities/chat-preview";
 
 export type Viewer = {
+    uid: UniqueId
     firstName: ViewerFirstName;
     lastName: ViewerLastName;
     avatar: ViewerAvatar | undefined;

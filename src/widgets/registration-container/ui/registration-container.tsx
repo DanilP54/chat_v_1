@@ -5,22 +5,26 @@ import {
 } from "@/features/registration";
 import { useReducer } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
-import { NEXT_STEP, SET_STATUS } from "@/shared/constants/action-types";
+import { NEXT_STEP, SET_STATUS, SET_USER_ID } from "@/shared/constants/action-types";
 
 export type State = {
   isPending: boolean,
-  step: 'step-one' | 'step-two' | 'step-three'
+  step: 'step-one' | 'step-two' | 'step-three',
+  userId: UniqueId | null
 };
 
 export const INITIAL_STATE: State = {
   isPending: false,
-  step: 'step-one'
+  step: 'step-one',
+  userId: null
 }
 
 const actions: ActionCreators = {
   nextStep: () => ({ type: NEXT_STEP }),
   setStatus: (status) => ({ type: SET_STATUS, payload: status }),
+  setUserId: (userId) => ({ type: SET_USER_ID, payload: userId })
 }
+
 
 export function reducer(state: State, action: Actions): State {
   switch (action.type) {
@@ -30,6 +34,8 @@ export function reducer(state: State, action: Actions): State {
       return state;
     case SET_STATUS:
       return { ...state, isPending: action.payload }
+    case SET_USER_ID:
+      return { ...state, userId: action.payload }
     default:
       throw new Error(`Unhandled action type: ${(action as { type: string }).type}`);
   }
@@ -38,13 +44,13 @@ export function reducer(state: State, action: Actions): State {
 
 export default function RegistrationContainer() {
 
-  const [{ step, isPending }, dispatch] = useReducer(reducer, INITIAL_STATE)
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
-  if (step === 'step-one') {
+  if (state.step === 'step-one') {
     return (
       <div className="h-full">
         <PhoneNumber
-          isPending={isPending}
+          isPending={state.isPending}
           dispatch={dispatch}
           actions={actions}
         />
@@ -52,22 +58,25 @@ export default function RegistrationContainer() {
     )
   };
 
-  if (step === 'step-two') {
+  if (state.step === 'step-two') {
     return (
       <div className="h-full">
         <OTPVarification
           dispatch={dispatch}
           actions={actions}
-          isPending={isPending}
+          isPending={state.isPending}
         />
       </div>
     )
   };
 
-  if (step === 'step-three') {
+  if (state.step === 'step-three') {
     return (
       <div className="h-full">
-        <ViewerInfoForm />
+        <ViewerInfoForm
+          dispatch={dispatch}
+          actions={actions}
+        />
       </div >
     )
   };

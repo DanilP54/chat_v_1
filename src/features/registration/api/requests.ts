@@ -11,12 +11,10 @@ declare global {
 
 auth.settings.appVerificationDisabledForTesting = true;
 
-
-
 const signInWithPhone = async (phone: string) => {
     try {
 
-        const formatPhone = `+${phone}`
+        const formatedPhone = `+${phone}`
 
         window.recaptchaVerifier = new RecaptchaVerifier(auth, 'send-phone-number', {
             size: 'invisible'
@@ -24,7 +22,7 @@ const signInWithPhone = async (phone: string) => {
 
         const appVerifier = window.recaptchaVerifier
 
-        const confirmationResult = await signInWithPhoneNumber(auth, formatPhone, appVerifier)
+        const confirmationResult = await signInWithPhoneNumber(auth, formatedPhone, appVerifier)
 
         if (confirmationResult) {
             window.confirmationResult = confirmationResult;
@@ -40,7 +38,7 @@ const signInWithPhone = async (phone: string) => {
 const confirmPhone = async (code: string) => {
     try {
         const confirm = await window.confirmationResult.confirm(code)
-        
+
         if (confirm) {
             return confirm
         }

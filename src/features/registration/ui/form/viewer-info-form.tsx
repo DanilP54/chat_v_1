@@ -8,14 +8,17 @@ import { z } from "zod"
 import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
 import { useToast } from "@/shared/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import { ActionCreators, Actions } from "@/shared/types";
 
 
+type ViewerInfoFormProps = {
+    dispatch: React.Dispatch<Actions>
+    actions: ActionCreators
+}
 
 
-
-
-export default function ViewerInfoForm() {
+export default function ViewerInfoForm({ dispatch, actions }: ViewerInfoFormProps) {
 
     const { toast } = useToast()
     const navigate = useNavigate()
@@ -40,9 +43,7 @@ export default function ViewerInfoForm() {
         }
 
         if (isValid.error) {
-
             const messages = isValid.error.issues
-
             toast({
                 title: 'Невалидное имя',
                 variant: 'destructive',

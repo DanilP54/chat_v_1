@@ -13,9 +13,6 @@ import 'react-phone-input-2/lib/bootstrap.css';
 import { DotLoader } from 'react-spinners'
 import { ActionCreators, Actions } from "@/shared/types";
 
-
-
-
 type PhoneNumberInputProps = {
   isPending: boolean,
   dispatch: React.Dispatch<Actions>
@@ -28,22 +25,27 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
 
   const [phone, setPhone] = useState('')
   const { isValid, error, checkValidPhone } = useValidationPhone()
-  // const { signIn } = useUserAuthentication(dispatch, actions.setStatus)
 
 
   const submitPhoneNumber = async () => {
     if (!isValid) {
-      toast({
+      return toast({
         variant: 'destructive',
         title: error.title,
         description: error.description
       })
-      return
     }
 
     const res = await signInWithPhone(phone)
 
-    console.log(res)
+    if (!res) {
+      return toast({
+        variant: 'destructive',
+        title: 'Ошибка',
+        description: 'Возникла ошибка при регистрации номера'
+      })
+    }
+
     dispatch(actions.nextStep())
   }
 
