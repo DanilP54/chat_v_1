@@ -1,51 +1,59 @@
+import React, { useState } from "react";
+// shared
 import { Button } from "@/shared/ui/button";
+import { useToast } from "@/shared/ui/use-toast";
+// model
+// hooks
+import { useValidationPhone } from "../lib/hooks/useValidationPhone";
+import { formatPhone } from "../lib/formatPhone";
+// api
+import { signInWithPhone, useUserAuthentication } from "../api";
+// lib
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
-import { Action as ActionType, setPhoneNumber } from "../model";
-import { useToast } from "@/shared/ui/use-toast";
-import { useIsValidPhone } from "../lib/hooks/useIsValidPhone";
-import { anyFn } from "../api";
+import { DotLoader } from 'react-spinners'
+import { ActionCreators, Actions } from "@/shared/types";
 
 
-type PhoneNumberProps = {
-  phone: string,
-  dispatch: React.Dispatch<ActionType>
+
+
+type PhoneNumberInputProps = {
+  isPending: boolean,
+  dispatch: React.Dispatch<Actions>
+  actions: ActionCreators
 }
 
-export default function PhoneNumberInput({
-  phone,
-  dispatch
-}: PhoneNumberProps) {
+export default function PhoneNumberInput({ actions, dispatch, isPending }: PhoneNumberInputProps) {
 
   const { toast } = useToast()
 
-  const { isValid, error, checkValidPhone } = useIsValidPhone()
+  const [phone, setPhone] = useState('')
+  const { isValid, error, checkValidPhone } = useValidationPhone()
+  // const { signIn } = useUserAuthentication(dispatch, actions.setStatus)
 
-  const handleChangePhone = (value: string) => {
-    dispatch(setPhoneNumber(value))
-  }
 
-  const handleClick = async () => {
+  const submitPhoneNumber = async () => {
     if (!isValid) {
-      return toast({
+      toast({
         variant: 'destructive',
         title: error.title,
         description: error.description
-      })
-    }
-    const p = '+' + phone
-    console.log(p)
-    const response = await anyFn(p)
-    if (response) {
-      dispatch({ type: 'NEXT_STEP' })
+       })
+      return
     }
   }
 
+  if (isPending) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <DotLoader color="hsla(239, 100%, 35%, 1)" />
+      </div>
+    )
+  }
 
   return (
     <>
       <div className="w-full h-full flex flex-col items-center gap-10 justify-center">
-        {/* <div id="recaptcha-container" className="w-full h-full"></div> */}
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-lg">Введите свой номер телефона</h2>
           <p className="text-sm w-56 text-center text-gray-700">Проверьте, что этот номер может SMS - мы используем их для отправки кода активации</p>
@@ -60,7 +68,7 @@ export default function PhoneNumberInput({
             country={'ru'}
             regions={'europe'}
             value={phone}
-            onChange={handleChangePhone}
+            onChange={(value) => setPhone(value)}
             isValid={(inputNumber, country) => {
               const result = checkValidPhone(inputNumber, country)
               return result
@@ -74,7 +82,7 @@ export default function PhoneNumberInput({
             }}
           />
           <div>
-            <Button id="send-phone-number" className="bg-emerald-700" onClick={handleClick} variant="noShadow">Далее</Button>
+            <Button id="send-phone-number" className="bg-emerald-700" onClick={submitPhoneNumber} variant="noShadow">Далее</Button>
           </div>
         </div>
       </div>

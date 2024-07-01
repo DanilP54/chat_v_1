@@ -7,11 +7,15 @@
     @apply box-border;
   }
 
+  /*html {*/
+  /*  @apply flex justify-center*/
+  /*}*/
+
   body {
-    @apply  w-screen text-base h-svh bg-[#E0E7F1] dark:bg-zinc-900;
+    @apply max-w-[1800px] m-auto text-base h-svh bg-[#E0E7F1] dark:bg-zinc-900;
 
     & #root {
-      @apply h-full
+      @apply h-full w-full
     }
   }
 

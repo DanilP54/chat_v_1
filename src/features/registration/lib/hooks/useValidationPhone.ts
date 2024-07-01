@@ -10,7 +10,7 @@ type ValidationStatusType = {
     error: Error
 }
 
-export const useIsValidPhone = () => {
+export const useValidationPhone = () => {
 
     const validationStatus = useRef<ValidationStatusType>({ isValid: false, error: { title: 'Неверный формат номера', description: 'Введите номер телефона' } })
 

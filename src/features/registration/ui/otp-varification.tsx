@@ -7,19 +7,25 @@ import {
 } from "@/shared/ui/input-otp";
 import { formatTime } from "../lib/formatTime";
 import React, { useEffect, useState } from "react";
-import { Action as ActionType, nextStep } from "../model";
 import clsx from "clsx";
 import { sendOtp } from "../api";
+import { ActionCreators, Actions } from "@/shared/types";
+import { Link } from "react-router-dom";
+import { spawn } from "child_process";
 
 type OTPVarificationProps = {
-  dispatch: React.Dispatch<ActionType>
+  dispatch: React.Dispatch<Actions>
+  actions: ActionCreators
+  isPending: boolean
 }
 
 export default function OTPVarification({
   dispatch,
+  actions,
+  isPending
 }: OTPVarificationProps) {
 
-  const [timer, setTimer] = useState(60)
+  const [timer, setTimer] = useState(10)
   const [otp, setOtp] = useState('')
 
   useEffect(() => {
@@ -36,13 +42,22 @@ export default function OTPVarification({
     const result = await sendOtp(otp)
     if (result) {
       console.log(result)
-      dispatch(nextStep())
+      dispatch(actions.nextStep())
     }
+  }
 
+  const handlePrevStep = () => {
+    // dispatch()
   }
 
   const handleChangeOtp = (value: string) => {
     setOtp(value)
+  }
+
+  if (isPending) {
+    return (
+      <div></div>
+    )
   }
 
   return (
@@ -52,6 +67,7 @@ export default function OTPVarification({
         <span
           className={clsx('text-yellow-600 font-thin', timer < 11 && 'text-red-900 font-bold')}
         >{formatTime(timer)}</span>
+        {timer === 0 && <span onClick={handlePrevStep}>Время истекло, повторить попытку</span>}
       </div>
       <div className="flex flex-col items-center gap-8">
         <InputOtpBox value={otp} onChange={handleChangeOtp} maxLength={6}>
