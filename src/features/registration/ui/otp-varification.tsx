@@ -8,10 +8,8 @@ import {
 import { formatTime } from "../lib/formatTime";
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { sendOtp } from "../api";
+import { confirmPhone } from "../api/requests";
 import { ActionCreators, Actions } from "@/shared/types";
-import { Link } from "react-router-dom";
-import { spawn } from "child_process";
 
 type OTPVarificationProps = {
   dispatch: React.Dispatch<Actions>
@@ -39,11 +37,8 @@ export default function OTPVarification({
   }, [timer])
 
   const handleNextStep = async () => {
-    const result = await sendOtp(otp)
-    if (result) {
-      console.log(result)
-      dispatch(actions.nextStep())
-    }
+    const res = await confirmPhone(otp)
+    console.log(res?.user.uid)
   }
 
   const handlePrevStep = () => {

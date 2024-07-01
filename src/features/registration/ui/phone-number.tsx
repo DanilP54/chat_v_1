@@ -5,9 +5,8 @@ import { useToast } from "@/shared/ui/use-toast";
 // model
 // hooks
 import { useValidationPhone } from "../lib/hooks/useValidationPhone";
-import { formatPhone } from "../lib/formatPhone";
 // api
-import { signInWithPhone, useUserAuthentication } from "../api";
+import { signInWithPhone } from "../api/requests";
 // lib
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
@@ -38,9 +37,14 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
         variant: 'destructive',
         title: error.title,
         description: error.description
-       })
+      })
       return
     }
+
+    const res = await signInWithPhone(phone)
+
+    console.log(res)
+    dispatch(actions.nextStep())
   }
 
   if (isPending) {
