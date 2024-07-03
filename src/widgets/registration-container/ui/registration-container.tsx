@@ -5,24 +5,29 @@ import {
 } from "@/features/registration";
 import { useReducer } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
-import { NEXT_STEP, SET_STATUS, SET_USER_ID } from "@/shared/constants/action-types";
+import { NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL, SET_USER_ID } from "@/shared/constants/action-types";
+
+type TempUserCedential = {
+  userId: UniqueId,
+  phone: string | null,
+}
 
 export type State = {
   isPending: boolean,
   step: 'step-one' | 'step-two' | 'step-three',
-  userId: UniqueId | null
+  tempUserCedential: TempUserCedential | null
 };
 
 export const INITIAL_STATE: State = {
   isPending: false,
   step: 'step-one',
-  userId: null
+  tempUserCedential: null,
 }
 
 const actions: ActionCreators = {
   nextStep: () => ({ type: NEXT_STEP }),
   setStatus: (status) => ({ type: SET_STATUS, payload: status }),
-  setUserId: (userId) => ({ type: SET_USER_ID, payload: userId })
+  setTempUserCedential: (credential) => ({ type: SET_TEMP_USER_CREDENTIAL, payload: credential })
 }
 
 
@@ -34,8 +39,8 @@ export function reducer(state: State, action: Actions): State {
       return state;
     case SET_STATUS:
       return { ...state, isPending: action.payload }
-    case SET_USER_ID:
-      return { ...state, userId: action.payload }
+    case SET_TEMP_USER_CREDENTIAL:
+      return { ...state, tempUserCedential: action.payload }
     default:
       throw new Error(`Unhandled action type: ${(action as { type: string }).type}`);
   }
@@ -45,6 +50,8 @@ export function reducer(state: State, action: Actions): State {
 export default function RegistrationContainer() {
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+
+  console.log(state.tempUserCedential)
 
   if (state.step === 'step-one') {
     return (
@@ -56,7 +63,7 @@ export default function RegistrationContainer() {
         />
       </div>
     )
-  };
+  }
 
   if (state.step === 'step-two') {
     return (
@@ -68,7 +75,7 @@ export default function RegistrationContainer() {
         />
       </div>
     )
-  };
+  }
 
   if (state.step === 'step-three') {
     return (
@@ -76,8 +83,9 @@ export default function RegistrationContainer() {
         <ViewerInfoForm
           dispatch={dispatch}
           actions={actions}
+          tempUserCredential={state.tempUserCedential}
         />
       </div >
     )
-  };
+  }
 }

@@ -1,15 +1,19 @@
 import { Button } from "@/shared/ui/button";
+
 import {
   InputOTP as InputOtpBox,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/shared/ui/input-otp";
+
 import { formatTime } from "../lib/formatTime";
 import React, { useEffect, useState } from "react";
 import clsx from "clsx";
-import { confirmPhone } from "../api/requests";
 import { ActionCreators, Actions } from "@/shared/types";
-import { toast } from "@/shared/ui/use-toast";
+import { getAdditionalUserInfo } from 'firebase/auth';
+import { register } from "@/entities/session/services/auth.service";
+
+
 
 type OTPVarificationProps = {
   dispatch: React.Dispatch<Actions>
@@ -29,7 +33,7 @@ export default function OTPVarification({
 
   const [timer, setTimer] = useState(DEFAULT_TIME)
   const [otp, setOtp] = useState('')
-  console.log(timer)
+
   useEffect(() => {
     if (!timer) return
     const id = setInterval(() => {
@@ -41,13 +45,19 @@ export default function OTPVarification({
   }, [timer])
 
   const handleNextStep = async () => {
-    const res = await confirmPhone(otp)
+    
+    const res = await register.verifyCode(otp)
+
     if (res) {
+      // const result = getAdditionalUserInfo(res)
+      // console.log(result?.isNewUser)
       const { user } = res
-      dispatch(actions.setUserId(user.uid))
+      dispatch(actions.setTempUserCedential({
+        userId: user.uid,
+        phone: user.phoneNumber
+      }))
       dispatch(actions.nextStep())
     }
-
   }
 
   const handlePrevStep = () => {

@@ -6,12 +6,14 @@ import { useToast } from "@/shared/ui/use-toast";
 // hooks
 import { useValidationPhone } from "../lib/hooks/useValidationPhone";
 // api
-import { signInWithPhone } from "../api/requests";
+import { register } from "@/entities/session/services/auth.service";
 // lib
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
 import { DotLoader } from 'react-spinners'
 import { ActionCreators, Actions } from "@/shared/types";
+import { formatPhone } from "../lib/formatPhone";
+
 
 type PhoneNumberInputProps = {
   isPending: boolean,
@@ -26,7 +28,6 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
   const [phone, setPhone] = useState('')
   const { isValid, error, checkValidPhone } = useValidationPhone()
 
-
   const submitPhoneNumber = async () => {
     if (!isValid) {
       return toast({
@@ -36,8 +37,7 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
       })
     }
 
-    const res = await signInWithPhone(phone)
-
+    const res = await register.signInWithPhone(formatPhone(phone))
     if (!res) {
       return toast({
         variant: 'destructive',

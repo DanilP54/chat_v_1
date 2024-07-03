@@ -8,5 +8,5 @@ export const viewerInfoSchema = z.object({
     lastname: z.string().min(2, {
         message: "Фамилия должна содержать минимум 2 буквы"
     }),
-    avatar: z.union([z.instanceof(File), z.null()]).optional(),
+    avatar: z.instanceof(File).optional(),
 });

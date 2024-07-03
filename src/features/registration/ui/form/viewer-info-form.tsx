@@ -10,15 +10,22 @@ import { useToast } from "@/shared/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
+import { request } from "@/entities/viewer/viewer.model";
 
+
+type TempUserCedential = {
+    userId: UniqueId,
+    phone: string | null,
+}
 
 type ViewerInfoFormProps = {
     dispatch: React.Dispatch<Actions>
-    actions: ActionCreators
+    actions: ActionCreators,
+    tempUserCredential: TempUserCedential | null
 }
 
 
-export default function ViewerInfoForm({ dispatch, actions }: ViewerInfoFormProps) {
+export default function ViewerInfoForm({ dispatch, actions, tempUserCredential }: ViewerInfoFormProps) {
 
     const { toast } = useToast()
     const navigate = useNavigate()
@@ -29,17 +36,24 @@ export default function ViewerInfoForm({ dispatch, actions }: ViewerInfoFormProp
         defaultValues: {
             firstname: "",
             lastname: "",
-            avatar: null
+            avatar: undefined
         },
         mode: "onSubmit",
     })
 
-    function onSubmit(values: z.infer<typeof viewerInfoSchema>) {
+    async function onSubmit(values: z.infer<typeof viewerInfoSchema>) {
 
         const isValid = viewerInfoSchema.safeParse(values)
 
         if (isValid.success) {
-            navigate('/home')
+
+            const res = await request.save({
+                id: tempUserCredential?.userId,
+                firstName: values.firstname,
+                lastName: values.lastname,
+                avatar: 'https' || undefined
+            })
+            // navigate('/home')
         }
 
         if (isValid.error) {

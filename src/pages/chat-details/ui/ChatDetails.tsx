@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { UserAvatar } from "@/entities/user";
+// import { UserAvatar } from "@/entities/user";
 import { TabsControl } from "@/widgets/tabs-control";
 
 export default function ChatDetails() {
@@ -18,10 +18,10 @@ export default function ChatDetails() {
                     </Link>
                 </div>
                 <div className="flex flex-col justify-center items-center mt-7">
-                    <UserAvatar
+                    {/* <UserAvatar
                         className="w-20 h-20 bg-transparent"
                         src="https://api.dicebear.com/8.x/adventurer/svg?seed=Garfield"
-                    />
+                    /> */}
                     <h2 className=" font-mono font-bold text-xl mt-3">Danil Putro</h2>
                     <span className="font-mono font-thin text-lg mt-1">Lorem ipsi quam ipsa rerum?</span>
                 </div>
