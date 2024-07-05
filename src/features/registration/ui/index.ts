@@ -1,7 +1,7 @@
 import PhoneNumber from "./phone-number";
-import OTPVarification from "./otp-varification";
+import OTPVerification from "./otp-verification.tsx";
 import { ViewerInfoForm } from "./form";
 
 
-export { PhoneNumber, OTPVarification, ViewerInfoForm }
+export { PhoneNumber, OTPVerification, ViewerInfoForm }
 

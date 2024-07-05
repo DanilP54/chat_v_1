@@ -1,10 +1,9 @@
-import { User } from "firebase/auth";
-import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { register } from "../services/auth.service";
-import { Viewer } from "@/entities/viewer/viewer.model";
-
-
+import {User, UserCredential} from "firebase/auth";
+import React, {createContext, useContext, useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {register} from "../services/auth.service";
+import {Viewer, viewerService} from "@/entities/viewer/viewer.model";
+import {getAdditionalUserInfo} from 'firebase/auth';
 
 
 const AuthContext = createContext<User | undefined>(undefined)
@@ -19,14 +18,30 @@ export const useAuthState = () => {
 }
 
 
-
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({children}: { children: React.ReactNode }) {
 
     const [currentViewer, setCurrentViewer] = useState<Viewer | null>(null)
     const navigate = useNavigate()
 
     useEffect(() => {
+        const unsubscribe = register.onAuthState(async (viewer: User) => {
+            try {
+                if (viewer) {
 
+                    const docRef = await viewerService.getViewerById(viewer.uid)
+
+                    if (docRef) {
+                        setCurrentViewer(docRef)
+                        // navigate('/home')
+                    }
+
+                }
+
+            } catch (error) {
+                console.error(error)
+            }
+        })
+        return () => unsubscribe()
     }, [])
 
     const value = undefined

@@ -112,7 +112,6 @@ export class ViewerService {
 
     async getViewerById(viewerId: string) {
         const res = await this.firebase.getViewer(viewerId)
-        console.log(res)
         return res
     }
 

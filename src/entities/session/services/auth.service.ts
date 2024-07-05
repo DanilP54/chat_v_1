@@ -1,6 +1,15 @@
-import { Viewer, ViewerMap, ViewerRepos, ViewerRepository } from "@/entities/viewer/viewer.model";
-import { auth } from "@/shared/config/firebase";
-import { Auth, ConfirmationResult, RecaptchaVerifier, Unsubscribe, User as ViewerDto, UserCredential, onAuthStateChanged, signInWithPhoneNumber } from "firebase/auth";
+import {ViewerRepos, ViewerRepository} from "@/entities/viewer/viewer.model";
+import {auth} from "@/shared/config/firebase";
+import {
+    Auth,
+    ConfirmationResult,
+    getAdditionalUserInfo,
+    onAuthStateChanged,
+    RecaptchaVerifier,
+    signInWithPhoneNumber,
+    Unsubscribe,
+    User
+} from "firebase/auth";
 
 auth.settings.appVerificationDisabledForTesting = true;
 
@@ -61,14 +70,18 @@ class AuthService {
         }
     }
 
-    public async verifyCode(code: string): Promise<UserCredential | undefined> {
+    public async verifyCode(code: string): Promise<{user: User, isNewUser: boolean | undefined} | undefined> {
         try {
             const confirmation = this.getConfirmationResult()
             const confirm = await confirmation.confirm(code)
 
             if (confirm) {
+                const authInfo = getAdditionalUserInfo(confirm)
                 this.cleanRecaptchaAndConfirmation()
-                return confirm
+                return {
+                    user: confirm.user,
+                    isNewUser: authInfo?.isNewUser,
+                }
             }
 
         } catch (e: unknown) {
@@ -76,38 +89,9 @@ class AuthService {
         }
     }
 
-    public async onAuthState(): Promise<{ unsubscribe: Unsubscribe | null, currentViewer: Viewer | null }> {
-
-        let currentViewer: Viewer | null = null
-
-        const unsubscribe = onAuthStateChanged(this.auth, (viewer: ViewerDto | null) => {
-            if (viewer) {
-                return currentViewer
-            }
-        })
-
-        console.log(unsubscribe)
-
-
-
-        // return await new Promise(resolve => {
-        //     let currentViewer: Viewer | null = null
-        //     const unsubscribe = onAuthStateChanged(this.auth, async (viewer: ViewerDto | null) => {
-        //         if (viewer) {
-        //             const viewerData = await this.viewerRepository.getViewer(viewer.uid)
-        //             if (viewerData) {
-        //                 currentViewer = viewerData
-        //             }
-        //         }
-        //         resolve({
-        //             unsubscribe,
-        //             currentViewer,
-        //         })
-        //     })
-    })
-
-
-}
+    public onAuthState(callback: any): Unsubscribe {
+        return onAuthStateChanged(this.auth, callback)
+    }
 }
 
-export const register = new AuthService()
+export const authService = new AuthService()
