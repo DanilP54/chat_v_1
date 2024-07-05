@@ -1,7 +1,8 @@
-import { User, onAuthStateChanged } from "firebase/auth";
+import { User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "@/shared/config/firebase";
 import { useNavigate } from "react-router-dom";
+import { register } from "../services/auth.service";
+import { Viewer } from "@/entities/viewer/viewer.model";
 
 
 
@@ -21,22 +22,11 @@ export const useAuthState = () => {
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
 
-    const [currentViewer, setCurrentViewer] = useState(null)
+    const [currentViewer, setCurrentViewer] = useState<Viewer | null>(null)
     const navigate = useNavigate()
 
     useEffect(() => {
-        // const unsubscribe = onAuthStateChanged(auth, (user) => {
-        //     console.log(user.)
-        //     if (user) {
-        //         setCurrentViewer(user)
-        //         // navigate('/home')
-        //         return
-        //     }
 
-        //     navigate('/signin')
-        // })
-
-        // return () => unsubscribe()
     }, [])
 
     const value = undefined

@@ -5,7 +5,7 @@ import {
 } from "@/features/registration";
 import { useReducer } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
-import { NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL, SET_USER_ID } from "@/shared/constants/action-types";
+import { NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL } from "@/shared/constants/action-types";
 
 type TempUserCedential = {
   userId: UniqueId,
@@ -51,7 +51,9 @@ export default function RegistrationContainer() {
 
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
 
-  console.log(state.tempUserCedential)
+  
+
+
 
   if (state.step === 'step-one') {
     return (

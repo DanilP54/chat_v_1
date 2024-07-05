@@ -10,7 +10,7 @@ import { useToast } from "@/shared/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
-import { request } from "@/entities/viewer/viewer.model";
+import { viewerService } from "@/entities/viewer/viewer.model";
 
 
 type TempUserCedential = {
@@ -47,7 +47,7 @@ export default function ViewerInfoForm({ dispatch, actions, tempUserCredential }
 
         if (isValid.success) {
 
-            const res = await request.save({
+            const res = await viewerService.setViewerToDB({
                 id: tempUserCredential?.userId,
                 firstName: values.firstname,
                 lastName: values.lastname,

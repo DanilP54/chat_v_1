@@ -1,5 +1,4 @@
 import { Button } from "@/shared/ui/button";
-
 import {
   InputOTP as InputOtpBox,
   InputOTPGroup,

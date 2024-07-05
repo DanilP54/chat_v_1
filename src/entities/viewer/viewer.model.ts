@@ -1,9 +1,9 @@
 import { Entity } from "@/kernel/abstract.entity";
 import { Chat } from "../chat/chat.model";
-import { Firestore, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { DocumentData as DocumentDto, Firestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/shared/config/firebase";
 
-
+// Entity
 
 interface IViewer {
     firstName: VFirstName;
@@ -26,6 +26,8 @@ export class Viewer extends Entity<IViewer> {
     }
 }
 
+// Dto
+
 
 interface ViewerDto {
     id: UniqueId,
@@ -34,6 +36,7 @@ interface ViewerDto {
     avatar: VAvatar | undefined
 }
 
+// Mapper
 
 export class ViewerMap {
 
@@ -45,50 +48,53 @@ export class ViewerMap {
         }
     }
 
-    public static toDomain(dto, uid: string) {
+    public static toDomain(dto: DocumentDto, uid: string) {
         return Viewer.create({
             firstName: dto.firstName,
             lastName: dto.lastName,
-            avatar: undefined,
-            chats: null,
-            blocked: null,
+            avatar: dto.avatar || undefined,
+            blocked: dto.blocked || [],
+            chats: dto.chats || []
         }, uid)
     }
 }
 
+// Repository
 
-
-interface ViewerRepository {
+export interface ViewerRepository {
     save(viewer: ViewerDto): Promise<void>
-    getViewer(viewerId: UniqueId): Promise<void>
+    getViewer(viewerId: UniqueId): Promise<Viewer | undefined>
+    // setAvatar(File: File): Promise<void>
+    // getAvatar(source: string): Promise<void>
 }
 
 
 
-class FirebaseViewerRepo implements ViewerRepository {
+export class ViewerRepos implements ViewerRepository {
 
-    private readonly db: Firestore;
-
-    constructor(db: Firestore) {
-        this.db = db
-    }
+    private readonly db: Firestore = db
+    private readonly collectionName = 'users'
+    // constructor(db: Firestore) {
+    //     this.db = db
+    // }
 
     async save(viewer: ViewerDto): Promise<void> {
         try {
             const data = ViewerMap.toPersistence(viewer)
-            const docRef = await setDoc(doc(this.db, 'users', viewer.id), data)
-            return docRef
+            await setDoc(doc(this.db, this.collectionName, viewer.id), data)
         }
         catch (error: unknown) {
             console.log(error)
         }
     }
 
-    async getViewer(viewerId: string): Promise<void> {
+
+    async getViewer(viewerId: string): Promise<Viewer | undefined> {
         try {
-            const docSnap = await getDoc(doc(this.db, 'users', viewerId))
+            const docSnap = await getDoc(doc(this.db, this.collectionName, viewerId))
             if (docSnap.exists()) {
-                console.log(docSnap.data())
+                const data = docSnap.data()
+                return ViewerMap.toDomain(data, viewerId)
             } else {
                 console.log('Нет данных')
             }
@@ -100,4 +106,22 @@ class FirebaseViewerRepo implements ViewerRepository {
 
 }
 
-export const request = new FirebaseViewerRepo(db)
+export class ViewerService {
+
+    private readonly firebase: ViewerRepository = new ViewerRepos()
+
+    async getViewerById(viewerId: string) {
+        const res = await this.firebase.getViewer(viewerId)
+        console.log(res)
+        return res
+    }
+
+    async setViewerToDB(viewer: ViewerDto) {
+        const res = await this.firebase.save(viewer)
+        console.log(res)
+    }
+
+}
+
+export const viewerService = new ViewerService()
+
