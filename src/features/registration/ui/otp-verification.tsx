@@ -9,8 +9,7 @@ import {formatTime} from "../lib/formatTime";
 import React, {useEffect, useState} from "react";
 import clsx from "clsx";
 import {ActionCreators, Actions} from "@/shared/types";
-import {getAdditionalUserInfo} from 'firebase/auth';
-import {register} from "@/entities/session/services/auth.service";
+import {authService} from "@/entities/session/services/auth.service";
 
 
 type OTPVerificationProps = {
@@ -23,11 +22,7 @@ const DEFAULT_TIME = 60
 const MAX_LENGTH_OTP = 6
 
 
-export default function OTPVerification({
-                                            dispatch,
-                                            actions,
-                                            isPending
-                                        }: OTPVerificationProps) {
+export default function OTPVerification({dispatch, actions, isPending}: OTPVerificationProps) {
 
     const [timer, setTimer] = useState(DEFAULT_TIME)
     const [otp, setOtp] = useState('')
@@ -44,7 +39,7 @@ export default function OTPVerification({
 
     const handleNextStep = async () => {
 
-        const {user, isNewUser} = await register.verifyCode(otp)
+        const {user, isNewUser} = await authService.verifyCode(otp)
 
         if (user) {
             dispatch(actions.setTempUserCredential({

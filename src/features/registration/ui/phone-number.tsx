@@ -2,16 +2,16 @@ import React, { useState } from "react";
 // shared
 import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/ui/use-toast";
-// model
+// actions
+import { ActionCreators, Actions } from "@/shared/types";
 // hooks
 import { useValidationPhone } from "../lib/hooks/useValidationPhone";
 // api
-import { register } from "@/entities/session/services/auth.service";
+import { authService } from "@/entities/session/services/auth.service";
 // lib
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
 import { DotLoader } from 'react-spinners'
-import { ActionCreators, Actions } from "@/shared/types";
 import { formatPhone } from "../lib/formatPhone";
 
 
@@ -36,8 +36,8 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
         description: error.description
       })
     }
+    const res = await authService.signInWithPhone(formatPhone(phone))
 
-    const res = await register.signInWithPhone(formatPhone(phone))
     if (!res) {
       return toast({
         variant: 'destructive',
@@ -75,10 +75,7 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
             regions={'europe'}
             value={phone}
             onChange={(value) => setPhone(value)}
-            isValid={(inputNumber, country) => {
-              const result = checkValidPhone(inputNumber, country)
-              return result
-            }}
+            isValid={(inputNumber, country) => checkValidPhone(inputNumber, country)}
             containerStyle={{
               backgroundColor: 'transparent'
             }}

@@ -106,9 +106,12 @@ export class ViewerRepos implements ViewerRepository {
 
 }
 
+export const viewerRepoInstance  = new ViewerRepos()
+
+
 export class ViewerService {
 
-    private readonly firebase: ViewerRepository = new ViewerRepos()
+    private readonly firebase: ViewerRepository = viewerRepoInstance
 
     async getViewerById(viewerId: string) {
         const res = await this.firebase.getViewer(viewerId)

@@ -1,11 +1,7 @@
-import {
-    PhoneNumber,
-    OTPVerification,
-    ViewerInfoForm
-} from "@/features/registration";
-import {useReducer} from "react";
-import {ActionCreators, Actions} from "@/shared/types";
-import {NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL} from "@/shared/constants/action-types";
+import { PhoneNumber, OTPVerification, ViewerInfoForm } from "@/features/registration";
+import { useReducer } from "react";
+import { ActionCreators, Actions } from "@/shared/types";
+import { NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL } from "@/shared/constants/action-types";
 
 type TempUserCredential = {
     userId: UniqueId,
@@ -25,22 +21,22 @@ export const INITIAL_STATE: State = {
 }
 
 const actions: ActionCreators = {
-    nextStep: () => ({type: NEXT_STEP}),
-    setStatus: (status) => ({type: SET_STATUS, payload: status}),
-    setTempUserCredential: (credential) => ({type: SET_TEMP_USER_CREDENTIAL, payload: credential})
+    nextStep: () => ({ type: NEXT_STEP }),
+    setStatus: (status) => ({ type: SET_STATUS, payload: status }),
+    setTempUserCredential: (credential) => ({ type: SET_TEMP_USER_CREDENTIAL, payload: credential })
 }
 
 
 export function reducer(state: State, action: Actions): State {
     switch (action.type) {
         case NEXT_STEP:
-            if (state.step === 'step-one') return {...state, step: 'step-two'}
-            if (state.step === 'step-two') return {...state, step: 'step-three'}
+            if (state.step === 'step-one') return { ...state, step: 'step-two' }
+            if (state.step === 'step-two') return { ...state, step: 'step-three' }
             return state;
         case SET_STATUS:
-            return {...state, isPending: action.payload}
+            return { ...state, isPending: action.payload }
         case SET_TEMP_USER_CREDENTIAL:
-            return {...state, tempUserCredential: action.payload}
+            return { ...state, tempUserCredential: action.payload }
         default:
             throw new Error(`Unhandled action type: ${(action as { type: string }).type}`);
     }

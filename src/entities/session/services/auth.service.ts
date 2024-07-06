@@ -1,5 +1,5 @@
-import {ViewerRepos, ViewerRepository} from "@/entities/viewer/viewer.model";
-import {auth} from "@/shared/config/firebase";
+import { viewerRepoInstance, ViewerRepository } from "@/entities/viewer/viewer.model";
+import { auth } from "@/shared/config/firebase";
 import {
     Auth,
     ConfirmationResult,
@@ -16,19 +16,8 @@ auth.settings.appVerificationDisabledForTesting = true;
 class AuthService {
     private recaptchaVerifier: RecaptchaVerifier | null = null
     private confirmationResult: ConfirmationResult | null = null
-    private readonly viewerRepository: ViewerRepository = new ViewerRepos()
+    private readonly viewerRepository: ViewerRepository = viewerRepoInstance
     private readonly auth: Auth = auth
-
-    // constructor(auth: Auth) {
-    //     this.auth = auth
-    // }
-
-    // private getRecaptchaVerifier(): RecaptchaVerifier {
-    //     if (this.recaptchaVerifier) {
-    //         return this.recaptchaVerifier
-    //     }
-    //     throw new Error('Отсутствует recaptcha')
-    // }
 
     private setRecaptchaVerifier(recaptcha: RecaptchaVerifier) {
         this.recaptchaVerifier = recaptcha
@@ -70,7 +59,7 @@ class AuthService {
         }
     }
 
-    public async verifyCode(code: string): Promise<{user: User, isNewUser: boolean | undefined} | undefined> {
+    public async verifyCode(code: string): Promise<{ user: User, isNewUser: boolean | undefined } | undefined> {
         try {
             const confirmation = this.getConfirmationResult()
             const confirm = await confirmation.confirm(code)
