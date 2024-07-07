@@ -3,6 +3,10 @@ import { useReducer } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
 import { NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL } from "@/shared/constants/action-types";
 
+
+
+
+
 type TempUserCredential = {
     userId: UniqueId,
     phone: string | null,
@@ -78,7 +82,7 @@ export default function RegistrationContainer() {
                 <ViewerInfoForm
                     dispatch={dispatch}
                     actions={actions}
-                    tempUserCredential={state.tempUserCedential}
+                    tempUserCredential={state.tempUserCredential}
                 />
             </div>
         )

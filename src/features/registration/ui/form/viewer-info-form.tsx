@@ -10,7 +10,7 @@ import { useToast } from "@/shared/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { ActionCreators, Actions } from "@/shared/types";
-import { viewerService } from "@/entities/viewer/viewer.model";
+import { viewerService } from "@/entities/viewer/interfaces/viewer.services";
 
 
 type TempUserCedential = {

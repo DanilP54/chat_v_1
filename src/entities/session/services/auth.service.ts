@@ -1,4 +1,4 @@
-import { viewerRepoInstance, ViewerRepository } from "@/entities/viewer/viewer.model";
+import { viewerRepoInstance, ViewerRepository } from "@/entities/viewer/interfaces/repository";
 import { auth } from "@/shared/config/firebase";
 import {
     Auth,

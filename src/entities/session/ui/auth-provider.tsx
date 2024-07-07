@@ -1,11 +1,17 @@
-import {User} from "firebase/auth";
-import React, {createContext, useContext, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {authService} from "../services/auth.service";
-import {Viewer, viewerService} from "@/entities/viewer/viewer.model";
+import { User } from "firebase/auth";
+import React, { createContext, SetStateAction, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../services/auth.service";
+import { viewerService } from "@/entities/viewer/interfaces/viewer.services";
+import { Viewer } from "@/entities/viewer/viewer.model";
 
 
-const AuthContext = createContext<User | undefined>(undefined)
+type AuthProviderProps = {
+    viewer: Viewer | null;
+    setIsProcessingAuth: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const AuthContext = createContext<AuthProviderProps | undefined>(undefined)
 
 export const useAuthState = () => {
     const context = useContext(AuthContext)
@@ -17,19 +23,20 @@ export const useAuthState = () => {
 }
 
 
-export default function AuthProvider({children}: { children: React.ReactNode }) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const [currentViewer, setCurrentViewer] = useState<Viewer | null>(null)
+    const [isProcessingAuth, setIsProcessingAuth] = useState<boolean>(false)
     const navigate = useNavigate()
 
     useEffect(() => {
         const unsubscribe = authService.onAuthState(async (viewer: User) => {
             try {
-                if (viewer) {
+                if (viewer && !isProcessingAuth) {
                     const docRef = await viewerService.getViewerById(viewer.uid)
                     if (docRef) {
                         setCurrentViewer(docRef)
-                        // navigate('/home')
+                        navigate('/home')
                     }
                 }
             } catch (error) {
@@ -39,7 +46,10 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
         return () => unsubscribe()
     }, [])
 
-    const value = undefined
+    const value: AuthProviderProps = {
+        viewer: currentViewer,
+        setIsProcessingAuth,
+    }
 
     return (
         <AuthContext.Provider value={value}>

@@ -10,6 +10,7 @@ import React, {useEffect, useState} from "react";
 import clsx from "clsx";
 import {ActionCreators, Actions} from "@/shared/types";
 import {authService} from "@/entities/session/services/auth.service";
+import {useAuthState} from "@/entities/session";
 
 
 type OTPVerificationProps = {
@@ -26,6 +27,7 @@ export default function OTPVerification({dispatch, actions, isPending}: OTPVerif
 
     const [timer, setTimer] = useState(DEFAULT_TIME)
     const [otp, setOtp] = useState('')
+    const { setIsProcessingAuth} = useAuthState()
 
     useEffect(() => {
         if (!timer) return
@@ -41,11 +43,12 @@ export default function OTPVerification({dispatch, actions, isPending}: OTPVerif
 
         const {user, isNewUser} = await authService.verifyCode(otp)
 
-        if (user) {
+        if (user && isNewUser) {
             dispatch(actions.setTempUserCredential({
                 userId: user.uid,
                 phone: user.phoneNumber
             }))
+            setIsProcessingAuth(true)
             dispatch(actions.nextStep())
         }
     }
