@@ -8,25 +8,17 @@ import { z } from "zod"
 import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
 import { useToast } from "@/shared/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
-import { ActionCreators, Actions } from "@/shared/types";
+import { useState } from "react";
 import { viewerService } from "@/entities/viewer/interfaces/viewer.services";
+import { Step } from "@/entities/session/ui/auth-provider";
 
-
-type TempUserCedential = {
-    userId: UniqueId,
-    phone: string | null,
+type StateWithoutAccountData = {
+    step: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA,
+    data: { userId: UniqueId }
 }
 
-type ViewerInfoFormProps = {
-    dispatch: React.Dispatch<Actions>
-    actions: ActionCreators,
-    tempUserCredential: TempUserCedential | null
-}
-
-
-export default function ViewerInfoForm({ dispatch, actions, tempUserCredential }: ViewerInfoFormProps) {
-
+export default function ViewerInfoForm(props: StateWithoutAccountData) {
+    console.log(props.uid)
     const { toast } = useToast()
     const navigate = useNavigate()
 
@@ -48,7 +40,7 @@ export default function ViewerInfoForm({ dispatch, actions, tempUserCredential }
         if (isValid.success) {
 
             const res = await viewerService.setViewerToDB({
-                id: tempUserCredential?.userId,
+                id: props.data.userId,
                 firstName: values.firstname,
                 lastName: values.lastname,
                 avatar: 'https' || undefined

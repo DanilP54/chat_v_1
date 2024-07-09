@@ -4,63 +4,89 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../services/auth.service";
 import { viewerService } from "@/entities/viewer/interfaces/viewer.services";
 import { Viewer } from "@/entities/viewer/viewer.model";
+import { Loader } from "@/shared/ui/loader";
 
 
+// export enum Step {
+//     PHONE_NUMBER_ENTRY = 'PHONE_ENTRY',
+//     VERIFY_CODE_ENTRY = 'VERIFY_CODE_ENTRY',
+//     USER_DATA_ENTRY = 'USER_DATA_ENTRY',
+//     PROCESS_AUTHINTIFICATE = 'PROCESS_AUTH_CERTIFICATE',
+// }
 
-type AuthProviderProps = {
-    viewer: Viewer | null;
-    setIsProcessingAuth: React.Dispatch<SetStateAction<boolean>>;
+// export enum AuthenticationSteps {
+//     PHONE_NUMBER_ENTRY = 'PHONE_ENTRY',
+//     VERIFY_CODE_ENTRY = 'VERIFY_CODE_ENTRY',
+//     LOADING = 'LOADNG',
+// }
+
+// ---------------------------------------------------------
+
+export enum AuthorizationSteps {
+    AUTH_IN_PROGRESS = 'AUTHORIZATION_IN_PROGRESS',
+    NOT_AUTH = 'NOT_AUTHORIZED',
+    AUTH_WITHOUT_ACCOUNT_DATA = 'AUTH_WITHOUT_ACCOUNT_DATA',
+    AUTH_SUCCESS = 'AUTHORIZATION_SUCCESS'
 }
 
-enum Step {
-    PHONE_NUMBER_ENTRY = 'PHONE_ENTRY',
-    VERIFY_CODE_ENTRY = 'VERIFY_CODE_ENTRY',
-    USER_DATA_ENTRY = 'USER_DATA_ENTRY',
+// ---------------------------------------------------------
+
+type StateAuthInProgress = {
+    step: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
-type StatePhoneNumber = {
-    step: Step.PHONE_NUMBER_ENTRY
+type StateNotAuth = {
+    step: AuthorizationSteps.NOT_AUTH,
 }
 
-type StateVerifyCode = {
-    step: Step.VERIFY_CODE_ENTRY
+type StateWithoutAccountData = {
+    step: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA,
+    data: { userId: UniqueId }
 }
 
-type StateUserData = {
-    step: Step.USER_DATA_ENTRY,
-    data: string
+type StateAuthSuccess = {
+    step: AuthorizationSteps.AUTH_SUCCESS,
 }
 
-type State = StatePhoneNumber | StateVerifyCode | StateUserData
+type State = StateAuthInProgress | StateNotAuth | StateWithoutAccountData | StateAuthSuccess;
+
+
+
 
 const INITIAL_STATE: State = {
-    step: Step.PHONE_NUMBER_ENTRY,
+    step: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
-type ActionPhoneNumber = {
-    type: Step.PHONE_NUMBER_ENTRY,
+type ActionAuthInProgress = {
+    type: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
-type ActionVerifyCode = {
-    type: Step.VERIFY_CODE_ENTRY
+type ActionNotAuth = {
+    type: AuthorizationSteps.NOT_AUTH
 }
 
-type ActionUserData = {
-    type: Step.USER_DATA_ENTRY,
+type ActionAuthWithoutAccoundData = {
+    type: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA
     payload: UniqueId
 }
 
-type Actions = ActionPhoneNumber | ActionVerifyCode | ActionUserData
+type ActionAuthSuccess = {
+    type: AuthorizationSteps.AUTH_SUCCESS
+}
+
+type Actions = ActionNotAuth | ActionAuthInProgress | ActionAuthWithoutAccoundData | ActionAuthSuccess
 
 
 const reducer = (state: State, action: Actions): State => {
     switch (action.type) {
-        case Step.PHONE_NUMBER_ENTRY:
-            return { step: Step.PHONE_NUMBER_ENTRY } as StatePhoneNumber;
-        case Step.VERIFY_CODE_ENTRY:
-            return { step: Step.VERIFY_CODE_ENTRY } as StateVerifyCode;
-        case Step.USER_DATA_ENTRY:
-            return { step: Step.USER_DATA_ENTRY, data: action.payload } as StateUserData;
+        case AuthorizationSteps.AUTH_IN_PROGRESS:
+            return { ...state, step: AuthorizationSteps.AUTH_IN_PROGRESS } as StateAuthInProgress;
+        case AuthorizationSteps.NOT_AUTH:
+            return { ...state, step: AuthorizationSteps.NOT_AUTH } as StateNotAuth;
+        case AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA:
+            return { ...state, step: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA, data: { userId: action.payload } } as StateWithoutAccountData;
+        case AuthorizationSteps.AUTH_SUCCESS:
+            return { ...state, step: AuthorizationSteps.AUTH_SUCCESS } as StateAuthSuccess
         default:
             throw new Error('Action not found')
     }
@@ -91,7 +117,7 @@ export const useAuthState = () => {
     const context = useContext(AuthContext)
 
     if (!context) {
-        throw new Error('useAuthState must be used within a CountProvider')
+        throw new Error('useAuthState must be used within a Provider')
     }
     return context
 }
@@ -100,25 +126,32 @@ export const useAuthState = () => {
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+    console.log(state)
     // const [currentViewer, setCurrentViewer] = useState<Viewer | null>(null)
     // const [isProcessingAuth, setIsProcessingAuth] = useState<boolean>(false)
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     useEffect(() => {
-        // const unsubscribe = authService.onAuthState(async (viewer: User) => {
-        //     try {
-        //         if (viewer && !isProcessingAuth) {
-        //             const docRef = await viewerService.getViewerById(viewer.uid)
-        //             if (docRef) {
-        //                 setCurrentViewer(docRef)
-        //                 navigate('/home')
-        //             }
-        //         }
-        //     } catch (error) {
-        //         console.error(error)
-        //     }
-        // })
-        // return () => unsubscribe()
+        const unsubscribe = authService.onAuthState(async (viewer: User) => {
+            try {
+                if (viewer) {
+                    const docRef = await viewerService.getViewerById(viewer.uid)
+                    if (docRef) {
+                        console.log(docRef)
+                        dispatch({ type: AuthorizationSteps.AUTH_SUCCESS } as ActionAuthSuccess)
+                        return navigate('/home')
+                    } else {
+                        dispatch({ type: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA, payload: viewer.uid} as ActionAuthWithoutAccoundData)
+                        return navigate('/create-profile')
+                    }
+                }
+                dispatch({ type: AuthorizationSteps.NOT_AUTH } as ActionNotAuth)
+                return navigate('/signin')
+            } catch (error) {
+                console.error(error)
+            }
+        })
+        return () => unsubscribe()
     }, [])
 
     // const value: AuthProviderProps = {

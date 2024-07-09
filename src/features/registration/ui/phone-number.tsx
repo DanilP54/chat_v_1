@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 // shared
 import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/ui/use-toast";
-// actions
-import { ActionCreators, Actions } from "@/shared/types";
 // hooks
 import { useValidationPhone } from "../lib/hooks/useValidationPhone";
 // api
@@ -11,22 +9,41 @@ import { authService } from "@/entities/session/services/auth.service";
 // lib
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
-import { DotLoader } from 'react-spinners'
 import { formatPhone } from "../lib/formatPhone";
+import { Loader } from "@/shared/ui/loader";
 
-
-type PhoneNumberInputProps = {
-  isPending: boolean,
-  dispatch: React.Dispatch<Actions>
-  actions: ActionCreators
+export enum AuthenticationSteps {
+  PHONE_NUMBER_ENTRY = 'PHONE_ENTRY',
+  VERIFY_CODE_ENTRY = 'VERIFY_CODE_ENTRY',
 }
 
-export default function PhoneNumberInput({ actions, dispatch, isPending }: PhoneNumberInputProps) {
+type StatePhoneNumberEntry = {
+  step: AuthenticationSteps.PHONE_NUMBER_ENTRY
+}
+
+type StateVerifyCodeEntry = {
+  step: AuthenticationSteps.VERIFY_CODE_ENTRY
+}
+
+
+type State = StatePhoneNumberEntry | StateVerifyCodeEntry
+
+type ActionPhoneNumber = { type: AuthenticationSteps.PHONE_NUMBER_ENTRY }
+type ActionVerifyCode = { type: AuthenticationSteps.VERIFY_CODE_ENTRY }
+type Actions = ActionPhoneNumber | ActionVerifyCode
+
+type PhoneNumberInputProps = {
+  state: State,
+  dispatch: React.Dispatch<Actions>
+}
+
+export default function PhoneNumberInput({ state, dispatch }: PhoneNumberInputProps) {
 
   const { toast } = useToast()
-
   const [phone, setPhone] = useState('')
   const { isValid, error, checkValidPhone } = useValidationPhone()
+  const [isPending, setIsPending] = useState(false)
+
 
   const submitPhoneNumber = async () => {
     if (!isValid) {
@@ -36,26 +53,23 @@ export default function PhoneNumberInput({ actions, dispatch, isPending }: Phone
         description: error.description
       })
     }
+    setIsPending(true)
+
     const res = await authService.signInWithPhone(formatPhone(phone))
 
     if (!res) {
+      setIsPending(false)
       return toast({
         variant: 'destructive',
         title: 'Ошибка',
         description: 'Возникла ошибка при регистрации номера'
       })
     }
-
-    dispatch(actions.nextStep())
+    dispatch({ type: AuthenticationSteps.VERIFY_CODE_ENTRY })
   }
 
-  if (isPending) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <DotLoader color="hsla(239, 100%, 35%, 1)" />
-      </div>
-    )
-  }
+  if (isPending) <Loader />
+
 
   return (
     <>

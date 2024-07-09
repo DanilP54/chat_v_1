@@ -1,90 +1,66 @@
-import { PhoneNumber, OTPVerification, ViewerInfoForm } from "@/features/registration";
-import { useReducer } from "react";
-import { ActionCreators, Actions } from "@/shared/types";
-import { NEXT_STEP, SET_STATUS, SET_TEMP_USER_CREDENTIAL } from "@/shared/constants/action-types";
+import { OTPVerification, PhoneNumber } from "@/features/registration";
+import { Loader } from "@/shared/ui/loader";
+import { Dispatch, SetStateAction, useReducer } from "react";
 
 
-
-
-
-type TempUserCredential = {
-    userId: UniqueId,
-    phone: string | null,
+export enum AuthenticationSteps {
+    PHONE_NUMBER_ENTRY = 'PHONE_ENTRY',
+    VERIFY_CODE_ENTRY = 'VERIFY_CODE_ENTRY',
 }
 
-export type State = {
-    isPending: boolean,
-    step: 'step-one' | 'step-two' | 'step-three',
-    tempUserCredential: TempUserCredential | null
-};
+type ActionPhoneNumber = { type: AuthenticationSteps.PHONE_NUMBER_ENTRY }
+type ActionVerifyCode = { type: AuthenticationSteps.VERIFY_CODE_ENTRY }
+type Actions = ActionPhoneNumber | ActionVerifyCode
 
-export const INITIAL_STATE: State = {
-    isPending: false,
-    step: 'step-one',
-    tempUserCredential: null,
+
+type StatePhoneNumber = {
+    step: AuthenticationSteps.PHONE_NUMBER_ENTRY
 }
 
-const actions: ActionCreators = {
-    nextStep: () => ({ type: NEXT_STEP }),
-    setStatus: (status) => ({ type: SET_STATUS, payload: status }),
-    setTempUserCredential: (credential) => ({ type: SET_TEMP_USER_CREDENTIAL, payload: credential })
+type StateVerifyCode = {
+    step: AuthenticationSteps.VERIFY_CODE_ENTRY
 }
 
 
-export function reducer(state: State, action: Actions): State {
-    switch (action.type) {
-        case NEXT_STEP:
-            if (state.step === 'step-one') return { ...state, step: 'step-two' }
-            if (state.step === 'step-two') return { ...state, step: 'step-three' }
-            return state;
-        case SET_STATUS:
-            return { ...state, isPending: action.payload }
-        case SET_TEMP_USER_CREDENTIAL:
-            return { ...state, tempUserCredential: action.payload }
+type State = StatePhoneNumber | StateVerifyCode
+
+const INITIAL_STATE: State = {
+    step: AuthenticationSteps.PHONE_NUMBER_ENTRY,
+}
+
+type StateCreator<T extends State> = (state: T, dispatch: Dispatch<Actions>) => React.ReactNode
+
+const createStatePhoneNumber: StateCreator<StatePhoneNumber> = (state, dispatch) => <PhoneNumber state={state} dispatch={dispatch} />
+const createVerifyCode: StateCreator<StateVerifyCode> = (state, dispatch) => <OTPVerification state={state} dispatch={dispatch} />
+
+const routingAuthentication = (state: State, dispatch: Dispatch<Actions>): React.ReactNode => {
+    switch (state.step) {
+        case AuthenticationSteps.PHONE_NUMBER_ENTRY:
+            return createStatePhoneNumber(state, dispatch);
+        case AuthenticationSteps.VERIFY_CODE_ENTRY:
+            return createVerifyCode(state, dispatch);
         default:
-            throw new Error(`Unhandled action type: ${(action as { type: string }).type}`);
+            throw new Error('Action not found');
+
     }
 }
+
+
+
+const reducer = (state: State, action: Actions): State => {
+    switch (action.type) {
+        case AuthenticationSteps.PHONE_NUMBER_ENTRY:
+            return { ...state, step: AuthenticationSteps.PHONE_NUMBER_ENTRY };
+        case AuthenticationSteps.VERIFY_CODE_ENTRY:
+            return { ...state, step: AuthenticationSteps.VERIFY_CODE_ENTRY };
+        default:
+            throw new Error('Action not found')
+    }
+}
+
 
 
 export default function RegistrationContainer() {
-
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-
-
-    if (state.step === 'step-one') {
-        return (
-            <div className="h-full">
-                <PhoneNumber
-                    isPending={state.isPending}
-                    dispatch={dispatch}
-                    actions={actions}
-                />
-            </div>
-        )
-    }
-
-    if (state.step === 'step-two') {
-        return (
-            <div className="h-full">
-                <OTPVerification
-                    dispatch={dispatch}
-                    actions={actions}
-                    isPending={state.isPending}
-                />
-            </div>
-        )
-    }
-
-    if (state.step === 'step-three') {
-        return (
-            <div className="h-full">
-                <ViewerInfoForm
-                    dispatch={dispatch}
-                    actions={actions}
-                    tempUserCredential={state.tempUserCredential}
-                />
-            </div>
-        )
-    }
+    return routingAuthentication(state, dispatch)
 }

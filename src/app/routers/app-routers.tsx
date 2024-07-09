@@ -5,6 +5,10 @@ import { ChatRoom } from "@/pages/chat-room";
 import { ChatDetails } from "@/pages/chat-details";
 import { SignIn } from "@/pages/sign-in";
 
+const CreateProfile = () => {
+    return 'ввод данных'
+}
+
 const routers = [
     {
         path: '/',
@@ -13,6 +17,10 @@ const routers = [
             {
                 path: 'signin',
                 element: <SignIn />
+            },
+            {
+                path: 'create-profile',
+                element: <CreateProfile />
             },
             {
                 path: 'home',

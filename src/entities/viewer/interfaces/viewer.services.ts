@@ -14,7 +14,8 @@ export class ViewerService {
 
     async getViewerById(viewerId: string) {
         const data = this.firebase.getViewer(viewerId)
-        return ViewerMap.toDomain(data, viewerId)
+        return undefined        
+        // return ViewerMap.toDomain(data, viewerId)
 
     }
 

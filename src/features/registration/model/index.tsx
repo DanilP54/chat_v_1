@@ -16,18 +16,16 @@ type StateVerifyCode = {
 
 type StateUserData = {
     step: Step.USER_DATA_ENTRY,
-    data: string
+    uid: string
 }
 
 type State = StatePhoneNumber | StateVerifyCode | StateUserData
 
-
-
 type StateCreator<T extends State> = (state: T) => React.ReactNode
 
 const createPhoneNumberEntry: StateCreator<StatePhoneNumber> = (state: StatePhoneNumber) => <PhoneNumber />
-const createVerifyCodeEntry: StateCreator<StateVerifyCode> = (state: State) => <OTPVerification {...state} />
-const createUserDataEntry: StateCreator<StateUserData> = (state: State) => <ViewerInfoForm {...state} />
+const createVerifyCodeEntry: StateCreator<StateVerifyCode> = (state: StateVerifyCode) => <OTPVerification />
+const createUserDataEntry: StateCreator<StateUserData> = (state: StateUserData) => <ViewerInfoForm {...state} />
 
 export const routing = (state: State): React.ReactNode => {
     switch (state.step) {
