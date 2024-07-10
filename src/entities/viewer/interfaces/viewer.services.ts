@@ -1,5 +1,6 @@
 import { ViewerMap } from "./mapper"
 import { ViewerRepository, viewerRepoInstance } from "./repository"
+import {Viewer} from "@/entities/viewer/viewer.model.ts";
 
 interface ViewerDto {
     id: UniqueId,
@@ -12,11 +13,9 @@ export class ViewerService {
 
     private readonly firebase: ViewerRepository = viewerRepoInstance
 
-    async getViewerById(viewerId: string) {
-        const data = this.firebase.getViewer(viewerId)
-        return undefined        
-        // return ViewerMap.toDomain(data, viewerId)
-
+    async getViewerProfileData(userId: string): Promise<Viewer | undefined> {
+        const data = await this.firebase.get(userId)
+        return data ? ViewerMap.toDomain(data, userId) : undefined
     }
 
     async setViewerToDB(viewer: ViewerDto) {

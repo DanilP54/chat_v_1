@@ -1,0 +1,29 @@
+import {routingAuthentication} from "./authentication-state-machine/routing.authentication.tsx";
+import { useReducer } from "react";
+import {AuthenticationSteps, AuthenticationState, AuthenticationActions} from "@/shared/types";
+
+
+
+const INITIAL_STATE: AuthenticationState = {
+    step: AuthenticationSteps.PHONE_NUMBER_ENTRY,
+}
+
+const reducer = (state: AuthenticationState , action: AuthenticationActions): AuthenticationState  => {
+    switch (action.type) {
+        case AuthenticationSteps.PHONE_NUMBER_ENTRY:
+            return { ...state, step: AuthenticationSteps.PHONE_NUMBER_ENTRY };
+        case AuthenticationSteps.VERIFY_CODE_ENTRY:
+            return { ...state, step: AuthenticationSteps.VERIFY_CODE_ENTRY };
+        case AuthenticationSteps.PENDING:
+            return { ...state, step: AuthenticationSteps.PENDING };
+        case AuthenticationSteps.ERROR:
+            return { ...state, step: AuthenticationSteps.ERROR };
+        default:
+            throw new Error('Action not found')
+    }
+}
+
+export default function AuthenticationContainer() {
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+    return routingAuthentication(state, dispatch)
+}

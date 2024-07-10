@@ -3,11 +3,9 @@ import RootLayout from "../RootLayout";
 import { HomePage } from "@/pages/home";
 import { ChatRoom } from "@/pages/chat-room";
 import { ChatDetails } from "@/pages/chat-details";
-import { SignIn } from "@/pages/sign-in";
+import {AuthenticationPage} from "@/pages/authentication-page";
+import {CreateProfile} from "@/pages/create-profile";
 
-const CreateProfile = () => {
-    return 'ввод данных'
-}
 
 const routers = [
     {
@@ -15,8 +13,8 @@ const routers = [
         element: <RootLayout />,
         children: [
             {
-                path: 'signin',
-                element: <SignIn />
+                path: 'sign-in',
+                element: <AuthenticationPage />
             },
             {
                 path: 'create-profile',

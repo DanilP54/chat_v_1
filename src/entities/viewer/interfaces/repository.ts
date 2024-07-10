@@ -3,7 +3,7 @@ import { DocumentData as DocumentDto, Firestore, doc, getDoc, setDoc } from "fir
 
 export interface ViewerRepository {
     save(id: UniqueId, data: Omit<ViewerDto, "id">): Promise<void>
-    getViewer(viewerId: UniqueId): DocumentDto
+    get(viewerId: UniqueId): Promise<DocumentDto | undefined>
     // setAvatar(File: File): Promise<void>
     // getAvatar(source: string): Promise<void>
 }
@@ -33,18 +33,17 @@ export class ViewerRepos implements ViewerRepository {
     }
 
 
-    async getViewer(viewerId: string): DocumentDto {
-        try {
-            const docSnap = await getDoc(doc(this.db, this.collectionName, viewerId))
-            if (docSnap.exists()) {
-                return docSnap.data()
-            } else {
-                console.log('Нет данных')
+    async get(viewerId: string): Promise<DocumentDto | undefined> {
+            try {
+                const accountData =  await getDoc(doc(this.db, this.collectionName, viewerId))
+                if(accountData.exists()) {
+                    return accountData.data()
+                } else {
+                    return undefined
+                }
+            } catch (error) {
+                console.log(error)
             }
-        }
-        catch (error) {
-            console.log(error)
-        }
     }
 
 }
