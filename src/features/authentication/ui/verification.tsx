@@ -1,15 +1,19 @@
-import {Button} from "@/shared/ui/button";
+import { Button } from "@/shared/ui/button";
 import {
     InputOTP as InputOtpBox,
     InputOTPGroup,
     InputOTPSlot,
 } from "@/shared/ui/input-otp";
 // import {formatTime} from "../lib/formatTime";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 // import clsx from "clsx";
-import {authService} from "@/entities/session/services/auth.service";
+import { authService } from "@/entities/session/services/auth.service";
 // import { useDispatchContext} from "@/entities/session/ui/auth-provider";
-import {Loader} from "@/shared/ui/loader";
+import { Loader } from "@/shared/ui/loader";
+import { formatTime } from "@/features/authentication/lib/formatTime.ts";
+import { clsx } from "clsx";
+import { ActionAuthInProgress, AuthorizationSteps } from "@/shared/types";
+import { useDispatchContext } from "@/entities/session/ui/auth-provider";
 
 
 const DEFAULT_TIME = 60
@@ -18,7 +22,7 @@ const MAX_LENGTH_OTP = 6
 
 export default function Verification() {
 
-    // const dispatch = useDispatchContext()
+    const dispatch = useDispatchContext()
     const [isPending, setIsPending] = useState(false)
 
     const [timer, setTimer] = useState(DEFAULT_TIME)
@@ -35,13 +39,14 @@ export default function Verification() {
     }, [timer])
 
     const handleNextStep = async () => {
-        setIsPending(true)
+        // setIsPending(true)
         const data = await authService.verifyCode(otp)
 
         if (data?.user) {
-            setIsPending(false)
+            dispatch({type: AuthorizationSteps.AUTH_IN_PROGRESS} as ActionAuthInProgress)
+            // setIsPending(false)
         }
-        setIsPending(false)
+        // setIsPending(false)
     }
 
     // const handlePrevStep = () => {
@@ -54,24 +59,24 @@ export default function Verification() {
 
 
     if (isPending) {
-        return <Loader/>
+        return <Loader />
     }
 
     return (
         <div className="w-full h-full flex flex-col items-center gap-10 justify-center">
-            {/* <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2">
                 <h2 className=" font-thin text-lg text-gray-400">Активация учётная записи</h2>
                 <span
                     className={clsx('text-blue-600 font-thin', timer < 11 && 'text-red-900 font-bold')}
                 >{formatTime(timer)}</span>
-                {timer === 0 && <span onClick={handlePrevStep}>Время истекло, повторить попытку</span>}
-            </div> */}
+                {timer === 0 && <span>Время истекло, повторить попытку</span>}
+            </div>
             <div className="flex flex-col items-center gap-8">
                 <InputOtpBox value={otp} onChange={handleChangeOtp} maxLength={MAX_LENGTH_OTP}>
                     <InputOTPGroup>
                         {
-                            Array.from({length: MAX_LENGTH_OTP}, (_, index) => (
-                                <InputOTPSlot key={index} index={index}/>
+                            Array.from({ length: MAX_LENGTH_OTP }, (_, index) => (
+                                <InputOTPSlot key={index} index={index} />
                             ))
                         }
                     </InputOTPGroup>

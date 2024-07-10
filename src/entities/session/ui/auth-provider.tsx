@@ -86,7 +86,11 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
     const navigate = useNavigate()
 
     useEffect(() => {
+
+        if (state.step !== AuthorizationSteps.AUTH_IN_PROGRESS && state.step !== AuthorizationSteps.AUTH_SUCCESS) return
+
         const unsubscribe = authService.onAuthState(async (user: User) => {
+            console.log(1)
             try {
                 if (user) {
                     const profileData = await viewerService.getViewerProfileData(user.uid)
@@ -112,7 +116,7 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
             }
         })
         return () => unsubscribe()
-    }, [])
+    }, [state.step  ])
 
     return (
         <DispatchContext.Provider value={dispatch}>

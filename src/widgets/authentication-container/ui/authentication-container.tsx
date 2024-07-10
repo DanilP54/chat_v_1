@@ -25,5 +25,6 @@ const reducer = (state: AuthenticationState , action: AuthenticationActions): Au
 
 export default function AuthenticationContainer() {
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+    console.log(state)
     return routingAuthentication(state, dispatch)
 }

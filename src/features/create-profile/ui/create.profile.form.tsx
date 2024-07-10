@@ -9,6 +9,8 @@ import {createProfileSchema} from "../lib/form-shema/create-profile-schema.ts";
 import { useToast } from "@/shared/ui/use-toast.ts";
 import { viewerService } from "@/entities/viewer/interfaces/viewer.services.ts";
 import {useAuthState} from "@/entities/session";
+import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
+import { AuthorizationSteps } from "@/shared/types/authorization.state.ts";
 
 
 
@@ -17,6 +19,7 @@ import {useAuthState} from "@/entities/session";
 export default function CreateProfileForm() {
     const { toast } = useToast()
     const state = useAuthState()
+    const dispatch = useDispatchContext()
     console.log(state)
     // const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null)
 
@@ -40,6 +43,7 @@ export default function CreateProfileForm() {
                 lastName: values.lastname,
                 avatar: 'https' || undefined
             })
+            dispatch({type: AuthorizationSteps.AUTH_IN_PROGRESS})
         }
 
         if (isValid.error) {
