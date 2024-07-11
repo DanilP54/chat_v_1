@@ -4,49 +4,45 @@ import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/ui/use-toast";
 // hooks
 import { useValidationPhone } from "../lib/hooks/useValidationPhone";
-// api
-import { authService } from "@/entities/session/services/auth.service";
 // lib
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
 import { formatPhone } from "../lib/formatPhone";
 import { Loader } from "@/shared/ui/loader";
-import {AuthenticationActions, AuthenticationSteps} from "@/shared/types";
+import {AuthenticationActions, AuthenticationState} from "@/shared/types";
+import {useSignInPhoneNumber} from "@/features/authentication/lib/hooks/useSignInPhoneNumber.ts";
 
 type PhoneNumberEntryProps = {
   dispatch: React.Dispatch<AuthenticationActions>
 }
 
-export default function PhoneNumberEntry({ dispatch }: PhoneNumberEntryProps) {
+export default function PhoneNumberEntry({dispatch }: PhoneNumberEntryProps) {
 
   const { toast } = useToast()
   const [phone, setPhone] = useState('')
-  const { isValid, error, checkValidPhone } = useValidationPhone()
-  const [isPending, setIsPending] = useState(false)
+  const { isValid, error: validateError, checkValidPhone } = useValidationPhone()
+  const {isPending,error: signInError, isError, submitPhoneNumber} = useSignInPhoneNumber(dispatch)
 
 
-  const submitPhoneNumber = async () => {
+  const handleSignInClick = async () => {
+
     if (!isValid) {
       return toast({
         variant: 'destructive',
-        title: error.title,
-        description: error.description
+        title: validateError.title,
+        description: validateError.description
       })
     }
-    setIsPending(true)
 
-    const res = await authService.signInWithPhone(formatPhone(phone))
+    await submitPhoneNumber(formatPhone(phone))
 
-    if (!res) {
-      setIsPending(false)
+    if(isError) {
       return toast({
         variant: 'destructive',
-        title: 'Ошибка',
-        description: 'Возникла ошибка при регистрации номера'
+        title: signInError?.title,
+        description: signInError?.message
       })
     }
-    setIsPending(false)
-    dispatch({ type: AuthenticationSteps.VERIFY_CODE_ENTRY })
   }
 
   if (isPending) {
@@ -81,7 +77,7 @@ export default function PhoneNumberEntry({ dispatch }: PhoneNumberEntryProps) {
             }}
           />
           <div>
-            <Button id="send-phone-number" className="bg-emerald-700" onClick={submitPhoneNumber} variant="noShadow">Далее</Button>
+            <Button id="send-phone-number" className="bg-emerald-700" onClick={handleSignInClick} variant="noShadow">Далее</Button>
           </div>
         </div>
       </div>

@@ -1,32 +1,37 @@
-import {User} from "firebase/auth";
-import React, {createContext, useContext, useEffect, useReducer} from "react";
-import {useNavigate} from "react-router-dom";
-import {authService} from "../services/auth.service";
-import {viewerService} from "@/entities/viewer/interfaces/viewer.services";
+import { User } from "firebase/auth";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../services/auth.service";
+import { viewerService } from "@/entities/viewer/interfaces/viewer.services";
+import { Viewer } from "@/entities/viewer/viewer.model.ts";
+
 import {
     ActionAuthInProgress,
-    ActionAuthSuccess, ActionAuthWithoutAccountData, ActionNotAuth,
-    AuthorizationSteps,
-    StateAuthInProgress, StateAuthSuccess,
+    ActionAuthSuccess,
+    ActionCreateProfileData,
+    ActionNotAuth,
+    StateCreateProfileData,
+    StateAuthInProgress,
+    StateAuthSuccess,
     StateNotAuth,
-    StateWithoutAccountData
+    AuthorizationSteps
 } from "@/shared/types";
-import {Viewer} from "@/entities/viewer/viewer.model.ts";
 
-export type Actions =
+type AuthorizationActions =
     ActionNotAuth |
     ActionAuthInProgress |
-    ActionAuthWithoutAccountData |
+    ActionCreateProfileData |
     ActionAuthSuccess<Viewer>
 
-export type State =
+type AuthorizationState =
     StateAuthInProgress |
     StateNotAuth |
-    StateWithoutAccountData |
+    StateCreateProfileData |
     StateAuthSuccess<Viewer>
 
 
-const DispatchContext = createContext<React.Dispatch<Actions> | undefined>(undefined)
+const DispatchContext = createContext<React.Dispatch<AuthorizationActions> | undefined>(undefined)
+
 
 export const useDispatchContext = () => {
     const context = useContext(DispatchContext)
@@ -41,9 +46,9 @@ export const useDispatchContext = () => {
 
 // AuthStateContext
 
-const AuthContext = createContext<State | undefined>(undefined)
+const AuthContext = createContext<AuthorizationState | undefined>(undefined)
 
-export const useAuthState = (): State => {
+export const useAuthState = (): AuthorizationState => {
     const context = useContext(AuthContext)
 
     if (!context) {
@@ -52,22 +57,26 @@ export const useAuthState = (): State => {
     return context
 }
 
-const INITIAL_STATE: State = {
+const INITIAL_STATE: AuthorizationState = {
     step: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
-const reducer = (state: State, action: Actions): State => {
+const reducer = (state: AuthorizationState, action: AuthorizationActions): AuthorizationState => {
+    console.log(action.type)
     switch (action.type) {
         case AuthorizationSteps.AUTH_IN_PROGRESS:
-            return {...state, step: AuthorizationSteps.AUTH_IN_PROGRESS} as StateAuthInProgress;
+            return { ...state, step: AuthorizationSteps.AUTH_IN_PROGRESS } as StateAuthInProgress;
         case AuthorizationSteps.NOT_AUTH:
-            return {...state, step: AuthorizationSteps.NOT_AUTH} as StateNotAuth;
-        case AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA:
             return {
                 ...state,
-                step: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA,
+                step: AuthorizationSteps.NOT_AUTH,
+            } as StateNotAuth;
+        case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
+            return {
+                ...state,
+                step: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
                 viewerId: action.payload
-            } as StateWithoutAccountData;
+            } as StateCreateProfileData;
         case AuthorizationSteps.AUTH_SUCCESS:
             return {
                 ...state,
@@ -80,17 +89,17 @@ const reducer = (state: State, action: Actions): State => {
 }
 
 
-export default function AuthProvider({children}: { children: React.ReactNode }) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
     console.log(state)
     const navigate = useNavigate()
 
     useEffect(() => {
 
-        if (state.step !== AuthorizationSteps.AUTH_IN_PROGRESS && state.step !== AuthorizationSteps.AUTH_SUCCESS) return
+        if (state.step !== AuthorizationSteps.AUTH_IN_PROGRESS
+            && state.step !== AuthorizationSteps.AUTH_SUCCESS) return
 
         const unsubscribe = authService.onAuthState(async (user: User) => {
-            console.log(1)
             try {
                 if (user) {
                     const profileData = await viewerService.getViewerProfileData(user.uid)
@@ -103,20 +112,22 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
                         return navigate('/home')
                     } else {
                         dispatch({
-                            type: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA,
-                            payload: user.uid
-                        } as ActionAuthWithoutAccountData)
+                            type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
+                            payload: user.uid,
+                        } as ActionCreateProfileData)
                         return navigate('/create-profile')
                     }
                 }
-                dispatch({type: AuthorizationSteps.NOT_AUTH} as ActionNotAuth)
+                dispatch({
+                    type: AuthorizationSteps.NOT_AUTH,
+                } as ActionNotAuth)
                 return navigate('/sign-in')
             } catch (error) {
                 console.error(error)
             }
         })
         return () => unsubscribe()
-    }, [state.step  ])
+    }, [state.step])
 
     return (
         <DispatchContext.Provider value={dispatch}>

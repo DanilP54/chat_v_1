@@ -1,25 +1,35 @@
 export type {
+
+    // actions
     ActionAuthInProgress,
     ActionAuthSuccess,
-    ActionAuthWithoutAccountData,
+    ActionCreateProfileData,
     ActionNotAuth,
+
+    // state
+    StateCreateProfileData,
     StateAuthInProgress,
     StateAuthSuccess,
     StateNotAuth,
-    StateWithoutAccountData,
 } from './authorization.state.ts'
 
 export type {
-    Actions as AuthenticationActions,
-    State as AuthenticationState,
-    ActionVerifyCode,
+    AuthenticationActions,
     ActionPhoneNumber,
-    StateVerifyCode,
-    StatePhoneNumber} from './authentication.state.ts'
+    ActionVerifyCode,
 
-export {AuthorizationSteps} from './authorization.state.ts'
-export {AuthenticationSteps} from './authentication.state.ts'
+    AuthenticationState,
+    StatePhoneNumber,
+    StateVerifyCode
+} from './authentication.state.ts'
 
 
+export { AuthorizationSteps } from './authorization.state.ts'
+export { AuthenticationSteps } from './authentication.state.ts'
+
+export type AuthorizationError = {
+    title: string,
+    message: string
+}
 
 

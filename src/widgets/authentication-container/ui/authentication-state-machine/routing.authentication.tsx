@@ -8,22 +8,16 @@ import {Verification, PhoneNumberEntry } from '@/features/authentication'
 
 
 type createStatePhoneNumberEntry = (dispatch: React.Dispatch<AuthenticationActions>) => React.ReactNode
-type createVerification= () => React.ReactNode
+type createVerification = () => React.ReactNode
 
 
 
 const createStatePhoneNumberEntry: createStatePhoneNumberEntry =
-    ( dispatch) => <PhoneNumberEntry  dispatch={dispatch}/>
+    ( dispatch) => <PhoneNumberEntry dispatch={dispatch}/>
 
-const createVerification: createVerification=
-    () => <Verification />
+const createVerification: createVerification =
+    () => <Verification  />
 
-//
-// enum AuthenticationStatus {
-//     IDLE = 'IDLE',
-//     PENDING = 'PENDING',
-//     ERROR = 'ERROR',
-// }
 
 export const routingAuthentication = (state: AuthenticationState, dispatch: React.Dispatch<AuthenticationActions>): React.ReactNode => {
     switch (state.step) {

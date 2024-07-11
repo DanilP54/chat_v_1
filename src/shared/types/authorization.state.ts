@@ -1,11 +1,11 @@
 export enum AuthorizationSteps {
     AUTH_IN_PROGRESS = 'AUTHORIZATION_IN_PROGRESS',
     NOT_AUTH = 'NOT_AUTHORIZED',
-    AUTH_WITHOUT_ACCOUNT_DATA = 'AUTH_WITHOUT_ACCOUNT_DATA',
+    AUTH_CREATE_PROFILE_DATA = 'AUTH_CREATE_PROFILE_DATA',
     AUTH_SUCCESS = 'AUTHORIZATION_SUCCESS'
 }
 
-// State
+// AuthorizationState
 
 export type StateAuthInProgress = {
     step: AuthorizationSteps.AUTH_IN_PROGRESS,
@@ -15,8 +15,8 @@ export type StateNotAuth = {
     step: AuthorizationSteps.NOT_AUTH,
 }
 
-export type StateWithoutAccountData = {
-    step: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA,
+export type StateCreateProfileData = {
+    step: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
     viewerId: UniqueId
 }
 
@@ -27,17 +27,18 @@ export type StateAuthSuccess<T extends object> = {
 
 // Actions
 
+
 export type ActionAuthInProgress = {
     type: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
 export type ActionNotAuth = {
-    type: AuthorizationSteps.NOT_AUTH
+    type: AuthorizationSteps.NOT_AUTH,
 }
 
-export type ActionAuthWithoutAccountData = {
-    type: AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA
-    payload: UniqueId
+export type ActionCreateProfileData = {
+    type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA
+    payload: UniqueId,
 }
 
 export type ActionAuthSuccess<T extends object> = {

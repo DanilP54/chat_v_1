@@ -7,20 +7,20 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {createProfileSchema} from "../lib/form-shema/create-profile-schema.ts";
 import { useToast } from "@/shared/ui/use-toast.ts";
-import { viewerService } from "@/entities/viewer/interfaces/viewer.services.ts";
 import {useAuthState} from "@/entities/session";
-import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
-import { AuthorizationSteps } from "@/shared/types/authorization.state.ts";
+import { Loader } from "@/shared/ui/loader";
+import {useSubmitProfileData} from "@/features/create-profile/lib/hooks/useSubmitProfileData.ts";
 
 
 
 
 
 export default function CreateProfileForm() {
+
     const { toast } = useToast()
     const state = useAuthState()
-    const dispatch = useDispatchContext()
-    console.log(state)
+    const {isPending, submit, isError, error} = useSubmitProfileData()
+
     // const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null)
 
     const form = useForm<z.infer<typeof createProfileSchema>>({
@@ -32,18 +32,19 @@ export default function CreateProfileForm() {
         mode: "onSubmit",
     })
 
-    async function onSubmit(values: z.infer<typeof createProfileSchema>) {
-
+    async function createProfileData(values: z.infer<typeof createProfileSchema>) {
         const isValid = createProfileSchema.safeParse(values)
 
         if (isValid.success && state.viewerId) {
-            await viewerService.setViewerToDB({
-                id: state.viewerId,
-                firstName: values.firstname,
-                lastName: values.lastname,
-                avatar: 'https' || undefined
+            await submit(values, state.viewerId)
+        }
+
+        if(isError) {
+            toast({
+                title: error?.title,
+                variant: 'destructive',
+                description: error?.message
             })
-            dispatch({type: AuthorizationSteps.AUTH_IN_PROGRESS})
         }
 
         if (isValid.error) {
@@ -56,10 +57,14 @@ export default function CreateProfileForm() {
         }
     }
 
+    if(isPending) {
+        return <Loader />
+    }
+
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center justify-center h-full gap-9">
+            <form onSubmit={form.handleSubmit(createProfileData)} className="flex flex-col items-center justify-center h-full gap-9">
                 <FormField
                     control={form.control}
                     name="avatar"

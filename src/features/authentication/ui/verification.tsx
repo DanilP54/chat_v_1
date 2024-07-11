@@ -1,19 +1,11 @@
-import { Button } from "@/shared/ui/button";
-import {
-    InputOTP as InputOtpBox,
-    InputOTPGroup,
-    InputOTPSlot,
-} from "@/shared/ui/input-otp";
-// import {formatTime} from "../lib/formatTime";
-import { useEffect, useState } from "react";
-// import clsx from "clsx";
-import { authService } from "@/entities/session/services/auth.service";
-// import { useDispatchContext} from "@/entities/session/ui/auth-provider";
-import { Loader } from "@/shared/ui/loader";
-import { formatTime } from "@/features/authentication/lib/formatTime.ts";
-import { clsx } from "clsx";
-import { ActionAuthInProgress, AuthorizationSteps } from "@/shared/types";
-import { useDispatchContext } from "@/entities/session/ui/auth-provider";
+import {Button} from "@/shared/ui/button";
+import {InputOTP as InputOtpBox, InputOTPGroup, InputOTPSlot,} from "@/shared/ui/input-otp";
+import {useEffect, useState} from "react";
+import {Loader} from "@/shared/ui/loader";
+import {formatTime} from "@/features/authentication/lib/formatTime.ts";
+import {clsx} from "clsx";
+import {useOtpVerification} from "@/features/authentication/lib/hooks/useOtpVerification.ts";
+import {useToast} from "@/shared/ui/use-toast.ts";
 
 
 const DEFAULT_TIME = 60
@@ -22,11 +14,10 @@ const MAX_LENGTH_OTP = 6
 
 export default function Verification() {
 
-    const dispatch = useDispatchContext()
-    const [isPending, setIsPending] = useState(false)
-
+    const {toast} = useToast()
     const [timer, setTimer] = useState(DEFAULT_TIME)
     const [otp, setOtp] = useState('')
+    const {isError, error, submitOtp, isPending} = useOtpVerification()
 
     useEffect(() => {
         if (!timer) return
@@ -38,23 +29,16 @@ export default function Verification() {
         }
     }, [timer])
 
-    const handleNextStep = async () => {
-        // setIsPending(true)
-        const data = await authService.verifyCode(otp)
-
-        if (data?.user) {
-            dispatch({type: AuthorizationSteps.AUTH_IN_PROGRESS} as ActionAuthInProgress)
-            // setIsPending(false)
-        }
-        // setIsPending(false)
-    }
-
-    // const handlePrevStep = () => {
-    //     // dispatch()
-    // }
-
     const handleChangeOtp = (value: string) => {
         setOtp(value)
+    }
+
+    if(isError) {
+        return toast({
+            variant: 'destructive',
+            title: error?.title,
+            description: error?.message
+        })
     }
 
 
@@ -83,7 +67,7 @@ export default function Verification() {
                 </InputOtpBox>
                 <Button
                     disabled={otp.length < MAX_LENGTH_OTP}
-                    onClick={handleNextStep} variant="default" className="bg-emerald-700">Активировать</Button>
+                    onClick={() => submitOtp(otp)} variant="default" className="bg-emerald-700">Активировать</Button>
             </div>
         </div>
 

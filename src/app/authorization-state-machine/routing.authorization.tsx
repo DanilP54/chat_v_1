@@ -26,7 +26,7 @@ export const routingAuthorization = (state: State, outlet: React.ReactElement): 
             return createAuthInProgress(outlet);
         case AuthorizationSteps.NOT_AUTH:
             return createNotAuth(outlet);
-        case AuthorizationSteps.AUTH_WITHOUT_ACCOUNT_DATA:
+        case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
             return createAuthWithoutAccountData(outlet);
         case AuthorizationSteps.AUTH_SUCCESS:
             return createAuthSuccess(outlet);
