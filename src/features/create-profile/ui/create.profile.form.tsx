@@ -5,11 +5,11 @@ import { Button } from "@/shared/ui/button.tsx";
 import { Form, FormControl, FormField, FormItem } from "@/shared/ui/form.tsx";
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import {createProfileSchema} from "../lib/form-shema/create-profile-schema.ts";
+import { createProfileSchema } from "../lib/form-shema/create-profile-schema.ts";
 import { useToast } from "@/shared/ui/use-toast.ts";
-import {useAuthState} from "@/entities/session";
+import { useAuthState } from "@/entities/session";
 import { Loader } from "@/shared/ui/loader";
-import {useSubmitProfileData} from "@/features/create-profile/lib/hooks/useSubmitProfileData.ts";
+import { useSubmitProfileData } from "@/features/create-profile/lib/hooks/useSubmitProfileData.ts";
 
 
 
@@ -19,7 +19,7 @@ export default function CreateProfileForm() {
 
     const { toast } = useToast()
     const state = useAuthState()
-    const {isPending, submit, isError, error} = useSubmitProfileData()
+    const { isPending, submit, isError, error } = useSubmitProfileData()
 
     // const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null)
 
@@ -39,7 +39,7 @@ export default function CreateProfileForm() {
             await submit(values, state.viewerId)
         }
 
-        if(isError) {
+        if (isError) {
             toast({
                 title: error?.title,
                 variant: 'destructive',
@@ -57,7 +57,7 @@ export default function CreateProfileForm() {
         }
     }
 
-    if(isPending) {
+    if (isPending) {
         return <Loader />
     }
 

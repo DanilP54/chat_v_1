@@ -1,24 +1,20 @@
 import React from "react";
-import {AuthorizationSteps, StateAuthSuccess, StateNotAuth, StateWithoutAccountData, StateAuthInProgress} from "@/shared/types";
-import {Viewer} from "@/entities/viewer/viewer.model.ts";
-import {Loader} from "@/shared/ui/loader.tsx";
+import { AuthorizationSteps, StateAuthSuccess, StateNotAuth, StateCreateProfileData, StateAuthInProgress } from "@/shared/types";
+import { Viewer } from "@/entities/viewer/user.model";
 
 type State =
     StateAuthInProgress |
     StateNotAuth |
-    StateWithoutAccountData |
+    StateCreateProfileData |
     StateAuthSuccess<Viewer>
 
 type createState<T> = (outlet: T) => T
 
 
-const createAuthInProgress: createState<React.ReactElement> = (outlet) => <Loader />
-
-const createNotAuth: createState<React.ReactElement> = (outlet ) => outlet
-
+const createAuthInProgress: createState<React.ReactElement> = (outlet) => outlet
+const createNotAuth: createState<React.ReactElement> = (outlet) => outlet
 const createAuthWithoutAccountData: createState<React.ReactElement> = (outlet) => outlet
-
-const createAuthSuccess: createState<React.ReactElement>  = (outlet) => outlet
+const createAuthSuccess: createState<React.ReactElement> = (outlet) => outlet
 
 export const routingAuthorization = (state: State, outlet: React.ReactElement): React.ReactElement => {
     switch (state.step) {

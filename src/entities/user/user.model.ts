@@ -1,9 +1,12 @@
 import { Entity } from "@/kernel/abstract.entity";
+import { Chat } from "../chat/chat.model";
 
-export interface IUser {
-    firstName: UFirstName;
-    lastName: ULastName;
-    avatar: UAvatar;
+interface IUser {
+    firstName: VFirstName;
+    lastName: VLastName;
+    avatar: VAvatar | undefined;
+    chats: Chat[] | null;
+    blocked: UniqueId[] | null;
 }
 
 export class User extends Entity<IUser> {
@@ -12,8 +15,14 @@ export class User extends Entity<IUser> {
         super(user, id)
     }
 
-    public getUser(): IUser {
-        return this.entity
+    static create(object: IUser, id: string): User {
+        return new User(object, id)
     }
 }
+
+
+
+
+
+
 

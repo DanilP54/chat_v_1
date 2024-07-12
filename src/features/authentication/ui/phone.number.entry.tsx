@@ -9,19 +9,19 @@ import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
 import { formatPhone } from "../lib/formatPhone";
 import { Loader } from "@/shared/ui/loader";
-import {AuthenticationActions, AuthenticationState} from "@/shared/types";
-import {useSignInPhoneNumber} from "@/features/authentication/lib/hooks/useSignInPhoneNumber.ts";
+import { AuthenticationActions, AuthenticationState } from "@/shared/types";
+import { useSignInPhoneNumber } from "@/features/authentication/lib/hooks/useSignInPhoneNumber.ts";
 
 type PhoneNumberEntryProps = {
   dispatch: React.Dispatch<AuthenticationActions>
 }
 
-export default function PhoneNumberEntry({dispatch }: PhoneNumberEntryProps) {
+export default function PhoneNumberEntry({ dispatch }: PhoneNumberEntryProps) {
 
   const { toast } = useToast()
   const [phone, setPhone] = useState('')
   const { isValid, error: validateError, checkValidPhone } = useValidationPhone()
-  const {isPending,error: signInError, isError, submitPhoneNumber} = useSignInPhoneNumber(dispatch)
+  const { isPending, error: signInError, isError, submitPhoneNumber } = useSignInPhoneNumber(dispatch)
 
 
   const handleSignInClick = async () => {
@@ -36,7 +36,7 @@ export default function PhoneNumberEntry({dispatch }: PhoneNumberEntryProps) {
 
     await submitPhoneNumber(formatPhone(phone))
 
-    if(isError) {
+    if (isError) {
       return toast({
         variant: 'destructive',
         title: signInError?.title,

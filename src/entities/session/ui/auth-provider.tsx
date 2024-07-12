@@ -1,10 +1,6 @@
-import { User } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../services/auth.service";
-import { viewerService } from "@/entities/viewer/interfaces/viewer.services";
-import { Viewer } from "@/entities/viewer/viewer.model.ts";
-
+import { User } from "@/entities/user/user.model";
 import {
     ActionAuthInProgress,
     ActionAuthSuccess,
@@ -17,17 +13,28 @@ import {
     AuthorizationSteps
 } from "@/shared/types";
 
+
+import { Loader } from "@/shared/ui/loader";
+import { authService } from "../services/auth.service";
+import { User as UserDTO } from "firebase/auth";
+import { onExitState } from "../lib/onExitState";
+
+
 type AuthorizationActions =
     ActionNotAuth |
     ActionAuthInProgress |
     ActionCreateProfileData |
-    ActionAuthSuccess<Viewer>
+    ActionAuthSuccess<User>
 
 type AuthorizationState =
     StateAuthInProgress |
     StateNotAuth |
     StateCreateProfileData |
-    StateAuthSuccess<Viewer>
+    StateAuthSuccess<User>
+
+
+// Dispatch Context
+
 
 
 const DispatchContext = createContext<React.Dispatch<AuthorizationActions> | undefined>(undefined)
@@ -43,8 +50,7 @@ export const useDispatchContext = () => {
     return context;
 }
 
-
-// AuthStateContext
+// AuthContext
 
 const AuthContext = createContext<AuthorizationState | undefined>(undefined)
 
@@ -54,15 +60,19 @@ export const useAuthState = (): AuthorizationState => {
     if (!context) {
         throw new Error('useAuthState must be used within a Provider')
     }
-    return context
+
+    return context;
 }
+
+// State
 
 const INITIAL_STATE: AuthorizationState = {
     step: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
+// Reducer
+
 const reducer = (state: AuthorizationState, action: AuthorizationActions): AuthorizationState => {
-    console.log(action.type)
     switch (action.type) {
         case AuthorizationSteps.AUTH_IN_PROGRESS:
             return { ...state, step: AuthorizationSteps.AUTH_IN_PROGRESS } as StateAuthInProgress;
@@ -79,60 +89,78 @@ const reducer = (state: AuthorizationState, action: AuthorizationActions): Autho
             } as StateCreateProfileData;
         case AuthorizationSteps.AUTH_SUCCESS:
             return {
-                ...state,
                 step: AuthorizationSteps.AUTH_SUCCESS,
-                currentViewer: action.payload
-            } as StateAuthSuccess<Viewer>
+                currentUser: action.payload
+            } as StateAuthSuccess<User>
         default:
             throw new Error('Action not found')
     }
 }
 
+// Provider
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
+
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-    console.log(state)
     const navigate = useNavigate()
+    
+
 
     useEffect(() => {
 
-        if (state.step !== AuthorizationSteps.AUTH_IN_PROGRESS
-            && state.step !== AuthorizationSteps.AUTH_SUCCESS) return
+        const isAuthProgress = state.step !== AuthorizationSteps.AUTH_IN_PROGRESS
+        const isAuthSuccess = state.step !== AuthorizationSteps.AUTH_SUCCESS
 
-        const unsubscribe = authService.onAuthState(async (user: User) => {
-            try {
-                if (user) {
-                    const profileData = await viewerService.getViewerProfileData(user.uid)
-                    console.log(profileData)
-                    if (profileData) {
-                        dispatch({
-                            type: AuthorizationSteps.AUTH_SUCCESS,
-                            payload: profileData
-                        } as ActionAuthSuccess<Viewer>)
-                        return navigate('/home')
-                    } else {
-                        dispatch({
-                            type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
-                            payload: user.uid,
-                        } as ActionCreateProfileData)
-                        return navigate('/create-profile')
-                    }
-                }
-                dispatch({
-                    type: AuthorizationSteps.NOT_AUTH,
-                } as ActionNotAuth)
-                return navigate('/sign-in')
-            } catch (error) {
-                console.error(error)
+        if (isAuthProgress && isAuthSuccess) return
+
+        const unsubscribe = authService.onAuthState(async (user: UserDTO) => {
+
+            const result = await onExitState(user, dispatch)
+
+            switch (result) {
+                case AuthorizationSteps.NOT_AUTH:
+                    navigate('/sign-in')
+                    break;
+                case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
+                    navigate('/create-profile')
+                    break;
+                case AuthorizationSteps.AUTH_SUCCESS:
+                    navigate('/home')
+                    break;
+                default:
+                    throw new Error('Ошибка состояния перехода')
             }
+
+            // if (!user) {
+            //     dispatch({ type: AuthorizationSteps.NOT_AUTH } as ActionNotAuth)
+            //     return navigate('/sign-in')
+            // }
+
+            // const profileData = await viewerService.getViewerProfileData(user.uid)
+
+            // if (!profileData) {
+            //     dispatch({
+            //         type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
+            //         payload: user.uid,
+            //     } as ActionCreateProfileData)
+            //     return navigate('/create-profile')
+            // }
+
+            // dispatch({
+            //     type: AuthorizationSteps.AUTH_SUCCESS,
+            //     payload: profileData
+            // } as ActionAuthSuccess<Viewer>)
+            // return navigate('/home')
         })
+
         return () => unsubscribe()
+
     }, [state.step])
 
     return (
         <DispatchContext.Provider value={dispatch}>
             <AuthContext.Provider value={state}>
-                {children}
+                {state.step === AuthorizationSteps.AUTH_IN_PROGRESS ? <Loader /> : children}
             </AuthContext.Provider>
         </DispatchContext.Provider>
     )

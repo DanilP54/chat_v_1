@@ -22,7 +22,7 @@ export type StateCreateProfileData = {
 
 export type StateAuthSuccess<T extends object> = {
     step: AuthorizationSteps.AUTH_SUCCESS,
-    currentViewer: T
+    currentUser: T
 }
 
 // Actions

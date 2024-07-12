@@ -1,15 +1,14 @@
-
 import { ResizablePanel, ResizablePanelGroup } from "@/shared/ui/resizable"
 import { Outlet } from "react-router-dom"
 import { Providers } from "./providers"
-import { routingAuthorization } from "@/app/authorization-state-machine/routing.authorization.tsx"
-import { useAuthState } from "@/entities/session"
+// import { routingAuthorization } from "@/app/authorization-state-machine/routing.authorization.tsx"
+// import { useAuthState } from "@/entities/session"
 
 
-const StateMachine = () => {
-    const state = useAuthState()
-    return routingAuthorization(state, <Outlet />)
-}
+// const StateMachine = () => {
+//     const state = useAuthState()
+//     return routingAuthorization(state, <Outlet />)
+// }
 
 const RootLayout = () => {
 
@@ -17,7 +16,7 @@ const RootLayout = () => {
         <Providers>
             <ResizablePanelGroup direction="horizontal">
                 <ResizablePanel>
-                    <StateMachine />
+                    <Outlet />
                 </ResizablePanel>
             </ResizablePanelGroup>
         </Providers>

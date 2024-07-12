@@ -1,16 +1,17 @@
 export abstract class Entity<T extends object> {
-    protected readonly entity: T
-    protected readonly id: string
-    constructor(entity: T, id: string) {
-        this.entity = entity
-        this.id = id
+    protected readonly _data: T
+    protected readonly _id: string
+
+    constructor(data: T, id: string) {
+        this._data = data
+        this._id = id
     }
 
     public getId() {
-        return this.id
+        return this._id
     }
 
-    public getEntity() {
-        return this.entity
+    public getData() {
+        return this._data
     }
 }

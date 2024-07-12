@@ -1,4 +1,4 @@
-import { viewerRepoInstance, ViewerRepository } from "@/entities/viewer/interfaces/repository";
+import { userRepoInstance, UserRepository } from "@/entities/user/interfaces/repository";
 import { auth } from "@/shared/config/firebase";
 import {
     Auth,
@@ -16,7 +16,7 @@ auth.settings.appVerificationDisabledForTesting = true;
 class AuthService {
     private recaptchaVerifier: RecaptchaVerifier | null = null
     private confirmationResult: ConfirmationResult | null = null
-    private readonly viewerRepository: ViewerRepository = viewerRepoInstance
+    private readonly userRepository: UserRepository = userRepoInstance
     private readonly auth: Auth = auth
 
     private setRecaptchaVerifier(recaptcha: RecaptchaVerifier) {
@@ -49,7 +49,6 @@ class AuthService {
 
             const appVerifier = recaptcha
             const confirmationResult = await signInWithPhoneNumber(this.auth, phoneNumber, appVerifier)
-            console.log(confirmationResult)
             if (confirmationResult) this.setConfirmationResult(confirmationResult)
 
             return confirmationResult
@@ -62,15 +61,13 @@ class AuthService {
     public async verifyCode(code: string): Promise<{ user: User, isNewUser: boolean | undefined } | undefined> {
         try {
             const confirmation = this.getConfirmationResult()
-            console.log(confirmation)
             const confirm = await confirmation.confirm(code)
-            console.log(confirm)
-            
+
             if (confirm) {
-                
+
                 const authInfo = getAdditionalUserInfo(confirm)
                 this.cleanRecaptchaAndConfirmation()
-                
+
                 return {
                     user: confirm.user,
                     isNewUser: authInfo?.isNewUser,

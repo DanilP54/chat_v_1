@@ -1,1 +1,3 @@
-export {CreateProfile} from './ui/create.profile.tsx'
+import CreateProfile from "./ui/create.profile";
+
+export { CreateProfile }

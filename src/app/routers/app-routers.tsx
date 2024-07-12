@@ -3,9 +3,8 @@ import RootLayout from "../RootLayout";
 import { HomePage } from "@/pages/home";
 import { ChatRoom } from "@/pages/chat-room";
 import { ChatDetails } from "@/pages/chat-details";
-import {AuthenticationPage} from "@/pages/authentication-page";
-import {CreateProfile} from "@/pages/create-profile";
-
+import { AuthenticationPage } from "@/pages/authentication-page";
+import { CreateProfile } from "@/pages/create-profile";
 
 const routers = [
     {
@@ -19,10 +18,12 @@ const routers = [
             {
                 path: 'create-profile',
                 element: <CreateProfile />
+
             },
             {
                 path: 'home',
                 element: <HomePage />
+
             },
             {
                 path: 'chat/:id',

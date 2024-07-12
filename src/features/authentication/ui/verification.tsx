@@ -1,11 +1,11 @@
-import {Button} from "@/shared/ui/button";
-import {InputOTP as InputOtpBox, InputOTPGroup, InputOTPSlot,} from "@/shared/ui/input-otp";
-import {useEffect, useState} from "react";
-import {Loader} from "@/shared/ui/loader";
-import {formatTime} from "@/features/authentication/lib/formatTime.ts";
-import {clsx} from "clsx";
-import {useOtpVerification} from "@/features/authentication/lib/hooks/useOtpVerification.ts";
-import {useToast} from "@/shared/ui/use-toast.ts";
+import { Button } from "@/shared/ui/button";
+import { InputOTP as InputOtpBox, InputOTPGroup, InputOTPSlot, } from "@/shared/ui/input-otp";
+import { useEffect, useState } from "react";
+import { Loader } from "@/shared/ui/loader";
+import { formatTime } from "@/features/authentication/lib/formatTime.ts";
+import { clsx } from "clsx";
+import { useOtpVerification } from "@/features/authentication/lib/hooks/useOtpVerification.ts";
+import { useToast } from "@/shared/ui/use-toast.ts";
 
 
 const DEFAULT_TIME = 60
@@ -14,10 +14,10 @@ const MAX_LENGTH_OTP = 6
 
 export default function Verification() {
 
-    const {toast} = useToast()
+    const { toast } = useToast()
     const [timer, setTimer] = useState(DEFAULT_TIME)
     const [otp, setOtp] = useState('')
-    const {isError, error, submitOtp, isPending} = useOtpVerification()
+    const { isError, error, submitOtp, isPending } = useOtpVerification()
 
     useEffect(() => {
         if (!timer) return
@@ -33,7 +33,7 @@ export default function Verification() {
         setOtp(value)
     }
 
-    if(isError) {
+    if (isError) {
         return toast({
             variant: 'destructive',
             title: error?.title,

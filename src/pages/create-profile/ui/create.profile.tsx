@@ -1,5 +1,5 @@
 import {CreateProfileForm} from "@/features/create-profile";
 
-export function CreateProfile() {
+export default function CreateProfile() {
     return <CreateProfileForm />
 }

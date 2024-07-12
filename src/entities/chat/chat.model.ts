@@ -9,8 +9,6 @@ interface IParticipantInfo {
     lastName: ULastName;
 }
 
-
-
 interface IChatPrewiew {
     participantInfo: IParticipantInfo;
     lastMessage: string;
@@ -30,7 +28,6 @@ type MetaData = {
 
 type TypeDate = 'createdAt' | 'updatedAt'
 
-
 // model
 
 interface IChat {
@@ -43,27 +40,29 @@ interface IChat {
 
 export class Chat extends Entity<IChat> {
 
-    constructor(chat: IChat, id: string) {
+    private constructor(chat: IChat, id: string) {
         super(chat, id)
     }
-
-    public getChat(): IChat {
-        return this.entity
+    static create(chat: IChat, id: UniqueId): Chat {
+        return new Chat(chat, id)
     }
 
     public getMetaData(prop: TypeDate): Date {
-        return this.entity.metadata[prop]
+        return this.data.metadata[prop]
     }
 
     public getRecipients(): IUser[] {
-        return this.entity.participants
+        return this.data.participants
     }
 
     public getChatPreview(): IChatPrewiew {
-        return this.entity.chatPreview
+        return this.data.chatPreview
     }
 
     public getMessages(): Message[] {
-        return this.entity.messages
+        return this.data.messages
     }
 }
+
+
+

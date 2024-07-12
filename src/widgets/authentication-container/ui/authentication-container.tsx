@@ -19,6 +19,5 @@ const reducer = (state: AuthenticationState, action: AuthenticationActions): Aut
 
 export default function AuthenticationContainer() {
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-    console.log('Локальный стейт: ', state)
     return routingAuthentication(state, dispatch)
 }

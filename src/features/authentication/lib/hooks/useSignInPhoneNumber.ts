@@ -1,16 +1,17 @@
-import {authService} from "@/entities/session/services/auth.service.ts";
-import {Dispatch, useState} from "react";
-import {AuthenticationActions, AuthenticationSteps, AuthorizationError} from "@/shared/types";
+import { authService } from "@/entities/session/services/auth.service.ts";
+import { Dispatch, useState } from "react";
+import { AuthenticationActions, AuthenticationSteps, AuthorizationError } from "@/shared/types";
 
 
 
 export const useSignInPhoneNumber = (dispatch: Dispatch<AuthenticationActions>) => {
+
     const [isPending, setIsPending] = useState<boolean>(false)
     const [isError, setIsError] = useState<boolean>(false)
     const [error, setError] = useState<AuthorizationError | undefined>(undefined)
 
-    console.log(isPending)
     const submitPhoneNumber = async (phoneNumber: string) => {
+
         setError(undefined)
         setIsError(false)
         setIsPending(true)
