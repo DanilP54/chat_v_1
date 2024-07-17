@@ -1,4 +1,4 @@
-import { Entity } from "@/kernel/abstract.entity";
+import { Entity } from "@/kernel/domain/entity";
 import { IUser } from "../user/user.model";
 
 // value object
@@ -31,7 +31,7 @@ type TypeDate = 'createdAt' | 'updatedAt'
 // model
 
 interface IChat {
-    participants: IUser[];
+    participant: IUser;
     chatPreview: IChatPrewiew;
     messages: Message[];
     metadata: MetaData

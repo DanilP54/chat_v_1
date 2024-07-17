@@ -1,7 +1,7 @@
-import {userService} from "@/entities/user/interfaces/user.services";
-import {useState} from "react";
-import {AuthorizationError, AuthorizationSteps} from "@/shared/types";
-import {useDispatchContext} from "@/entities/session/ui/auth-provider.tsx";
+import { userService } from "@/entities/user/interfaces/user.services";
+import { useState } from "react";
+import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
+import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
 
 export const useSubmitProfileData = () => {
 
@@ -17,7 +17,7 @@ export const useSubmitProfileData = () => {
         error
     }
 
-    async function submit(value, userId) {
+    async function submit(values, userId) {
 
         setError(undefined)
         setIsError(false)
