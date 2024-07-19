@@ -11,7 +11,6 @@ export class UserFirstName extends ValueObject<string> {
         if (value === null || value === undefined) {
             return Result.fail<UserFirstName>('First name is undefined')
         }
-
         if (value.length < 2) {
             return Result.fail<UserFirstName>('First name must be at least 2 characters long')
         }

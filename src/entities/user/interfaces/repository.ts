@@ -10,9 +10,9 @@ export interface UserRepository {
 
 interface UserDTO {
     id: UniqueId,
-    firstName: VFirstName,
-    lastName: VLastName,
-    avatar: VAvatar | undefined
+    firstName: string,
+    lastName: string,
+    avatar: string | null
 }
 
 export class UserRepos implements UserRepository {

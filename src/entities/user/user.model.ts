@@ -7,12 +7,12 @@ import { UserLastName } from "./value-object/user.lastname";
 import { UserFirstName } from "./value-object/user.firstname";
 
 interface UserProps {
-    firstName: UserFirstName,
-    lastName: UserLastName,
-    avatar: string | undefined,
-    chatCollection: UserChatCollection,
+    firstName: string,
+    lastName: string,
+    avatar: string | null,
+    chatCollection: object[],
     blockedUsers: UniqueId[],
-    createdAt?: Date
+    createdAt?: Date,
 }
 
 
@@ -28,8 +28,6 @@ export class User extends Entity<UserProps> {
             { argument: data.chatCollection, argumentName: 'chat collection' },
             { argument: data.blockedUsers, argumentName: 'blocked users' }
         ])
-
-        console.log(dataResult)
 
         if (!dataResult.succeeded) {
             return Result.fail<User>(dataResult.message)

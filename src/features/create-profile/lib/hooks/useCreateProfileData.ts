@@ -3,6 +3,15 @@ import { useState } from "react";
 import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
 import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
 
+interface UserDTO {
+
+    firstName: VFirstName,
+    lastName: VLastName,
+    avatar: VAvatar | null
+}
+
+
+
 export const useCreateProfileData = () => {
 
     const [isPending, setIsPending] = useState<boolean>(false)
@@ -26,8 +35,8 @@ export const useCreateProfileData = () => {
         await userService.setUserToDB(userId, {
             firstName: values.firstname,
             lastName: values.lastname,
-            avatar: 'https' || undefined,
-        }).then(() => {
+            avatar: null,
+        } as UserDTO).then(() => {
             authorizationDispatch({
                 type: AuthorizationSteps.AUTH_IN_PROGRESS
             })

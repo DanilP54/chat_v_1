@@ -1,6 +1,6 @@
 import { userService } from "@/entities/user/interfaces/user.services"
 import { User } from "@/entities/user/user.model"
-import { ActionAuthSuccess, ActionCreateProfileData, ActionNotAuth, AuthorizationSteps } from "@/shared/types"
+import { ActionAuthSuccess, ActionCreateProfileData, ActionNotAuth, AuthorizationSteps, CurrentUser } from "@/shared/types"
 import { User as PersistUserDTO } from "firebase/auth"
 import { Dispatch } from "react"
 
@@ -10,15 +10,15 @@ type AuthorizationActions =
     ActionAuthSuccess<User>
 
 export const onExitState = async (user: PersistUserDTO, dispatch: Dispatch<AuthorizationActions>) => {
-    
+
     if (!user) {
         dispatch({ type: AuthorizationSteps.NOT_AUTH } as ActionNotAuth)
         return AuthorizationSteps.NOT_AUTH
     }
-    console.log('trigger')
-    const profileData = await userService.getUserProfileData(user.uid)
 
-    if (!profileData) {
+    const currentUser = await userService.getCurrentUser(user.uid)
+    console.log('Итого:', currentUser)
+    if (!currentUser) {
         dispatch({
             type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
             payload: user.uid,
@@ -28,7 +28,7 @@ export const onExitState = async (user: PersistUserDTO, dispatch: Dispatch<Autho
 
     dispatch({
         type: AuthorizationSteps.AUTH_SUCCESS,
-        payload: profileData
+        payload: currentUser
     } as ActionAuthSuccess<User>)
     return AuthorizationSteps.AUTH_SUCCESS
 }

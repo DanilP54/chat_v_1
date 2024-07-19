@@ -20,6 +20,7 @@ export class Guard {
     }
 
     public static againstNullOrUndefined(argument: any, argumentName: string): IGuardResult {
+        
         if (argument === null || argument === undefined) {
             return { succeeded: false, message: `${argumentName} is null or undefined` }
         } else {

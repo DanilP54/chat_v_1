@@ -5,7 +5,7 @@ export type {
     ActionAuthSuccess,
     ActionCreateProfileData,
     ActionNotAuth,
-
+    CurrentUser,
     // state
     StateCreateProfileData,
     StateAuthInProgress,
@@ -17,7 +17,7 @@ export type {
     AuthenticationActions,
     ActionPhoneNumber,
     ActionVerifyCode,
-
+    
     AuthenticationState,
     StatePhoneNumber,
     StateVerifyCode

@@ -5,32 +5,44 @@ import { UniqueEntityID } from "@/kernel/core/domain/UniqueEntityID.ts";
 import { UserFirstName } from "../value-object/user.firstname";
 import { UserLastName } from "../value-object/user.lastname";
 import { UserChatCollection } from "../value-object/user.chat.collection";
+import { CurrentUser } from "@/shared/types";
 
 type IUserForm = {
     firstName: string,
     lastName: string,
-    avatar: string | undefined
+    avatar: string | null
 }
 
 export class UserMap {
 
-    public static toPersistence(dto: IUserForm): IPersistUser {
+    static toPersistence(dto: IUserForm): IPersistUser {
         return {
             firstName: dto.firstName,
             lastName: dto.lastName,
-            avatar: dto.avatar ?? undefined,
+            avatar: dto.avatar,
             chats: [],
             blockedUsers: [],
         }
     }
 
-    public static toDomain(dto: DocumentDTO, uid: string): User {
+    // static toView(dto: User): CurrentUser {
+    //     return {
+    //         id: dto.id.toValue().toString(),
+    //         fullname: `${dto.data.firstName.value} ${dto.data.lastName.value}`,
+    //         avatar: dto.data.avatar,
+    //         chats: dto.data.chatCollection.value.length > 0 ? dto.data.chatCollection.value : undefined,
+    //         blockedUsers: dto.data.blockedUsers.length > 0 ? dto.data.blockedUsers : undefined,
+    //     }
+    // }
+
+
+    static toDomain(dto: DocumentDTO, uid: string): User {
         const userOrError = User.create({
-            firstName: UserFirstName.create(dto.firstName).getValue(),
-            lastName: UserLastName.create(dto.lastName).getValue(),
-            avatar: dto.avatar ?? undefined,
-            chatCollection: UserChatCollection.create(dto.chats).getValue(),
-            blockedUsers: dto.blocked,
+            firstName: UserFirstName.create(dto.firstName).getValue().value,
+            lastName: UserLastName.create(dto.lastName).getValue().value,
+            avatar: dto.avatar,
+            chatCollection: UserChatCollection.create(dto.chats).getValue().value,
+            blockedUsers: dto.blockedUsers,
         }, new UniqueEntityID(uid))
 
         if (!userOrError.isSuccess) {

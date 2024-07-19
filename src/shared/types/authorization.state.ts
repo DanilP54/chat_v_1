@@ -1,3 +1,5 @@
+
+
 export enum AuthorizationSteps {
     AUTH_IN_PROGRESS = 'AUTHORIZATION_IN_PROGRESS',
     NOT_AUTH = 'NOT_AUTHORIZED',
@@ -5,6 +7,13 @@ export enum AuthorizationSteps {
     AUTH_SUCCESS = 'AUTHORIZATION_SUCCESS'
 }
 
+export type CurrentUser = {
+    id: UniqueId,
+    fullname: string,
+    avatar: string | undefined,
+    chats: object[] | undefined,
+    blockedUsers: string[] | undefined,
+}
 // AuthorizationState
 
 export type StateAuthInProgress = {

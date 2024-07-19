@@ -33,7 +33,7 @@ export interface IChat {
 export interface IPersistUser {
     firstName: string,
     lastName: string,
-    avatar: string | undefined,
+    avatar: string | null,
     chats: UniqueId[],
     blockedUsers: UniqueId[],
 }
