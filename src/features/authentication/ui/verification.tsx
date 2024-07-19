@@ -17,7 +17,8 @@ export default function Verification() {
     const { toast } = useToast()
     const [timer, setTimer] = useState(DEFAULT_TIME)
     const [otp, setOtp] = useState('')
-    const { isError, error, submitOtp, isPending } = useOtpVerification()
+    
+const { isError, error, submitOtp, isPending } = useOtpVerification()
 
     useEffect(() => {
         if (!timer) return

@@ -3,24 +3,24 @@ import { useState } from "react";
 import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
 import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
 
-export const useSubmitProfileData = () => {
+export const useCreateProfileData = () => {
 
     const [isPending, setIsPending] = useState<boolean>(false)
-    const [isError, setIsError] = useState<boolean>(false)
+    const [isErrorCreatePD, setIsErrorCreatePD] = useState<boolean>(false)
     const [error, setError] = useState<AuthorizationError | null>(null)
     const authorizationDispatch = useDispatchContext()
 
     const createProfile = {
-        submit,
+        create,
         isPending,
-        isError,
+        isErrorCreatePD,
         error
     }
 
-    async function submit(values, userId) {
+    async function create(values, userId) {
 
         setError(null)
-        setIsError(false)
+        setIsErrorCreatePD(false)
         setIsPending(true)
 
         await userService.setUserToDB(userId, {
@@ -32,7 +32,7 @@ export const useSubmitProfileData = () => {
                 type: AuthorizationSteps.AUTH_IN_PROGRESS
             })
         }).catch((error: Error) => {
-            setIsError(true)
+            setIsErrorCreatePD(true)
             setError({
                 title: 'Ошибка регистрации номера телефона',
                 message: error.message

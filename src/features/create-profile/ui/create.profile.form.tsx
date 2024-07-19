@@ -1,25 +1,28 @@
 import UploadAvatar from "./upload-avatar.tsx";
 import FirstNameInput from "./first-name-input.tsx";
 import LastNameInput from "./last-name-input.tsx";
-import { Button } from "@/shared/ui/button.tsx";
-import { Form, FormControl, FormField, FormItem } from "@/shared/ui/form.tsx";
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { createProfileSchema } from "../lib/form-shema/create-profile-schema.ts";
-import { useToast } from "@/shared/ui/use-toast.ts";
-import { useAuthState } from "@/entities/session";
-import { Loader } from "@/shared/ui/loader";
-import { useSubmitProfileData } from "@/features/create-profile/lib/hooks/useSubmitProfileData.ts";
-
-
-
+import {Button} from "@/shared/ui/button.tsx";
+import {Form, FormControl, FormField, FormItem} from "@/shared/ui/form.tsx";
+import {useForm} from "react-hook-form"
+import {z} from "zod"
+import {createProfileSchema} from "../lib/form-shema/create-profile-schema.ts";
+import {useToast} from "@/shared/ui/use-toast.ts";
+import {useAuthState} from "@/entities/session";
+import {Loader} from "@/shared/ui/loader";
+import {useCreateProfileData} from "@/features/create-profile/lib/hooks/useCreateProfileData.ts";
 
 
 export default function CreateProfileForm() {
 
-    const { toast } = useToast()
+    const {
+        isPending,
+        isErrorCreatePD,
+        error,
+        create,
+    } = useCreateProfileData()
+
+    const {toast} = useToast()
     const state = useAuthState()
-    const { isPending, submit, isError, error } = useSubmitProfileData()
 
     // const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null)
 
@@ -32,20 +35,8 @@ export default function CreateProfileForm() {
         mode: "onSubmit",
     })
 
-    async function createProfileData(values: z.infer<typeof createProfileSchema>) {
+    async function handleCreateProfileData(values: z.infer<typeof createProfileSchema>) {
         const isValid = createProfileSchema.safeParse(values)
-
-        if (isValid.success && state.viewerId) {
-            await submit(values, state.viewerId)
-        }
-
-        if (isError) {
-            toast({
-                title: error?.title,
-                variant: 'destructive',
-                description: error?.message
-            })
-        }
 
         if (isValid.error) {
             const messages = isValid.error.issues
@@ -55,23 +46,37 @@ export default function CreateProfileForm() {
                 description: messages.map(issue => issue.message).join(', ')
             })
         }
+
+        if (isValid.success && state.userId) {
+            await create(values, state.userId)
+        }
+
+        if (isErrorCreatePD) {
+            toast({
+                title: error?.title,
+                variant: 'destructive',
+                description: error?.message
+            })
+
+        }
     }
 
     if (isPending) {
-        return <Loader />
+        return <Loader/>
     }
 
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(createProfileData)} className="flex flex-col items-center justify-center h-full gap-9">
+            <form onSubmit={form.handleSubmit(handleCreateProfileData)}
+                  className="flex flex-col items-center justify-center h-full gap-9">
                 <FormField
                     control={form.control}
                     name="avatar"
-                    render={({ field }) => (
+                    render={({field}) => (
                         <FormItem>
                             <FormControl>
-                                <UploadAvatar field={field} />
+                                <UploadAvatar field={field}/>
                             </FormControl>
                         </FormItem>
                     )}
@@ -80,10 +85,10 @@ export default function CreateProfileForm() {
                     <FormField
                         control={form.control}
                         name="firstname"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem>
                                 <FormControl>
-                                    <FirstNameInput field={field} />
+                                    <FirstNameInput field={field}/>
                                 </FormControl>
                             </FormItem>
                         )}
@@ -91,10 +96,10 @@ export default function CreateProfileForm() {
                     <FormField
                         control={form.control}
                         name="lastname"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem>
                                 <FormControl>
-                                    <LastNameInput field={field} />
+                                    <LastNameInput field={field}/>
                                 </FormControl>
                             </FormItem>
                         )}
@@ -104,6 +109,6 @@ export default function CreateProfileForm() {
                     <Button variant="default" className="bg-emerald-700" type="submit">Завершить регистрацию</Button>
                 </div>
             </form>
-        </Form >
+        </Form>
     )
 }

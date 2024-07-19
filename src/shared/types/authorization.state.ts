@@ -17,7 +17,7 @@ export type StateNotAuth = {
 
 export type StateCreateProfileData = {
     step: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
-    viewerId: UniqueId
+    userId: UniqueId
 }
 
 export type StateAuthSuccess<T extends object> = {

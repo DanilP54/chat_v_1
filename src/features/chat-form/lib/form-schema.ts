@@ -3,7 +3,7 @@ import {  z } from "zod";
 
 const fileSchema = z.object({
     file: z.instanceof(File).refine((value) => {
-        return value.size < 5 * 1024 * 1024
+        return value.size > 5 * 1024 * 1024
     }, {
         message: "Недопустимый размер файла"
     }).refine((value) => {
