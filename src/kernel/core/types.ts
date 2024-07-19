@@ -50,8 +50,8 @@ export interface IUserDTO {
 export interface IUser {
     firstName: string,
     lastName: string,
-    avatar: File | undefined;
-    chats: IChat[];
+    avatar: string | undefined;
+    chatCollection: IChat[];
     blockedUsers: UniqueId[];
     createdAt?: Date,
 }
