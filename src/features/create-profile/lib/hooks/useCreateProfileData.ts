@@ -7,7 +7,7 @@ export const useSubmitProfileData = () => {
 
     const [isPending, setIsPending] = useState<boolean>(false)
     const [isError, setIsError] = useState<boolean>(false)
-    const [error, setError] = useState<AuthorizationError | undefined>(undefined)
+    const [error, setError] = useState<AuthorizationError | null>(null)
     const authorizationDispatch = useDispatchContext()
 
     const createProfile = {
@@ -19,15 +19,14 @@ export const useSubmitProfileData = () => {
 
     async function submit(values, userId) {
 
-        setError(undefined)
+        setError(null)
         setIsError(false)
         setIsPending(true)
 
-        await userService.setViewerToDB({
-            id: userId,
+        await userService.setUserToDB(userId, {
             firstName: values.firstname,
             lastName: values.lastname,
-            avatar: 'https' || undefined
+            avatar: 'https' || undefined,
         }).then(() => {
             authorizationDispatch({
                 type: AuthorizationSteps.AUTH_IN_PROGRESS
