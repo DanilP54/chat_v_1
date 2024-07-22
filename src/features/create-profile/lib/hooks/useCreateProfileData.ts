@@ -4,7 +4,6 @@ import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
 import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
 
 interface UserDTO {
-
     firstName: VFirstName,
     lastName: VLastName,
     avatar: VAvatar | null
@@ -26,30 +25,47 @@ export const useCreateProfileData = () => {
         error
     }
 
-    async function create(values, userId) {
+    async function create(values: any, userId: any) {
+        try {
+            setIsPending(true)
+            setIsErrorCreatePD(false)
+            setError(null)
 
-        setError(null)
-        setIsErrorCreatePD(false)
-        setIsPending(true)
-
-        await userService.setUserToDB(userId, {
-            firstName: values.firstname,
-            lastName: values.lastname,
-            avatar: null,
-        } as UserDTO).then(() => {
-            authorizationDispatch({
-                type: AuthorizationSteps.AUTH_IN_PROGRESS
+            await userService.setUserToDB(userId, {
+                firstName: values.firstname,
+                lastName: values.lastname,
+                avatar: null,
             })
-        }).catch((error: Error) => {
+
+            authorizationDispatch({ type: AuthorizationSteps.AUTH_IN_PROGRESS })
+
+        } catch (error: any) {
             setIsErrorCreatePD(true)
             setError({
                 title: 'Ошибка регистрации номера телефона',
                 message: error.message
             })
-        }).finally(() => {
+        } finally {
             setIsPending(false)
-        })
+        }
     }
+    //         firstName: values.firstname,
+    //         lastName: values.lastname,
+    //         avatar: null,
+    //     } as UserDTO).then(() => {
+    //         authorizationDispatch({
+    //             type: AuthorizationSteps.AUTH_IN_PROGRESS
+    //         })
+    //     }).catch((error: Error) => {
+    //         setIsErrorCreatePD(true)
+    //         setError({
+    //             title: 'Ошибка регистрации номера телефона',
+    //             message: error.message
+    //         })
+    //     }).finally(() => {
+    //         setIsPending(false)
+    //     })
+    // }
 
 
     return createProfile

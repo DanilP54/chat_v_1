@@ -25,17 +25,6 @@ export class UserMap {
         }
     }
 
-    // static toView(dto: User): CurrentUser {
-    //     return {
-    //         id: dto.id.toValue().toString(),
-    //         fullname: `${dto.data.firstName.value} ${dto.data.lastName.value}`,
-    //         avatar: dto.data.avatar,
-    //         chats: dto.data.chatCollection.value.length > 0 ? dto.data.chatCollection.value : undefined,
-    //         blockedUsers: dto.data.blockedUsers.length > 0 ? dto.data.blockedUsers : undefined,
-    //     }
-    // }
-
-
     static toDomain(dto: DocumentDTO, uid: string): User {
         const userOrError = User.create({
             firstName: UserFirstName.create(dto.firstName).getValue().value,

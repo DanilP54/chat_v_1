@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { useNavigate } from "react-router-dom";
-import { User } from "@/entities/user/user.model";
+import React, {createContext, useContext, useEffect, useReducer} from "react";
+import {useNavigate} from "react-router-dom";
+import {User} from "@/entities/user/user.model";
 import {
     ActionAuthInProgress,
     ActionAuthSuccess,
@@ -11,15 +11,13 @@ import {
     StateAuthSuccess,
     StateNotAuth,
     AuthorizationSteps,
-    CurrentUser
-} from "@/shared/types";
+} from '@/shared/types'
 
 
-import { Loader } from "@/shared/ui/loader";
-import { authService } from "../services/auth.service";
-import { User as PersistUserDTO } from "firebase/auth";
-import { onExitState } from "../lib/onExitState";
-
+import {Loader} from "@/shared/ui/loader";
+import {authService} from "../services/auth.service";
+import {User as PersistUserDTO} from "firebase/auth";
+import {onExitState} from "../lib/onExitState";
 
 
 type AuthorizationActions =
@@ -75,7 +73,7 @@ const INITIAL_STATE: AuthorizationState = {
 const reducer = (state: AuthorizationState, action: AuthorizationActions): AuthorizationState => {
     switch (action.type) {
         case AuthorizationSteps.AUTH_IN_PROGRESS:
-            return { ...state, step: AuthorizationSteps.AUTH_IN_PROGRESS } as StateAuthInProgress;
+            return {...state, step: AuthorizationSteps.AUTH_IN_PROGRESS} as StateAuthInProgress;
         case AuthorizationSteps.NOT_AUTH:
             return {
                 ...state,
@@ -99,7 +97,7 @@ const reducer = (state: AuthorizationState, action: AuthorizationActions): Autho
 
 // Provider
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({children}: { children: React.ReactNode }) {
 
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
     const navigate = useNavigate()
@@ -138,7 +136,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return (
         <DispatchContext.Provider value={dispatch}>
             <AuthContext.Provider value={state}>
-                {state.step === AuthorizationSteps.AUTH_IN_PROGRESS ? <Loader /> : children}
+                {state.step === AuthorizationSteps.AUTH_IN_PROGRESS ? <Loader/> : children}
             </AuthContext.Provider>
         </DispatchContext.Provider>
     )

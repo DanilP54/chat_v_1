@@ -1,7 +1,7 @@
 import { Input } from "@/shared/ui/input.tsx";
 import { ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
-import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
+import { viewerInfoSchema } from "../../logic/form-schema/viewer-info-schema";
 
 type FirstNameInputProps = {
     field: ControllerRenderProps<z.infer<typeof viewerInfoSchema>, "firstname">;

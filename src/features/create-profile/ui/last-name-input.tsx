@@ -1,5 +1,5 @@
 import { Input } from "@/shared/ui/input.tsx";
-import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
+import { viewerInfoSchema } from "../../logic/form-schema/viewer-info-schema";
 import { z } from "zod";
 import { ControllerRenderProps } from "react-hook-form";
 

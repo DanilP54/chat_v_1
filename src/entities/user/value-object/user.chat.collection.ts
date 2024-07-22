@@ -15,10 +15,10 @@ export class UserChatCollection extends ValueObject<ChatCollection> {
             return Result.fail<UserChatCollection>('Массив с чатами отсутствует')
         }
 
-        const MAX_LENGTH_COLLELCTION = 20
+        const MAX_LENGTH_COLLECTION = 20
 
-        if (collection.length > MAX_LENGTH_COLLELCTION) {
-            return Result.fail<UserChatCollection>(`Коллекция не должны превышать ${MAX_LENGTH_COLLELCTION} элементов`)
+        if (collection.length > MAX_LENGTH_COLLECTION) {
+            return Result.fail<UserChatCollection>(`Коллекция не должны превышать ${MAX_LENGTH_COLLECTION} элементов`)
         }
 
         return Result.ok(new UserChatCollection(collection))

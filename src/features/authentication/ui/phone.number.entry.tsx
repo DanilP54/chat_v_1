@@ -4,7 +4,7 @@ import { Button } from "@/shared/ui/button";
 import { useToast } from "@/shared/ui/use-toast";
 // hooks
 import { useValidationPhone } from "../lib/hooks/useValidationPhone";
-// lib
+// logic
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
 import { formatPhone } from "../lib/formatPhone";
@@ -15,6 +15,7 @@ import { useSignInPhoneNumber } from "@/features/authentication/lib/hooks/useSig
 type PhoneNumberEntryProps = {
   dispatch: React.Dispatch<AuthenticationActions>
 }
+
 
 export default function PhoneNumberEntry({ dispatch }: PhoneNumberEntryProps) {
 

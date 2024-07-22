@@ -5,7 +5,6 @@ export type {
     ActionAuthSuccess,
     ActionCreateProfileData,
     ActionNotAuth,
-    CurrentUser,
     // state
     StateCreateProfileData,
     StateAuthInProgress,

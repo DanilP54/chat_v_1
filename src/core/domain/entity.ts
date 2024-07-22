@@ -1,4 +1,4 @@
-import { UniqueEntityID } from "./UniqueEntityID"
+import { UniqueEntityId } from "@/core/domain/unique.entityI.id"
 
 function isEntity(value: unknown): value is Entity<unknown> {
     return value instanceof Entity
@@ -6,11 +6,11 @@ function isEntity(value: unknown): value is Entity<unknown> {
 
 export abstract class Entity<T> {
     protected readonly _data: T
-    protected readonly _id: UniqueEntityID
+    protected readonly _id: UniqueEntityId
 
-    protected constructor(data: T, id?: UniqueEntityID) {
+    protected constructor(data: T, id?: UniqueEntityId) {
         this._data = data
-        this._id = id ? id : new UniqueEntityID()
+        this._id = id ? id : new UniqueEntityId()
     }
 
     get id() {

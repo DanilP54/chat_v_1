@@ -1,10 +1,8 @@
 import { UserMap } from "./mapper"
 import { UserRepository, userRepoInstance } from "./repository"
 import { User } from "@/entities/user/user.model";
-import { IUserDTO } from "@/kernel/core/types.ts";
 
 interface UserDTO {
-
     firstName: VFirstName,
     lastName: VLastName,
     avatar: VAvatar | null

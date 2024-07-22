@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar.tsx";
 import { ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
-import { viewerInfoSchema } from "../../lib/form-schema/viewer-info-schema";
+import { viewerInfoSchema } from "../../logic/form-schema/viewer-info-schema";
 import { Button } from "@/shared/ui/button.tsx";
 import React, { useState } from "react";
 

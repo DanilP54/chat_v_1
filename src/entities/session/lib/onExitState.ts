@@ -16,9 +16,9 @@ export const onExitState = async (user: PersistUserDTO, dispatch: Dispatch<Autho
         return AuthorizationSteps.NOT_AUTH
     }
 
-    const currentUser = await userService.getCurrentUser(user.uid)
-    console.log('Итого:', currentUser)
-    if (!currentUser) {
+    const profileData = await userService.getCurrentUser(user.uid)
+    console.log('Итого:', profileData)
+    if (!profileData) {
         dispatch({
             type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
             payload: user.uid,
@@ -28,7 +28,7 @@ export const onExitState = async (user: PersistUserDTO, dispatch: Dispatch<Autho
 
     dispatch({
         type: AuthorizationSteps.AUTH_SUCCESS,
-        payload: currentUser
+        payload: profileData
     } as ActionAuthSuccess<User>)
     return AuthorizationSteps.AUTH_SUCCESS
 }
