@@ -1,6 +1,7 @@
 import { db } from "@/shared/config/firebase"
+import { FirestoreCollections } from "@/shared/types"
 import { DocumentData, Firestore, doc, getDoc, setDoc } from "firebase/firestore"
-import { FirestoreCollections } from "./enum"
+
 
 export class FirestoreClient {
 

@@ -7,10 +7,7 @@ import {
     Unsubscribe
 } from "firebase/auth";
 
-
-
 auth.settings.appVerificationDisabledForTesting = true;
-
 
 export class AuthClient {
 

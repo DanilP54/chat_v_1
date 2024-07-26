@@ -1,6 +1,6 @@
-import { UseCase } from "@/core/domain/use.case";
-import { ViewerRepository } from "@/core/domain/viewer/viewer.repository";
-import { ViewerView } from "../ViewerViewe";
+import { UseCase } from "@/core/application/use.case.ts";
+import { ViewerRepository } from "@/core/models/viewer/viewer.repository";
+import { ViewerView } from "../viewer.to.view";
 
 export class getCurrentViewerUseCase implements UseCase<UniqueId | number, ViewerView> {
 
@@ -10,10 +10,11 @@ export class getCurrentViewerUseCase implements UseCase<UniqueId | number, Viewe
 
     async execute(id: UniqueId): Promise<ViewerView | undefined> {
 
-        const currentViewer = await this.viewerRepository.get(id)
+        const currentViewer = await this.viewerRepository.getViewer(id)
 
         if (currentViewer) {
             return ViewerView.fromDomain(currentViewer)
         }
+
     }
 }

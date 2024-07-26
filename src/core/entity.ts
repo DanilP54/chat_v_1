@@ -1,4 +1,4 @@
-import { UniqueEntityId } from "@/core/domain/unique.entityI.id"
+import { UniqueEntityId } from "@/core/models/unique.entityI.id"
 
 function isEntity(value: unknown): value is Entity<unknown> {
     return value instanceof Entity

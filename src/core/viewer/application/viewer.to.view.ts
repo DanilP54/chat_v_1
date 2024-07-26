@@ -1,4 +1,4 @@
-import { Viewer } from "@/core/domain/viewer/viewer.entity";
+import { Viewer } from "@/core/models/viewer/viewer.entity";
 
 
 export class ViewerView {
@@ -16,9 +16,5 @@ export class ViewerView {
         const viewerId = viewer.id
 
         return new ViewerView(viewerId.toString(), `${firstName} ${lastName}`, avatar, chatCollection, blockedUsers)
-    }
-
-    get data(): ViewerView {
-        return this
     }
 }
