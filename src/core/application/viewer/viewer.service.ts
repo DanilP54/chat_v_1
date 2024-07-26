@@ -1,6 +1,6 @@
-import { ViewerRepository } from "@/core/domain/viewer/viewer.repository";
+import { ViewerRepository } from "@/core/models/viewer/viewer.repository";
 import { getCurrentViewerUseCase } from "./getViewerUseCase";
-import { ViewerView } from "../ViewerViewe";
+import { ViewerView } from "../ViewerView";
 
 export class ViewerService {
 
