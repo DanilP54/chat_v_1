@@ -47,5 +47,3 @@ export class User extends Entity<UserProps> {
 
 
 
-
-

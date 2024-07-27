@@ -1,8 +1,8 @@
-import {Entity} from "@/core/models/entity";
-import {UniqueEntityId} from "@/core/models/unique.entityI.id";
+import {Entity} from "@/core/entity";
+import {UniqueEntityId} from "@/core/unique.entity.id";
 import {Guard} from "@/core/logic/Guard";
 import {Result} from "@/core/logic/Result";
-import {ViewerProps} from "../types";
+import {ViewerProps} from "@/core/types";
 
 export class Viewer extends Entity<ViewerProps> {
 

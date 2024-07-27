@@ -31,7 +31,3 @@ export type AuthorizationError = {
     message: string
 }
 
-export enum FirestoreCollections {
-    Users = 'users',
-    Chats = 'chats',
-}

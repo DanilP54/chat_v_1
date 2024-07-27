@@ -1,7 +1,7 @@
 import { authService } from "@/entities/session/services/auth.service.ts";
 import { useState } from "react";
 import { ActionAuthInProgress, AuthorizationError, AuthorizationSteps } from "@/shared/types";
-import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
+import { useDispatchContext } from "@/core/session/ui/auth-provider.tsx";
 
 export const useOtpVerification = () => {
     const [isPending, setIsPending] = useState<boolean>(false)

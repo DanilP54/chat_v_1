@@ -1,7 +1,7 @@
 import { userService } from "@/entities/user/interfaces/user.services";
 import { useState } from "react";
 import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
-import { useDispatchContext } from "@/entities/session/ui/auth-provider.tsx";
+import { useDispatchContext } from "@/core/session/ui/auth-provider.tsx";
 
 interface UserDTO {
     firstName: VFirstName,

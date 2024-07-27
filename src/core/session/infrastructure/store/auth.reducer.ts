@@ -1,9 +1,5 @@
-import { createContext } from "react"
-import { AuthorizationActions, AuthorizationState, AuthorizationSteps } from "../infra/session/types"
-import { Viewer } from "@/core/models/viewer/viewer.entity";
+import {createContext} from "react";
 
-export const DispatchContext = createContext<React.Dispatch<AuthorizationActions> | undefined>(undefined);
-export const AuthContext = createContext<AuthorizationState | undefined>(undefined);
 
 export const INITIAL_STATE: AuthorizationState = {
     step: AuthorizationSteps.AUTH_IN_PROGRESS,

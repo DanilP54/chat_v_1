@@ -1,15 +1,12 @@
-import { ViewerRepository } from "@/core/models/viewer/viewer.repository.ts";
-import { getCurrentViewerUseCase } from "../../application/viewer/use-cases/getViewerUseCase.ts";
-import { ViewerView } from "../../application/viewer/ViewerView.ts";
+import { getCurrentViewerUseCase } from "./use-cases/get.viewer.use.case.ts";
+import { ViewerView } from "./viewer.ui.ts";
 
 export class ViewerService {
 
     private readonly getCurrentViewerUseCase: getCurrentViewerUseCase
 
-    constructor(
-        private readonly viewerRepository: ViewerRepository
-    ) {
-        this.getCurrentViewerUseCase = new getCurrentViewerUseCase(viewerRepository)
+    constructor(getCurrentViewerUseCase: getCurrentViewerUseCase) {
+        this.getCurrentViewerUseCase = getCurrentViewerUseCase
     }
 
     async getCurrentViewer(id: string): Promise<ViewerView | undefined> {

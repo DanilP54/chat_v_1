@@ -1,5 +1,5 @@
 import { Entity } from "./entity";
-import { UniqueEntityId } from "./unique.entityI.id";
+import { UniqueEntityId } from "./unique.entity.id";
 
 export abstract class AggregateRoot<T> extends Entity<T> {
 

@@ -1,4 +1,4 @@
-import { Viewer } from "@/core/models/viewer/viewer.entity";
+import { Viewer } from "../domain/viewer.entity"
 
 
 export class ViewerView {

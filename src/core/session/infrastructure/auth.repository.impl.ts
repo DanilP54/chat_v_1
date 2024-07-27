@@ -1,8 +1,8 @@
-import {AuthRepository} from "@/core/session/domain/auth.interface.repo.ts";
 import {AuthClient} from "./firebase.auth.client.ts";
 import {ConfirmationResult, Unsubscribe} from "firebase/auth";
+import {AuthRepository} from "@/core/session/domain/auth.repository.ts";
 
-export class AuthResource implements AuthRepository {
+export class AuthRepositoryImpl implements AuthRepository {
 
     private _confirmationResult: ConfirmationResult | null = null
 
@@ -46,15 +46,14 @@ export class AuthResource implements AuthRepository {
             const confirmation = this.confirmationResult
 
             if (!confirmation) {
-                throw new Error('Ошибка в confirmation')
+                console.error("Confirmation result is undefined")
             }
-
             const confirm = await this.authClient.verifyCode(code, confirmation)
 
             if (confirm) this.cleanConfirmationResult()
 
         } catch (e: unknown) {
-            console.log(e)
+            console.error(e)
         }
     }
 
