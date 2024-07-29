@@ -3,7 +3,7 @@ import ButtonDialog from "@/shared/ui/button-dialog";
 import { Plus } from './icons/index';
 import { ChatCreator } from "./chat-creator";
 import { ChatPreviewList } from "@/features/chat-list";
-import type { ChatPreview } from "@/entities/chat-preview";
+import type { ChatPreview } from "@/entities/chat-room-preview";
 
 
 // иммитация базы данных

@@ -15,7 +15,7 @@ export class Viewer extends Entity<ViewerProps> {
         const dataResult = Guard.againstNullOrUndefinedBulk([
             {argument: data.firstName, argumentName: 'first name'},
             {argument: data.lastName, argumentName: 'last name'},
-            {argument: data.chatCollection, argumentName: 'chat collection'},
+            {argument: data.chatCollection, argumentName: 'chat-room collection'},
             {argument: data.blockedUsers, argumentName: 'blocked users'}
         ])
 

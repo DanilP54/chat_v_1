@@ -26,7 +26,7 @@ const routers = [
 
             },
             {
-                path: 'chat/:id',
+                path: 'chat-room/:id',
                 element: <ChatRoom />
             },
             {

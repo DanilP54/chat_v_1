@@ -21,7 +21,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>({
 export const ThemeProvider = ({
     children,
     defaultTheme = "system",
-    storageKey = "chat-ui-theme",
+    storageKey = "chat-room-ui-theme",
     ...props
 }: ThemeProviderProps) => {
 
