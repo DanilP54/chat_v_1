@@ -4,30 +4,43 @@ type SessionActive = 'active'
 type SessionNotActive = 'not active'
 
 type SessionStatus = SessionActive | SessionNotActive
-type SessionId = string
 type SessionStartTime = Date
 type SessionEndTime = Date
 
-// Aggregate
 
-export type Session = {
-    readonly id: SessionId,
+type SessionId = string
+export type SessionDTO = CurrentViewer
+
+
+export type SessionProps = {
     readonly start_time: SessionStartTime,
-    readonly end_time: SessionEndTime | null,
+    readonly end_time?: SessionEndTime,
     readonly status: SessionStatus,
-    readonly current_session_viewer: CurrentViewer
+    readonly current_viewer: CurrentViewer
 }
 
-export function createSession() {}
+export class Session {
+    private readonly _data
+    private readonly _id
 
-export function endSession() {}
+    constructor(props: SessionProps, id: SessionId) {
+        this._data = props
+        this._id = id
+    }
 
-export function changeStatus() {}
+    get data() {
+        return this._data
+    }
 
-export function addDataSession() {}
+    get id() {
+        return this._id
+    }
 
-// Process: создать сессию ----->
-// Trigger event: Верификация прошла успешно ----->
-// Явный Input: id текущего пользователя, phone number текущего пользователя ------->
-// Неявный Input: account данные текущего пользователя ------->
-// Output: сессия создана событие -------->
+    static create(props: SessionDTO, id: SessionId): Session {
+        return new Session({
+            start_time: new Date(),
+            status: 'active',
+            current_viewer: props
+        }, id)
+    }
+}

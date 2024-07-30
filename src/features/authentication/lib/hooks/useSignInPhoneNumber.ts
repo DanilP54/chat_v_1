@@ -1,7 +1,6 @@
-import { authService } from "@/entities/session/services/auth.service.ts";
-import { Dispatch, useState } from "react";
-import { AuthenticationActions, AuthenticationSteps, AuthorizationError } from "@/shared/types";
-
+import {Dispatch, useState} from "react";
+import {AuthenticationActions, AuthenticationSteps, AuthorizationError} from "@/shared/types";
+import {authPhoneService} from "@/domain/session";
 
 
 export const useSignInPhoneNumber = (dispatch: Dispatch<AuthenticationActions>) => {
@@ -11,27 +10,27 @@ export const useSignInPhoneNumber = (dispatch: Dispatch<AuthenticationActions>) 
     const [error, setError] = useState<AuthorizationError | undefined>(undefined)
 
     const submitPhoneNumber = async (phoneNumber: string) => {
+        try {
+            setError(undefined)
+            setIsError(false)
+            setIsPending(true)
 
-        setError(undefined)
-        setIsError(false)
-        setIsPending(true)
+            await authPhoneService.signIn(phoneNumber)
 
-        await authService.signInWithPhone(phoneNumber)
-            .then(() => {
-                dispatch({
-                    type: AuthenticationSteps.VERIFY_CODE_ENTRY
-                })
-            }).catch(error => {
-                setIsError(true)
-                setError({
-                    title: 'Ошибка регистрации номера телефона',
-                    message: error.message
-                })
-            }).finally(() => {
-                setIsPending(false)
+            dispatch({
+                type: AuthenticationSteps.VERIFY_CODE_ENTRY
             })
-    }
 
+        } catch (error: unknown) {
+            setIsError(true)
+            setError({
+                title: 'Ошибка регистрации номера телефона',
+                message: error.message
+            })
+        } finally {
+            setIsPending(false)
+        }
+    }
 
     return {
         isPending,
