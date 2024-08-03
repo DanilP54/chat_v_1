@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {ActionAuthInProgress, AuthorizationError, AuthorizationSteps} from "@/shared/types";
 import {useDispatchContext} from "@/core/session/ui/auth-provider.tsx";
-import {authPhoneService} from "@/domain/session";
+import {authWithPhoneService} from "@/domain/session";
 
 export const useOtpVerification = () => {
 
@@ -17,12 +17,13 @@ export const useOtpVerification = () => {
             setIsPending(true)
             setError(undefined)
 
+            const response = await authWithPhoneService.verify(otp)
 
-            await authPhoneService.verify(otp)
+            if (!response) {
+                throw new Error('Возникла ошибка при ферификации номера телефона по коду')
+            }
 
-            authorizationDispatch({
-                type: AuthorizationSteps.AUTH_IN_PROGRESS
-            } as ActionAuthInProgress)
+            authorizationDispatch({type: AuthorizationSteps.AUTH_IN_PROGRESS} as ActionAuthInProgress)
 
         } catch (error) {
             setIsError(true)

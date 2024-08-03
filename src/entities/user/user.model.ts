@@ -12,7 +12,6 @@ interface UserProps {
     createdAt?: Date,
 }
 
-
 export class User extends Entity<UserProps> {
 
     private constructor(user: UserProps, id: UniqueEntityID) {

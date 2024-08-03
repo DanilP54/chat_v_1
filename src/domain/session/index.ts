@@ -1,20 +1,8 @@
-import {FirebaseAuthRepositoryImpl} from "@/domain/session/infra/firebase.auth.repository.ts";
 import {auth} from "@/shared/config/firebase.ts";
-import {SignInWithPhoneUseCaseImpl} from "@/domain/session/application/use-cases/signin.with.phone.ts";
-import {VerifyCodeUseCaseImpl} from "@/domain/session/application/use-cases/verify.code.ts";
-import {AuthWithPhoneService} from "@/domain/session/application/auth.service.ts";
+import {signInWithPhone} from "@/domain/session/adapters/firebase.phone.auth.api.ts";
+import {verifyCode} from "@/domain/session/adapters/firebase.phone.auth.api.ts";
+import {AuthWithPhoneService} from "@/domain/session/application/auth.phone.service.ts";
 
 auth.settings.appVerificationDisabledForTesting = true;
 
-// Infrastructure
-
-export const firebaseAuthRepository = new FirebaseAuthRepositoryImpl(auth)
-
-// Application
-
-export const signInWithPhoneUseCase = new SignInWithPhoneUseCaseImpl(firebaseAuthRepository)
-export const verifyCodeUseCase = new VerifyCodeUseCaseImpl(firebaseAuthRepository)
-
-// Service
-
-export const authPhoneService = new AuthWithPhoneService(signInWithPhoneUseCase, verifyCodeUseCase)
+export const authWithPhoneService = new AuthWithPhoneService(signInWithPhone, verifyCode)

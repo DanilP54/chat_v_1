@@ -17,7 +17,9 @@ import {
 import {Loader} from "@/shared/ui/loader.tsx";
 import {authService} from "../../../entities/session/services/auth.service.ts";
 import {User as PersistUserDTO} from "firebase/auth";
-import {onExitState} from "../../../entities/session/lib/onExitState.ts";
+import {onExitAuthState} from "../../../entities/session/lib/onExitState.ts";
+import {auth} from "@/shared/config/firebase.ts";
+import {getAuthState} from "@/domain/session/adapters/storage/firebase.auth.state.ts";
 
 
 type AuthorizationActions =
@@ -33,8 +35,6 @@ type AuthorizationState =
     StateAuthSuccess<User>
 
 
-// Dispatch Context
-
 const DispatchContext = createContext<React.Dispatch<AuthorizationActions> | undefined>(undefined)
 
 
@@ -48,7 +48,6 @@ export const useDispatchContext = () => {
     return context;
 }
 
-// AuthContext
 
 const AuthContext = createContext<AuthorizationState | undefined>(undefined)
 
@@ -62,13 +61,11 @@ export const useAuthState = (): AuthorizationState => {
     return context;
 }
 
-// State
 
 const INITIAL_STATE: AuthorizationState = {
     step: AuthorizationSteps.AUTH_IN_PROGRESS,
 }
 
-// Reducer
 
 const reducer = (state: AuthorizationState, action: AuthorizationActions): AuthorizationState => {
     switch (action.type) {
@@ -95,7 +92,6 @@ const reducer = (state: AuthorizationState, action: AuthorizationActions): Autho
     }
 }
 
-// Provider
 
 export default function AuthProvider({children}: { children: React.ReactNode }) {
 
@@ -110,24 +106,23 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
 
         if (isAuthProgress && isAuthSuccess) return
 
-        const unsubscribe = authService.onAuthState(async (user: PersistUserDTO) => {
+        const {unsubscribe, currentUser} = getAuthState()
 
-            const result = await onExitState(user, dispatch)
+        const authState = await onExitAuthState(currentUser, dispatch)
 
-            switch (result) {
-                case AuthorizationSteps.NOT_AUTH:
-                    navigate('/sign-in')
-                    break;
-                case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
-                    navigate('/create-profile')
-                    break;
-                case AuthorizationSteps.AUTH_SUCCESS:
-                    navigate('/home')
-                    break;
-                default:
-                    throw new Error('Ошибка состояния перехода')
-            }
-        })
+        switch (authState) {
+            case AuthorizationSteps.NOT_AUTH:
+                navigate('/sign-in')
+                break;
+            case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
+                navigate('/create-profile')
+                break;
+            case AuthorizationSteps.AUTH_SUCCESS:
+                navigate('/home')
+                break;
+            default:
+                throw new Error('Ошибка состояния перехода')
+        }
 
         return () => unsubscribe()
 

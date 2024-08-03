@@ -2,7 +2,6 @@ import {CurrentViewer} from "@/domain/current-viewer/domain/current.viewer.entit
 
 type SessionActive = 'active'
 type SessionNotActive = 'not active'
-
 type SessionStatus = SessionActive | SessionNotActive
 type SessionStartTime = Date
 type SessionEndTime = Date
@@ -16,7 +15,7 @@ export type SessionProps = {
     readonly start_time: SessionStartTime,
     readonly end_time?: SessionEndTime,
     readonly status: SessionStatus,
-    readonly current_viewer: CurrentViewer
+    current_viewer: CurrentViewer
 }
 
 export class Session {
@@ -42,5 +41,9 @@ export class Session {
             status: 'active',
             current_viewer: props
         }, id)
+    }
+
+    addCurrentViewer(viewer: CurrentViewer) {
+        this._data.current_viewer = viewer
     }
 }

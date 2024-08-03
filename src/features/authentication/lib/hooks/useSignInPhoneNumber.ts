@@ -1,6 +1,6 @@
 import {Dispatch, useState} from "react";
 import {AuthenticationActions, AuthenticationSteps, AuthorizationError} from "@/shared/types";
-import {authPhoneService} from "@/domain/session";
+import {authWithPhoneService} from "@/domain/session";
 
 
 export const useSignInPhoneNumber = (dispatch: Dispatch<AuthenticationActions>) => {
@@ -15,12 +15,12 @@ export const useSignInPhoneNumber = (dispatch: Dispatch<AuthenticationActions>) 
             setIsError(false)
             setIsPending(true)
 
-            await authPhoneService.signIn(phoneNumber)
+            const response = await authWithPhoneService.signIn(phoneNumber)
 
-            dispatch({
-                type: AuthenticationSteps.VERIFY_CODE_ENTRY
-            })
-
+            if (!response) {
+                throw new Error('Ошибка при регистрации номера телефона')
+            }
+            dispatch({type: AuthenticationSteps.VERIFY_CODE_ENTRY})
         } catch (error: unknown) {
             setIsError(true)
             setError({
