@@ -16,21 +16,20 @@ export const onExitAuthState = async (currentUser: UserDto | null, dispatch: Dis
         return AuthorizationSteps.NOT_AUTH
     }
 
-    const profileData = await userService.getCurrentUser(currentUser.uid)
+    const session = await userService.getCurrentUser(currentUser.uid)
 
-    if (profileData) {
+    if (!session) {
         dispatch({
-            type: AuthorizationSteps.AUTH_SUCCESS,
-            payload: profileData
-        } as ActionAuthSuccess<User>)
-        return AuthorizationSteps.AUTH_SUCCESS
+            type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
+            payload: currentUser.uid,
+        } as ActionCreateProfileData)
+        return AuthorizationSteps.AUTH_CREATE_PROFILE_DATA
     }
 
     dispatch({
-        type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
-        payload: user.uid,
-    } as ActionCreateProfileData)
-    return AuthorizationSteps.AUTH_CREATE_PROFILE_DATA
-
+        type: AuthorizationSteps.AUTH_SUCCESS,
+        payload: session
+    } as ActionAuthSuccess<User>)
+    return AuthorizationSteps.AUTH_SUCCESS
 
 }
