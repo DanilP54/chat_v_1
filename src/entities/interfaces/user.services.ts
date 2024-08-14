@@ -1,6 +1,6 @@
 import { UserMap } from "./mapper"
 import { UserRepository, userRepoInstance } from "./repository"
-import { User } from "@/entities/user/user.model";
+import { User } from "@/entities/user/current.user.ts";
 
 interface UserDTO {
     firstName: VFirstName,

@@ -1,4 +1,4 @@
-import { User } from "../user.model"
+import { User } from "../current.user.ts"
 import { DocumentData as DocumentDTO } from "firebase/firestore"
 import { IPersistUser, IUserDTO } from "@/kernel/core/types.ts";
 import { UniqueEntityID } from "@/kernel/core/domain/UniqueEntityID.ts";
