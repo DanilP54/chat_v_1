@@ -1,14 +1,8 @@
-import { userService } from "@/entities/user/interfaces/user.services";
 import { useState } from "react";
 import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
-import { useDispatchContext } from "@/core/session/ui/auth-provider.tsx";
-
-interface UserDTO {
-    firstName: VFirstName,
-    lastName: VLastName,
-    avatar: VAvatar | null
-}
-
+import { useDispatchContext } from "@/entities/session/ui/auth-provider";
+import { useCreateViewerProfile } from "@/entities/viewer";
+import { ViewerFieldFromFormDto } from "@/entities/viewer/application/create.viewer.profile";
 
 
 export const useCreateProfileData = () => {
@@ -18,55 +12,40 @@ export const useCreateProfileData = () => {
     const [error, setError] = useState<AuthorizationError | null>(null)
     const authorizationDispatch = useDispatchContext()
 
-    const createProfile = {
-        create,
-        isPending,
-        isErrorCreatePD,
-        error
-    }
+    const createProfileDb = useCreateViewerProfile()
 
-    async function create(values: any, userId: any) {
+    async function create(values: ViewerFieldFromFormDto, userId: string) {
+        console.log('DTO: ', values)
         try {
             setIsPending(true)
             setIsErrorCreatePD(false)
             setError(null)
 
-            await userService.setUserToDB(userId, {
-                firstName: values.firstname,
-                lastName: values.lastname,
-                avatar: null,
+
+            await createProfileDb.execute(userId, {
+                first_name: values.first_name,
+                last_name: values.last_name,
+                phone_number: values.phone_number,
+                avatar: values.avatar
             })
 
             authorizationDispatch({ type: AuthorizationSteps.AUTH_IN_PROGRESS })
 
-        } catch (error: any) {
+        } catch (e) {
             setIsErrorCreatePD(true)
             setError({
                 title: 'Ошибка регистрации номера телефона',
-                message: error.message
+                message: e.message
             })
         } finally {
             setIsPending(false)
         }
     }
-    //         firstName: values.firstname,
-    //         lastName: values.lastname,
-    //         avatar: null,
-    //     } as UserDTO).then(() => {
-    //         authorizationDispatch({
-    //             type: AuthorizationSteps.AUTH_IN_PROGRESS
-    //         })
-    //     }).catch((error: Error) => {
-    //         setIsErrorCreatePD(true)
-    //         setError({
-    //             title: 'Ошибка регистрации номера телефона',
-    //             message: error.message
-    //         })
-    //     }).finally(() => {
-    //         setIsPending(false)
-    //     })
-    // }
 
-
-    return createProfile
+    return {
+        create,
+        isPending,
+        isErrorCreatePD,
+        error
+    }
 }

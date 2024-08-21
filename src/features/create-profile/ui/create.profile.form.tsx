@@ -10,16 +10,18 @@ import { useToast } from "@/shared/ui/use-toast.ts";
 import { useAuthState } from "@/entities/session";
 import { Loader } from "@/shared/ui/loader";
 import { useCreateProfileData } from "@/features/create-profile/lib/hooks/useCreateProfileData.ts";
+import { StateCreateProfileData } from "@/shared/types/authorization.state.ts";
+import {useUploadAvatar} from "@/entities/avatar/application/upload.avatar.ts";
 
 
 export default function CreateProfileForm() {
 
-
     const { toast } = useToast()
-    const state = useAuthState()
+
+    const state = useAuthState() as StateCreateProfileData
 
     const profileData = useCreateProfileData()
-    // const [uploadedAvatar, setUploadedAvatar] = useState<string | null>(null)
+
 
     const form = useForm<z.infer<typeof createProfileSchema>>({
         defaultValues: {
@@ -31,7 +33,10 @@ export default function CreateProfileForm() {
     })
 
     async function handleCreateProfileData(values: z.infer<typeof createProfileSchema>) {
+        console.log(values)
         const isValid = createProfileSchema.safeParse(values)
+
+
 
         if (isValid.error) {
             const messages = isValid.error.issues
@@ -42,8 +47,13 @@ export default function CreateProfileForm() {
             })
         }
 
-        if (isValid.success && state.userId) {
-            await profileData.create(values, state.userId)
+        if (isValid.success && state.current_user.user_id) {
+            await profileData.create({
+                first_name: values.firstname,
+                last_name: values.lastname,
+                phone_number: state.current_user.phone_number,
+                avatar: values.avatar
+            }, state.current_user.user_id)
         }
 
         if (profileData.isErrorCreatePD) {

@@ -4,7 +4,7 @@ type VFirstName = string;
 type VLastName = string;
 type VAvatar = string;
 
-// user
+// current-user
 
 type UFirstName = string;
 type ULastName = string;

@@ -1,38 +1,34 @@
 import React, {createContext, useContext, useEffect, useReducer} from "react";
 import {useNavigate} from "react-router-dom";
-import {User} from "@/entities/user/user.model.ts";
 import {
     ActionAuthInProgress,
     ActionAuthSuccess,
     ActionCreateProfileData,
     ActionNotAuth,
-    StateCreateProfileData,
+    AuthorizationSteps,
     StateAuthInProgress,
     StateAuthSuccess,
+    StateCreateProfileData,
     StateNotAuth,
-    AuthorizationSteps,
 } from '@/shared/types'
-
-
 import {Loader} from "@/shared/ui/loader.tsx";
-import {authService} from "../../../entities/session/services/auth.service.ts";
-import {User as PersistUserDTO} from "firebase/auth";
-import {onExitAuthState} from "../../../entities/session/lib/onExitState.ts";
+import {useOnExitAuthState} from "../lib/useOnAuthExitState.ts";
+import {Session} from "../session.model.ts";
 import {auth} from "@/shared/config/firebase.ts";
-import {getAuthState} from "@/domain/session/adapters/storage/firebase.auth.state.ts";
+import {onAuthStateChanged} from 'firebase/auth'
 
 
 type AuthorizationActions =
     ActionNotAuth |
     ActionAuthInProgress |
     ActionCreateProfileData |
-    ActionAuthSuccess<User>
+    ActionAuthSuccess<Session>
 
 type AuthorizationState =
     StateAuthInProgress |
     StateNotAuth |
     StateCreateProfileData |
-    StateAuthSuccess<User>
+    StateAuthSuccess<Session>
 
 
 const DispatchContext = createContext<React.Dispatch<AuthorizationActions> | undefined>(undefined)
@@ -80,13 +76,13 @@ const reducer = (state: AuthorizationState, action: AuthorizationActions): Autho
             return {
                 ...state,
                 step: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
-                userId: action.payload
+                current_user: action.payload
             } as StateCreateProfileData;
         case AuthorizationSteps.AUTH_SUCCESS:
             return {
                 step: AuthorizationSteps.AUTH_SUCCESS,
-                currentUser: action.payload
-            } as StateAuthSuccess<User>
+                current_session: action.payload
+            } as StateAuthSuccess<Session>
         default:
             throw new Error('Action not found')
     }
@@ -96,8 +92,10 @@ const reducer = (state: AuthorizationState, action: AuthorizationActions): Autho
 export default function AuthProvider({children}: { children: React.ReactNode }) {
 
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+    
+    const getGlobalAuthState = useOnExitAuthState()
+    console.dir(state)
     const navigate = useNavigate()
-
 
     useEffect(() => {
 
@@ -106,23 +104,24 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
 
         if (isAuthProgress && isAuthSuccess) return
 
-        const {unsubscribe, currentUser} = getAuthState()
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
 
-        const authState = await onExitAuthState(currentUser, dispatch)
+            const currentAuthState = await getGlobalAuthState(user, dispatch)
 
-        switch (authState) {
-            case AuthorizationSteps.NOT_AUTH:
-                navigate('/sign-in')
-                break;
-            case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
-                navigate('/create-profile')
-                break;
-            case AuthorizationSteps.AUTH_SUCCESS:
-                navigate('/home')
-                break;
-            default:
-                throw new Error('Ошибка состояния перехода')
-        }
+            switch (currentAuthState) {
+                case AuthorizationSteps.NOT_AUTH:
+                    navigate('/sign-in')
+                    break;
+                case AuthorizationSteps.AUTH_CREATE_PROFILE_DATA:
+                    navigate('/create-profile')
+                    break;
+                case AuthorizationSteps.AUTH_SUCCESS:
+                    navigate('/home')
+                    break;
+                default:
+                    throw new Error('Ошибка состояния перехода')
+            }
+        })
 
         return () => unsubscribe()
 

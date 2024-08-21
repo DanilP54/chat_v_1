@@ -1,9 +1,12 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar.tsx";
-import { ControllerRenderProps } from "react-hook-form";
-import { z } from "zod";
-import { viewerInfoSchema } from "../../logic/form-schema/viewer-info-schema";
-import { Button } from "@/shared/ui/button.tsx";
-import React, { useState } from "react";
+import {Avatar, AvatarFallback, AvatarImage} from "@/shared/ui/avatar.tsx";
+import {ControllerRenderProps} from "react-hook-form";
+import {z} from "zod";
+import {viewerInfoSchema} from "../../logic/form-schema/viewer-info-schema";
+import {Button} from "@/shared/ui/button.tsx";
+import React, {useState} from "react";
+import {useUploadAvatar} from "@/entities/avatar/application/upload.avatar.ts";
+import {useAuthState} from "@/entities/session";
+import {StateCreateProfileData} from "@/shared/types";
 
 
 interface UploadAvatarProps {
@@ -12,17 +15,30 @@ interface UploadAvatarProps {
 
 const defaultAvatar: string = 'https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=Ginger'
 
-export default function UploadAvatar({ field }: UploadAvatarProps) {
+export default function UploadAvatar({field}: UploadAvatarProps) {
 
     const [uploadedAvatar, setUploadedAvatar] = useState<string>(defaultAvatar)
-    
-    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        field.onChange(file)
-        if (file) {
-            const a = URL.createObjectURL(file)
-            setUploadedAvatar(a)
-            console.log(a)
+    const [progress, setProgress] = useState()
+
+    const state = useAuthState() as StateCreateProfileData
+
+    const uploadingAvatar = useUploadAvatar()
+
+
+
+    const handleChangeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        if (e.target.files) {
+
+            const file = e.target.files[0]
+
+            const url = await uploadingAvatar.execute(file, state.current_user.user_id)
+            console.log(url)
+            setUploadedAvatar(url)
+            console.log(file)
+
+            field.onChange(file)
+
         }
 
 

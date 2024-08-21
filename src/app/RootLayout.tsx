@@ -11,7 +11,6 @@ import { Providers } from "./providers"
 // }
 
 const RootLayout = () => {
-
     return (
         <Providers>
             <ResizablePanelGroup direction="horizontal">

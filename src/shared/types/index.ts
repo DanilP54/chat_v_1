@@ -10,6 +10,7 @@ export type {
     StateAuthInProgress,
     StateAuthSuccess,
     StateNotAuth,
+    UserCred
 } from './authorization.state.ts'
 
 export type {

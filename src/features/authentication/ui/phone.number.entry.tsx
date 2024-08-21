@@ -1,56 +1,53 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 // shared
-import {Button} from "@/shared/ui/button";
-import {useToast} from "@/shared/ui/use-toast";
+import { Button } from "@/shared/ui/button";
+import { useToast } from "@/shared/ui/use-toast";
 // hooks
-import {useValidationPhone} from "../lib/hooks/useValidationPhone";
+import { useValidationPhone } from "../lib/hooks/useValidationPhone";
 // logic
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/bootstrap.css';
-import {formatPhone} from "../lib/formatPhone";
-import {Loader} from "@/shared/ui/loader";
-import {AuthenticationActions} from "@/shared/types";
-import {useSignInPhoneNumber} from "@/features/authentication/lib/hooks/useSignInPhoneNumber.ts";
+import { formatPhone } from "../lib/formatPhone";
+import { Loader } from "@/shared/ui/loader";
+import { AuthenticationActions } from "@/shared/types";
+import { useRegisterPhone } from "@/features/authentication/lib/hooks/useRegisterPhone";
+
 
 type PhoneNumberEntryProps = {
     dispatch: React.Dispatch<AuthenticationActions>
 }
 
+export default function PhoneNumberEntry({ dispatch }: PhoneNumberEntryProps) {
 
-export default function PhoneNumberEntry({dispatch}: PhoneNumberEntryProps) {
-
-    const {toast} = useToast()
-
+    const { toast } = useToast()
     const [phone, setPhone] = useState('')
-
-    const {isValid, error: validateError, checkValidPhone} = useValidationPhone()
-
-    const {isPending, error: signInError, isError, submitPhoneNumber} = useSignInPhoneNumber(dispatch)
+    const validationPhone = useValidationPhone()
+    const registerPhone = useRegisterPhone(dispatch)
 
 
-    const handleSignInClick = async () => {
+    const handleSignInByPhoneNumber = async () => {
 
-        if (!isValid) {
+        if (!validationPhone.isValid) {
             return toast({
                 variant: 'destructive',
-                title: validateError.title,
-                description: validateError.description
+                title: validationPhone.error?.title,
+                description: validationPhone.error?.message
             })
         }
 
-        await submitPhoneNumber(formatPhone(phone))
+        await registerPhone.register(formatPhone(phone))
 
-        if (isError) {
+        if (registerPhone.isError) {
             return toast({
                 variant: 'destructive',
-                title: signInError?.title,
-                description: signInError?.message
+                title: registerPhone.error?.title,
+                description: registerPhone.error?.message
             })
         }
     }
 
-    if (isPending) {
-        return <Loader/>
+    if (registerPhone.isPending) {
+        return <Loader />
     }
 
     return (
@@ -72,7 +69,7 @@ export default function PhoneNumberEntry({dispatch}: PhoneNumberEntryProps) {
                         regions={'europe'}
                         value={phone}
                         onChange={(value) => setPhone(value)}
-                        isValid={(inputNumber, country) => checkValidPhone(inputNumber, country)}
+                        isValid={(inputNumber, country) => validationPhone.checkValidPhone(inputNumber, country)}
                         containerStyle={{
                             backgroundColor: 'transparent'
                         }}
@@ -81,9 +78,10 @@ export default function PhoneNumberEntry({dispatch}: PhoneNumberEntryProps) {
                             color: 'white'
                         }}
                     />
+                    <div id="recaptcha_container"></div>
                     <div>
-                        <Button id="send-phone-number" className="bg-emerald-700" onClick={handleSignInClick}
-                                variant="noShadow">Далее</Button>
+                        <Button id="send-phone-number" className="bg-emerald-700" onClick={handleSignInByPhoneNumber}
+                            variant="noShadow">Далее</Button>
                     </div>
                 </div>
             </div>

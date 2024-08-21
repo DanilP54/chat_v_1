@@ -6,6 +6,10 @@ export enum AuthorizationSteps {
     AUTH_SUCCESS = 'AUTHORIZATION_SUCCESS'
 }
 
+export type UserCred = {
+    user_id: string
+    phone_number: string
+}
 // AuthorizationState
 
 export type StateAuthInProgress = {
@@ -18,12 +22,12 @@ export type StateNotAuth = {
 
 export type StateCreateProfileData = {
     step: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA,
-    userId: UniqueId
+    current_user: UserCred
 }
 
 export type StateAuthSuccess<T extends object> = {
     step: AuthorizationSteps.AUTH_SUCCESS,
-    currentUser: T
+    current_session: T
 }
 
 // Actions
@@ -39,7 +43,7 @@ export type ActionNotAuth = {
 
 export type ActionCreateProfileData = {
     type: AuthorizationSteps.AUTH_CREATE_PROFILE_DATA
-    payload: UniqueId,
+    payload: UserCred,
 }
 
 export type ActionAuthSuccess<T extends object> = {

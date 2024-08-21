@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, EllipsisVertical } from "./icons";
-// import { AvatarValueObject } from "@/entities/user";
+// import { AvatarValueObject } from "@/entities/current-user";
 import PopupMenu from "@/shared/ui/popup-menu";
 import { ChatActionsMenu } from "@/features/chat-actions-menu";
 

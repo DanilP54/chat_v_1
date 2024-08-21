@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-// import { AvatarValueObject } from "@/entities/user";
+// import { AvatarValueObject } from "@/entities/current-user";
 import { TabsControl } from "@/widgets/tabs-control";
 
 export default function ChatDetails() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthorizationSteps, StateAuthSuccess, StateNotAuth, StateCreateProfileData, StateAuthInProgress } from "@/shared/types";
-import { Viewer } from "@/entities/viewer/user.model";
+import { Viewer } from "@/entities/viewer/current-user.model";
 
 type State =
     StateAuthInProgress |

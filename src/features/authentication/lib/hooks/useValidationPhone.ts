@@ -2,7 +2,7 @@ import { useRef } from "react"
 
 type Error = {
     title: string,
-    description: string
+    message: string
 }
 
 type ValidationStatusType = {
@@ -12,7 +12,7 @@ type ValidationStatusType = {
 
 export const useValidationPhone = () => {
 
-    const validationStatus = useRef<ValidationStatusType>({ isValid: false, error: { title: 'Неверный формат номера', description: 'Введите номер телефона' } })
+    const validationStatus = useRef<ValidationStatusType>({ isValid: false, error: { title: 'Неверный формат номера', message: 'Введите номер телефона' } })
 
 
     const checkValidPhone = (numberPhone: string, country: object) => {
@@ -36,7 +36,7 @@ export const useValidationPhone = () => {
                 isValid: false,
                 error: {
                     title: 'Неверный формат номера',
-                    description: `Номер телефона должен содержать правильный формат`
+                    message: `Номер телефона должен содержать правильный формат`
                 }
             }
             return false
@@ -47,7 +47,7 @@ export const useValidationPhone = () => {
                 isValid: false,
                 error: {
                     title: 'Неверный формат номера',
-                    description: `Номер телефона должен начинаться с +${country.dialCode}`
+                    message: `Номер телефона должен начинаться с +${country.dialCode}`
                 }
             }
             return false
@@ -57,7 +57,7 @@ export const useValidationPhone = () => {
             isValid: true,
             error: {
                 title: '',
-                description: ''
+                message: ''
             }
         }
 

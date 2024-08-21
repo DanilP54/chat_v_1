@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Loader } from "@/shared/ui/loader";
 import { formatTime } from "@/features/authentication/lib/formatTime.ts";
 import { clsx } from "clsx";
-import { useOtpVerification } from "@/features/authentication/lib/hooks/useOtpVerification.ts";
+import { useConfirmationCode } from "@/features/authentication/lib/hooks/useConfirmationCode";
 import { useToast } from "@/shared/ui/use-toast.ts";
 
 
@@ -17,8 +17,7 @@ export default function Verification() {
     const { toast } = useToast()
     const [timer, setTimer] = useState(DEFAULT_TIME)
     const [otp, setOtp] = useState('')
-    
-const { isError, error, submitOtp, isPending } = useOtpVerification()
+    const confirmationCode = useConfirmationCode()
 
     useEffect(() => {
         if (!timer) return
@@ -34,16 +33,16 @@ const { isError, error, submitOtp, isPending } = useOtpVerification()
         setOtp(value)
     }
 
-    if (isError) {
+    if (confirmationCode.isError) {
         return toast({
             variant: 'destructive',
-            title: error?.title,
-            description: error?.message
+            title: confirmationCode.error?.title,
+            description: confirmationCode.error?.message
         })
     }
 
 
-    if (isPending) {
+    if (confirmationCode.isPending) {
         return <Loader />
     }
 
@@ -68,7 +67,7 @@ const { isError, error, submitOtp, isPending } = useOtpVerification()
                 </InputOtpBox>
                 <Button
                     disabled={otp.length < MAX_LENGTH_OTP}
-                    onClick={() => submitOtp(otp)} variant="default" className="bg-emerald-700">Активировать</Button>
+                    onClick={() => confirmationCode.confirm(otp)} variant="default" className="bg-emerald-700">Активировать</Button>
             </div>
         </div>
 
