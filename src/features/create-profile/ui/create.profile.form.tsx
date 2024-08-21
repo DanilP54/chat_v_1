@@ -36,8 +36,6 @@ export default function CreateProfileForm() {
         console.log(values)
         const isValid = createProfileSchema.safeParse(values)
 
-
-
         if (isValid.error) {
             const messages = isValid.error.issues
             toast({
