@@ -1,117 +1,44 @@
 import {Avatar, AvatarFallback, AvatarImage} from "@/shared/ui/avatar.tsx";
-import {ControllerRenderProps} from "react-hook-form";
+import {ControllerRenderProps, useFormState} from "react-hook-form";
 import {z} from "zod";
-import {viewerInfoSchema} from "../../logic/form-schema/viewer-info-schema";
+import { createProfileSchema } from "../lib/form-shema/create-profile-schema";
 import {Button} from "@/shared/ui/button.tsx";
-import React, {useRef, useState} from "react";
-import {useUploadAvatar} from "@/entities/avatar/application/upload.avatar.ts";
-import {useAuthState} from "@/entities/session";
-import {StateCreateProfileData} from "@/shared/types";
-import {getDownloadURL} from 'firebase/storage'
+// import {useUploadAvatar} from "@/entities/avatar/application/upload.avatar.ts";
+// import {useAuthState} from "@/entities/session";
+// import {StateCreateProfileData} from "@/shared/types";
+// import {useHandleUploadAvatar} from "@/features/create-profile/lib/hooks/useHandleUploadAvatar.ts";
+import React, {useState} from "react";
 
 interface UploadAvatarProps {
-    field: ControllerRenderProps<z.infer<typeof viewerInfoSchema>, "avatar">;
+    field: ControllerRenderProps<z.infer<typeof createProfileSchema>, "avatar">;
 }
 
-const defaultAvatar: string = 'https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=Ginger'
+const defaultAvatar = 'https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=Ginger'
 
 export default function UploadAvatar({field}: UploadAvatarProps) {
 
-    const [uploadedAvatar, setUploadedAvatar] = useState<string>(defaultAvatar)
-    const [isUploadingUrl, setIsUploadingUrl] = useState<boolean>(false)
-    const [progress, setProgress] = useState<string>('')
-    const imageRef = useRef<HTMLImageElement | null>(null)
+    const [avatarUrl, setAvatarUrl] = useState(defaultAvatar)
 
-    const state = useAuthState() as StateCreateProfileData
+    // const state = useAuthState() as StateCreateProfileData
+    // const avatarUploadService = useUploadAvatar()
 
-    const uploadingAvatar = useUploadAvatar()
-
-
-    const handleChangeInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
-
-        if (!e.target.files) return
-
-        let currentStorageRef: any;
-
-        const file = e.target.files[0]
-
-        uploadingAvatar.execute(file, state.current_user.user_id, {
-
-            onProgress: (snapshot) => {
-                setIsUploadingUrl(true)
-                currentStorageRef = snapshot.ref
-                const percentage = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(2)
-                setProgress(`${percentage}%`)
-                console.log('Progress: ', percentage)
-                switch (snapshot.state) {
-                    case 'paused':
-                        console.log('paused')
-                        break
-                    case 'success':
-                        console.log('success')
-                }
-            },
-
-            onError: (error) => {
-                switch (error.code) {
-                    case 'storage/unauthorized':
-                        // User doesn't have permission to access the object
-                        break;
-                    case 'storage/canceled':
-                        // User canceled the upload
-                        break;
-                    case 'storage/unknown':
-                        // Unknown error occurred, inspect error.serverResponse
-                        break;
-                }
-            },
-
-            onSuccess: () => {
-                if (!currentStorageRef) return
-
-                getDownloadURL(currentStorageRef).then(url => {
-
-                    const newImage = new Image()
-                    newImage.src = url
-
-                    newImage.onload = function() {
-                        console.log(1)
-                        setUploadedAvatar(url)
-                        setIsUploadingUrl(false)
-                    }
-
-                    newImage.onerror = function() {
-                        console.error('Failed to load new image');
-                        setIsUploadingUrl(false)
-                    };
-
-
-
-                })
-            }
-        })
-
-        field.onChange(file)
-
+    const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if(event.target.files) {
+            const file = event.target.files[0];
+            field.onChange(file)
+            setAvatarUrl(URL.createObjectURL(file))
+        }
     }
 
     return (
         <>
             <label htmlFor="avatar" className="flex flex-col items-center gap-4 cursor-pointer">
-                {
-                    isUploadingUrl ? `Загрузка:, ${progress}` :
-                        <Avatar ref={imageRef} className="w-32 h-32 rounded-sm shadow-3xl">
+                        <Avatar className="w-32 h-32 rounded-sm shadow-3xl">
                             <AvatarImage
-                                src={uploadedAvatar}
+                                src={avatarUrl}
                                 alt="avatar"
                             />
-                            <AvatarFallback>
-                                Photo
-                            </AvatarFallback>
                         </Avatar>
-
-                }
-
                 <Button
                     onClick={() => document.getElementById('avatar')?.click()}
                     type="button"
@@ -123,7 +50,7 @@ export default function UploadAvatar({field}: UploadAvatarProps) {
                     accept="image/*"
                     type="file"
                     className="hidden"
-                    onChange={handleChangeInput}
+                    onChange={onChangeInput}
                 />
             </label>
         </>

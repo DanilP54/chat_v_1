@@ -1,5 +1,5 @@
-import React, {createContext, useContext, useEffect, useReducer} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     ActionAuthInProgress,
     ActionAuthSuccess,
@@ -11,11 +11,11 @@ import {
     StateCreateProfileData,
     StateNotAuth,
 } from '@/shared/types'
-import {Loader} from "@/shared/ui/loader.tsx";
-import {useOnExitAuthState} from "../lib/useOnAuthExitState.ts";
-import {Session} from "../session.model.ts";
-import {auth} from "@/shared/config/firebase.ts";
-import {onAuthStateChanged} from 'firebase/auth'
+import { Loader } from "@/shared/ui/loader.tsx";
+import { useOnExitAuthState } from "../lib/useOnAuthExitState.ts";
+import { Session } from "../session.model.ts";
+import { auth } from "@/shared/config/firebase.ts";
+import { onAuthStateChanged } from 'firebase/auth'
 
 
 type AuthorizationActions =
@@ -48,6 +48,7 @@ export const useDispatchContext = () => {
 const AuthContext = createContext<AuthorizationState | undefined>(undefined)
 
 export const useAuthState = (): AuthorizationState => {
+    
     const context = useContext(AuthContext)
 
     if (!context) {
@@ -66,7 +67,7 @@ const INITIAL_STATE: AuthorizationState = {
 const reducer = (state: AuthorizationState, action: AuthorizationActions): AuthorizationState => {
     switch (action.type) {
         case AuthorizationSteps.AUTH_IN_PROGRESS:
-            return {...state, step: AuthorizationSteps.AUTH_IN_PROGRESS} as StateAuthInProgress;
+            return { ...state, step: AuthorizationSteps.AUTH_IN_PROGRESS } as StateAuthInProgress;
         case AuthorizationSteps.NOT_AUTH:
             return {
                 ...state,
@@ -89,10 +90,10 @@ const reducer = (state: AuthorizationState, action: AuthorizationActions): Autho
 }
 
 
-export default function AuthProvider({children}: { children: React.ReactNode }) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-    
+
     const getGlobalAuthState = useOnExitAuthState()
     console.dir(state)
     const navigate = useNavigate()
@@ -130,7 +131,7 @@ export default function AuthProvider({children}: { children: React.ReactNode }) 
     return (
         <DispatchContext.Provider value={dispatch}>
             <AuthContext.Provider value={state}>
-                {state.step === AuthorizationSteps.AUTH_IN_PROGRESS ? <Loader/> : children}
+                {state.step === AuthorizationSteps.AUTH_IN_PROGRESS ? <Loader /> : children}
             </AuthContext.Provider>
         </DispatchContext.Provider>
     )

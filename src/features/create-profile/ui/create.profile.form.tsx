@@ -11,7 +11,6 @@ import { useAuthState } from "@/entities/session";
 import { Loader } from "@/shared/ui/loader";
 import { useCreateProfileData } from "@/features/create-profile/lib/hooks/useCreateProfileData.ts";
 import { StateCreateProfileData } from "@/shared/types/authorization.state.ts";
-import {useUploadAvatar} from "@/entities/avatar/application/upload.avatar.ts";
 
 
 export default function CreateProfileForm() {
@@ -22,7 +21,6 @@ export default function CreateProfileForm() {
 
     const profileData = useCreateProfileData()
 
-
     const form = useForm<z.infer<typeof createProfileSchema>>({
         defaultValues: {
             firstname: "",
@@ -32,29 +30,36 @@ export default function CreateProfileForm() {
         mode: "onSubmit",
     })
 
-    async function handleCreateProfileData(values: z.infer<typeof createProfileSchema>) {
-        console.log(values)
-        const isValid = createProfileSchema.safeParse(values)
 
-        if (isValid.error) {
-            const messages = isValid.error.issues
+    async function handleCreateProfileData(values: z.infer<typeof createProfileSchema>) {
+
+        const formIsValid = createProfileSchema.safeParse(values)
+
+        if (formIsValid.error) {
+
+            const messages = formIsValid.error.issues
+
             toast({
                 title: 'Невалидное имя',
                 variant: 'destructive',
                 description: messages.map(issue => issue.message).join(', ')
             })
+
         }
 
-        if (isValid.success && state.current_user.user_id) {
+        if (formIsValid.success && state.current_user.user_id) {
+
             await profileData.create({
                 first_name: values.firstname,
                 last_name: values.lastname,
                 phone_number: state.current_user.phone_number,
                 avatar: values.avatar
             }, state.current_user.user_id)
+
         }
 
-        if (profileData.isErrorCreatePD) {
+        if (profileData.isError) {
+            
             toast({
                 title: profileData.error?.title,
                 variant: 'destructive',
@@ -67,7 +72,6 @@ export default function CreateProfileForm() {
     if (profileData.isPending) {
         return <Loader />
     }
-
 
     return (
         <Form {...form}>

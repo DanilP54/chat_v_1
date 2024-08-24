@@ -2,23 +2,23 @@ import { useState } from "react";
 import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
 import { useDispatchContext } from "@/entities/session/ui/auth-provider";
 import { useCreateViewerProfile } from "@/entities/viewer";
-import { ViewerFieldFromFormDto } from "@/entities/viewer/application/create.viewer.profile";
+import { ViewerFieldsFromFormDto } from "@/entities/viewer/application/create.viewer.profile";
 
 
 export const useCreateProfileData = () => {
 
     const [isPending, setIsPending] = useState<boolean>(false)
-    const [isErrorCreatePD, setIsErrorCreatePD] = useState<boolean>(false)
+    const [isError, setIsError] = useState<boolean>(false)
     const [error, setError] = useState<AuthorizationError | null>(null)
     const authorizationDispatch = useDispatchContext()
 
     const createProfileDb = useCreateViewerProfile()
 
-    async function create(values: ViewerFieldFromFormDto, userId: string) {
-        console.log('DTO: ', values)
+    async function create(values: ViewerFieldsFromFormDto, userId: string) {
+
         try {
             setIsPending(true)
-            setIsErrorCreatePD(false)
+            setIsError(false)
             setError(null)
 
 
@@ -32,7 +32,7 @@ export const useCreateProfileData = () => {
             authorizationDispatch({ type: AuthorizationSteps.AUTH_IN_PROGRESS })
 
         } catch (e) {
-            setIsErrorCreatePD(true)
+            setIsError(true)
             setError({
                 title: 'Ошибка регистрации номера телефона',
                 message: e.message
@@ -45,7 +45,7 @@ export const useCreateProfileData = () => {
     return {
         create,
         isPending,
-        isErrorCreatePD,
+        isError,
         error
     }
 }

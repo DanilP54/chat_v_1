@@ -1,10 +1,10 @@
 import { Input } from "@/shared/ui/input.tsx";
-import { viewerInfoSchema } from "../../logic/form-schema/viewer-info-schema";
+import {createProfileSchema} from "@/features/create-profile/lib/form-shema/create-profile-schema.ts";
 import { z } from "zod";
 import { ControllerRenderProps } from "react-hook-form";
 
 type LastNameInputProps = {
-    field: ControllerRenderProps<z.infer<typeof viewerInfoSchema>, "lastname">;
+    field: ControllerRenderProps<z.infer<typeof createProfileSchema>, "lastname">;
 }
 
 export default function LastNameInput({ field }: LastNameInputProps) {

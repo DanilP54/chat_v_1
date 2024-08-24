@@ -1,8 +1,9 @@
-import { ViewerModel } from "..";
-import { useViewerProfile } from "../services/viewer.profile.adapter"
-import { useAvatar } from "@/entities/avatar/services/avatar.adapter.ts";
+import {AvatarModel} from "@/entities/avatar";
+import {ViewerModel} from "..";
+import {useViewerProfile} from "../services/viewer.profile.adapter"
+import {useAvatar} from "@/entities/avatar/services/avatar.adapter.ts";
 
-export type ViewerFieldFromFormDto = {
+export type ViewerFieldsFromFormDto = {
     avatar?: File,
     first_name: string,
     last_name: string,
@@ -13,31 +14,32 @@ export type ViewerFieldFromFormDto = {
 export const useCreateViewerProfile = () => {
 
     const viewerProfile = useViewerProfile()
-    const avatarStorage = useAvatar()
+    const viewerAvatar = useAvatar()
 
-    async function execute(viewerId: string, data: ViewerFieldFromFormDto) {
+    async function execute(viewerId: string, data: ViewerFieldsFromFormDto) {
 
-        console.log('data: ', data)
-
-        if (data.avatar) {
-            await avatarStorage.save(data.avatar, viewerId)
-        }
-
-        // если есть аватар, создать его, сохранить в storage, url добавить в подколлекцию users
+        const {first_name, last_name, phone_number, avatar} = data
 
         const newProfile = ViewerModel.createViewerProfile({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            phone_number: data.phone_number,
+            first_name: first_name,
+            last_name: last_name,
+            phone_number: phone_number,
         }, viewerId)
 
-        // убрать chat room из модели viewer profile и из firestore
         await viewerProfile.save(viewerId, newProfile)
-        // создать нового viewer и сохранить его в базу данных
 
+        if (avatar) {
+            let url = await viewerAvatar.uploadAvatar(avatar, viewerId)
+
+            const newAvatar = AvatarModel.createViewerAvatar({
+                primary: true,
+                url,
+            }, viewerId)
+
+            await viewerAvatar.save(viewerId, newAvatar)
+        }
 
     }
 
-
-    return { execute }
+    return {execute}
 }
