@@ -1,20 +1,21 @@
 import {AvatarModel} from "@/entities/avatar";
-import {ViewerModel} from "..";
+import {ViewerModel} from "@/entities/viewer";
+
 import {useViewerProfile} from "../services/viewer.profile.adapter"
-import {useAvatar} from "@/entities/avatar/services/avatar.adapter.ts";
+import {useAvatarStorage} from "@/entities/avatar/services/avatar.adapter.ts";
+
 
 export type ViewerFieldsFromFormDto = {
     avatar?: File,
     first_name: string,
     last_name: string,
-    phone_number: string,
-
+    phone_number: string
 }
 
 export const useCreateViewerProfile = () => {
 
     const viewerProfile = useViewerProfile()
-    const viewerAvatar = useAvatar()
+    const avatarStorage = useAvatarStorage()
 
     async function execute(viewerId: string, data: ViewerFieldsFromFormDto) {
 
@@ -26,17 +27,18 @@ export const useCreateViewerProfile = () => {
             phone_number: phone_number,
         }, viewerId)
 
-        await viewerProfile.save(viewerId, newProfile)
+        await viewerProfile.saveViewerProfile(viewerId, newProfile)
 
         if (avatar) {
-            let url = await viewerAvatar.uploadAvatar(avatar, viewerId)
+
+            const url = await avatarStorage.uploadFile(avatar, viewerId)
 
             const newAvatar = AvatarModel.createViewerAvatar({
                 primary: true,
                 url,
-            }, viewerId)
+            })
 
-            await viewerAvatar.save(viewerId, newAvatar)
+            await viewerProfile.saveAvatarOfViewer(viewerId, newAvatar)
         }
 
     }

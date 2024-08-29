@@ -1,65 +1,25 @@
-import {
-    FirestoreDataConverter,
-    QueryDocumentSnapshot,
-    SnapshotOptions,
-    WithFieldValue,
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    setDoc
-} from "firebase/firestore"
-import {db} from "../config/firebase"
+import { ViewerConverter } from "@/entities/viewer/mappers/viewer.converter"
+import { db, storage } from "../config/firebase"
+import { Database, DatabaseApi } from "./database.api"
 
 
-
-
-
-export const converter = <T>() => ({
-    toFirestore: (data: T) => data,
-    fromFirestore: (snapshot: QueryDocumentSnapshot, options?: SnapshotOptions) => {
-        return snapshot.data(options) as T
-    }
-})
-
-const dataPoint = <T>(collectionPath: string, id: string) => {
-    return doc(db, collectionPath, id).withConverter(converter<T>())
+export enum DatabaseCollections {
+    USERS = 'users',
+    CHATROOMS = 'chatrooms',
+    AVATARS = 'avatars',
+    MESSAGES = 'messages',
+    SESSIONS = 'sessions'
 }
 
-const dbCollec = {
-    users: dataPoint
+export enum BaseStoragePath {
+    AVATARS = 'avatars/'
 }
 
-
-export const getOne = async (target: DBCollection, uid: string,) => {
-
-    const documentRef = dbCollec.users<UserResponseDto>('/users', '123')
-
-    return await getDoc(documentRef)
-}
-
-export const getMany = async (target: DBCollection, options: object) => {
-    const q = query(collection(db, target))
-    const querySnapshot = await getDocs(q);
-
-}
+// Storage
 
 
-export const create = async (target: DBCollection, data: unknown) => {
-    return await setDoc(doc(db, target), data)
-}
-
-
-export const update = async (target: DBCollection, id: string, data: unknown) => {
-    return await setDoc(doc(db, target, id), data)
-}
-
-
-export const dalete = async (target: DBCollection, id: string) => {
-    return await deleteDoc(doc(db, target, id));
-}
+// DataBase
+export const avatarsCollection = new Database(db, DatabaseCollections.AVATARS)
 
 
 

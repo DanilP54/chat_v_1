@@ -1,13 +1,13 @@
-import {Avatar, AvatarFallback, AvatarImage} from "@/shared/ui/avatar.tsx";
-import {ControllerRenderProps, useFormState} from "react-hook-form";
-import {z} from "zod";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar.tsx";
+import { ControllerRenderProps, useFormState } from "react-hook-form";
+import { z } from "zod";
 import { createProfileSchema } from "../lib/form-shema/create-profile-schema";
-import {Button} from "@/shared/ui/button.tsx";
+import { Button } from "@/shared/ui/button.tsx";
 // import {useUploadAvatar} from "@/entities/avatar/application/upload.avatar.ts";
 // import {useAuthState} from "@/entities/session";
 // import {StateCreateProfileData} from "@/shared/types";
 // import {useHandleUploadAvatar} from "@/features/create-profile/lib/hooks/useHandleUploadAvatar.ts";
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 interface UploadAvatarProps {
     field: ControllerRenderProps<z.infer<typeof createProfileSchema>, "avatar">;
@@ -15,7 +15,7 @@ interface UploadAvatarProps {
 
 const defaultAvatar = 'https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=Ginger'
 
-export default function UploadAvatar({field}: UploadAvatarProps) {
+export default function UploadAvatar({ field }: UploadAvatarProps) {
 
     const [avatarUrl, setAvatarUrl] = useState(defaultAvatar)
 
@@ -23,7 +23,7 @@ export default function UploadAvatar({field}: UploadAvatarProps) {
     // const avatarUploadService = useUploadAvatar()
 
     const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if(event.target.files) {
+        if (event.target.files) {
             const file = event.target.files[0];
             field.onChange(file)
             setAvatarUrl(URL.createObjectURL(file))
@@ -33,12 +33,12 @@ export default function UploadAvatar({field}: UploadAvatarProps) {
     return (
         <>
             <label htmlFor="avatar" className="flex flex-col items-center gap-4 cursor-pointer">
-                        <Avatar className="w-32 h-32 rounded-sm shadow-3xl">
-                            <AvatarImage
-                                src={avatarUrl}
-                                alt="avatar"
-                            />
-                        </Avatar>
+                <Avatar className="w-32 h-32 rounded-sm shadow-3xl">
+                    <AvatarImage
+                        src={avatarUrl}
+                        alt="avatar"
+                    />
+                </Avatar>
                 <Button
                     onClick={() => document.getElementById('avatar')?.click()}
                     type="button"

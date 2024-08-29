@@ -60,7 +60,7 @@ export function useCreateSession() {
         }
 
         const avatarList = await getAllAvatarList(userId)
-
+   
         const chatRoomList = await getChatRoomListOfViewer(userId)
 
         const viewer: SessionModel.SessionViewer = {
