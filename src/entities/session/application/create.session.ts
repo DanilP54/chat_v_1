@@ -3,18 +3,19 @@ import { useViewerProfile } from "@/entities/viewer/services/viewer.profile.adap
 import { ChatRoomService, useChatRoom } from "@/entities/chat-room/services/chat.room.adapter.ts";
 import { SessionModel } from "@/entities/session";
 import { Result } from "@/shared/lib/error.handler.ts";
-import { ViewerAvatarList } from "@/entities/avatar/avatar.model.ts";
+// import { ViewerAvatarList } from "@/entities/avatar/avatar.model.ts";
 import { ViewerProfile } from "@/entities/viewer/viewer.model.ts";
 import { ChatRoomList } from "@/entities/chat-room/chat.room.model.ts";
-import { AvatarService } from "@/entities/avatar/application/ports";
-import { useAvatar } from "@/entities/avatar/services/avatar.adapter";
+// import { StorageService } from "@/entities/avatar/application/ports";
+// import { useAvatarStorage } from "@/entities/avatar/services/avatar.adapter";
 
 type UserId = string
+
 export function useCreateSession() {
 
     const viewerProfile: ViewerProfileService = useViewerProfile()
     const chatRoom: ChatRoomService = useChatRoom()
-    const avatarList: AvatarService = useAvatar()
+    // const avatarList: StorageService  = useAvatarStorage()
 
     const getViewerProfile = async (userId: string): Promise<Result<ViewerProfile>> => {
 
@@ -28,19 +29,20 @@ export function useCreateSession() {
 
     }
 
-    const getAllAvatarList = async (userId: string): Promise<Result<ViewerAvatarList>> => {
-
-        const response = await avatarList.getAllAvatars(userId)
-
-        // if(!response) {
-        //     return Result.fail<ViewerAvatarList>(`Couldn't find AVATAR LIST by viewer id=${userId}`)
-        // }
-
-        return Result.ok(response)
-
-    }
+    // const getAllAvatarList = async (userId: string): Promise<Result<ViewerAvatarList>> => {
+    //
+    //     const response = await avatarList.getAllAvatars(userId)
+    //
+    //     // if(!response) {
+    //     //     return Result.fail<ViewerAvatarList>(`Couldn't find AVATAR LIST by viewer id=${userId}`)
+    //     // }
+    //
+    //     return Result.ok(response)
+    //
+    // }
 
     const getChatRoomListOfViewer = async (userId: string): Promise<Result<ChatRoomList>> => {
+
         const response = await chatRoom.getChatListWithPagination(userId)
 
         // if(!response) {
@@ -59,13 +61,12 @@ export function useCreateSession() {
             return false
         }
 
-        const avatarList = await getAllAvatarList(userId)
+        // const avatarList = await getAllAvatarList(userId)
    
         const chatRoomList = await getChatRoomListOfViewer(userId)
 
         const viewer: SessionModel.SessionViewer = {
             profile: profile.getValue(),
-            avatar_list: avatarList.getValue(),
             chat_room_list: chatRoomList.getValue()
         }
 
