@@ -25,7 +25,7 @@ export function ButtonSheet({
                         {buttonIcon}
                     </Button>
                 </SheetTrigger>
-                <SheetContent side={sheetSide}>
+                <SheetContent className='p-0' side={sheetSide}>
                     {sheetContent}
                 </SheetContent>
             </Sheet>

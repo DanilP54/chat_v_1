@@ -1,0 +1,1 @@
+export type TwoFAState = "PHONE NUMBER ENTRY" | "VERIFY CODE ENTRY";

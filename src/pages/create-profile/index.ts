@@ -1,3 +1,3 @@
-import CreateProfile from "./ui/create.profile";
+import CreateProfilePage from "./create.profile";
 
-export { CreateProfile }
+export { CreateProfilePage }

@@ -1,0 +1,24 @@
+  ~/Documents/code/chat_v_1
+   public
+   src
+  │  app                    
+  │  entities              ★ 
+  │  features              ★ 
+  │  kernel                 
+  │  pages                  
+  │  shared                 
+  │  widgets                
+  │  logic.png            ✓ 
+  └  query.js             ✓ 
+   README.md
+   components.json
+   index.html
+   package-lock.json
+   package.json           ✓ 
+   postcss.config.js
+  󱏿 tailwind.config.js
+   tsconfig.json
+   tsconfig.node.json
+   vite.config.ts
+  󰌾 yarn.lock              ✓ 
+  (5 hidden items)

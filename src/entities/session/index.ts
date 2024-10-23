@@ -1,5 +1,5 @@
-import { useAuthState } from './ui/auth-provider.tsx'
-import AuthProvider from './ui/auth-provider.tsx'
+import { useAuthContext } from './ui/session-provider.tsx'
+import AuthProvider from './ui/session-provider.tsx'
 import * as SessionModel from './session.model.ts'
 
-export { useAuthState, AuthProvider, SessionModel }
+export { useAuthContext, AuthProvider, SessionModel }

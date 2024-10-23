@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { AuthorizationError, AuthorizationSteps } from "@/shared/types";
-import { useDispatchContext } from "@/entities/session/ui/auth-provider";
-import { useCreateViewerProfile } from "@/entities/viewer";
-import { ViewerFieldsFromFormDto } from "@/entities/viewer/application/create.viewer.profile";
+import { AuthorizationError } from "@/shared/types";
+import { UserFormProfileData } from "@/entities/viewer/application/create.viewer.profile";
+import { useAuthContext } from "@/entities/session/ui/session-provider";
+import { useCreateUserProfile } from "@/entities/user/application/create.user.profile";
 
 
 export const useCreateProfileData = () => {
@@ -10,11 +10,13 @@ export const useCreateProfileData = () => {
     const [isPending, setIsPending] = useState<boolean>(false)
     const [isError, setIsError] = useState<boolean>(false)
     const [error, setError] = useState<AuthorizationError | null>(null)
-    const authorizationDispatch = useDispatchContext()
 
-    const createProfileDb = useCreateViewerProfile()
+    const createUserProfileUseCase = useCreateUserProfile()
 
-    async function create(values: ViewerFieldsFromFormDto, userId: string) {
+    const { getUserCredentials, updateSessionStatus } = useAuthContext()
+
+
+    async function create(formData: UserFormProfileData) {
 
         try {
             setIsPending(true)
@@ -22,14 +24,11 @@ export const useCreateProfileData = () => {
             setError(null)
 
 
-            await createProfileDb.execute(userId, {
-                first_name: values.first_name,
-                last_name: values.last_name,
-                phone_number: values.phone_number,
-                avatar: values.avatar
-            })
+            const userCreds = getUserCredentials()
 
-            authorizationDispatch({ type: AuthorizationSteps.AUTH_IN_PROGRESS })
+            await createUserProfileUseCase.execute(userCreds, formData)
+
+            updateSessionStatus('USER_PROFILE_LOADING')
 
         } catch (e) {
             setIsError(true)

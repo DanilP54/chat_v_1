@@ -7,17 +7,14 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { createProfileSchema } from "../lib/form-shema/create-profile-schema.ts";
 import { useToast } from "@/shared/ui/use-toast.ts";
-import { useAuthState } from "@/entities/session";
 import { Loader } from "@/shared/ui/loader";
 import { useCreateProfileData } from "@/features/create-profile/lib/hooks/useCreateProfileData.ts";
-import { StateCreateProfileData } from "@/shared/types/authorization.state.ts";
+
 
 
 export default function CreateProfileForm() {
 
     const { toast } = useToast()
-
-    const state = useAuthState() as StateCreateProfileData
 
     const profileData = useCreateProfileData()
 
@@ -47,19 +44,18 @@ export default function CreateProfileForm() {
 
         }
 
-        if (formIsValid.success && state.current_user.user_id) {
+        if (formIsValid.success) {
 
             await profileData.create({
                 first_name: values.firstname,
                 last_name: values.lastname,
-                phone_number: state.current_user.phone_number,
                 avatar: values.avatar
-            }, state.current_user.user_id)
+            })
 
         }
 
         if (profileData.isError) {
-            
+
             toast({
                 title: profileData.error?.title,
                 variant: 'destructive',

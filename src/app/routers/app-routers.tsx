@@ -1,44 +1,54 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "../RootLayout";
-import { HomePage } from "@/pages/home";
+import ChatListPage from "@/pages/chat-list/chat-list";
 import { ChatRoom } from "@/pages/chat-room";
 import { ChatDetails } from "@/pages/chat-details";
-import { AuthenticationPage } from "@/pages/authentication-page";
-import { CreateProfile } from "@/pages/create-profile";
+
+import { CreateProfilePage } from "@/pages/create-profile";
+import { SearchPage } from "@/pages/new-chat/ui/search.page.tsx";
+import { TwoFactorAuthPage } from "@/features/auth/two-factor-auth";
+import AuthenticationLayout from "@/pages/auth/layout";
 
 const routers = [
-    {
-        path: '/',
-        element: <RootLayout />,
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <ChatListPage />,
+      },
+      {
+        path: "chat-room/:id",
+        element: <ChatRoom />,
+      },
+      {
+        path: "chat-info/:id",
+        element: <ChatDetails />,
+      },
+      {
+        path: "create-profile",
+        element: <CreateProfilePage />,
+      },
+      {
+        path: "search",
+        element: <SearchPage />,
+      },
+      {
+        path: "auth",
+        element: <AuthenticationLayout />,
         children: [
-            {
-                path: 'sign-in',
-                element: <AuthenticationPage />
-            },
-            {
-                path: 'create-profile',
-                element: <CreateProfile />
-
-            },
-            {
-                path: 'home',
-                element: <HomePage />
-
-            },
-            {
-                path: 'chat-room/:id',
-                element: <ChatRoom />
-            },
-            {
-                path: 'chatdetails/:id',
-                element: <ChatDetails />
-            }
-        ]
-    },
-]
-
+          {
+            index: true,
+            element: <TwoFactorAuthPage />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export function AppRouters() {
-    const router = createBrowserRouter(routers)
-    return <RouterProvider router={router} />
+  const router = createBrowserRouter(routers);
+  return <RouterProvider router={router} />;
 }

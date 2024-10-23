@@ -1,7 +1,3 @@
-import { SearcheBar } from "@/features/searche-bar";
-import ButtonDialog from "@/shared/ui/button-dialog";
-import { Plus } from './icons/index';
-import { ChatCreator } from "./chat-creator";
 import { ChatPreviewList } from "@/features/chat-list";
 import type { ChatPreview } from "@/entities/chat-room-preview";
 
@@ -36,13 +32,7 @@ export default function ChatHub() {
 
     return (
         <div>
-            <div className="flex items-center">
-                <SearcheBar />
-                <ButtonDialog
-                    buttonIcon={<Plus />}
-                    renderContent={<ChatCreator />}
-                />
-            </div>
+
             <ChatPreviewList chat={chats} />
         </div>
     )
