@@ -10,7 +10,7 @@ const RootLayout = () => {
                     <Outlet />
                 </ResizablePanel>
             </ResizablePanelGroup>
-        </Providers>
+        </Providers>``
     )
 }
 
