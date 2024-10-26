@@ -1,22 +1,14 @@
-import { UserProfile } from "../profile.ts";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/shared/config/firebase.ts";
-import { ProfileMap } from "../_mappers/profile.ts";
+// import { UserProfile } from "../profile.ts";
 import { ProfileRepository } from "../_application/ports.ts";
+import { profileDbClient } from "../_api/profile.db.ts";
 
 export class ProfileRepositoryImpl implements ProfileRepository {
-  async getUserProfileById(userId: string): Promise<UserProfile | undefined> {
-    try {
-      const userProfile = await getDoc(
-        doc(db, "users", userId).withConverter(new ProfileMap()),
-      );
+  async getProfileById(userId: string) {
+  
+    const response = await profileDbClient.getById(userId)
 
-      if (userProfile.exists()) {
-        return userProfile.data();
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    console.log(response)
+
   }
 }
 

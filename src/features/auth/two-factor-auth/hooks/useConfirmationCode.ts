@@ -1,41 +1,32 @@
 import { useState } from "react";
-import { useAuth } from "@/entities/session/application/authenticate";
-import { useAuthContext } from "@/entities/session/ui/session-provider";
+import { verifyCodeUseCase } from "@/entities/session/_application/use-cases/verify.code.use.case";
 
 export const useConfirmationCode = () => {
 
-    const [isPending, setIsPending] = useState<boolean>(false)
-    const [isError, setIsError] = useState<boolean>(false)
+    const [isPending, setIsPending] = useState<boolean>(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const authService = useAuth()
-    const { updateSessionStatus } = useAuthContext()
+    const confirmOtpFn = async (otp: string) => {
+        
+        setIsPending(true);
+        setError(null);
 
-
-    const confirm = async (otp: string) => {
-
-        setIsError(false)
-        setIsPending(true)
-
-        await authService.verificationCode(otp)
-            .then((response) => {
-
-                // if(response?.isNewUser) {
-
-                // }
-                updateSessionStatus('SESSION_INITIALIZING')
-            })
-            .catch(() => {
-                setIsError(true)
-            })
-            .finally(() => {
-                setIsPending(false)
-            })
-    }
+        try {
+            await verifyCodeUseCase.exec(otp)
+            setIsSuccess(true);
+        } catch (err) {
+            setError(err.message || "An error occurred otp");
+            setIsSuccess(false);
+        } finally {
+            setIsPending(false);
+        }
+    };
 
     return {
-        confirm,
         isPending,
-        isError,
-
-    }
+        isSuccess,
+        error,
+        confirmOtpFn
+    };
 }

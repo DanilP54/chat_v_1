@@ -1,18 +1,16 @@
-import { useState } from "node_modules/react-resizable-panels/dist/declarations/src/vendor/react";
-import PhoneNumberForm from "./_ui/phone.number.form.tsx";
-import VerifyCodeForm from "./_ui/verify.code.form.tsx";
-
-// types
-import { TwoFAState } from "./types.ts";
+import { useState } from "react";
+import PhoneNumberEntry from "./_ui/phone.number.entry.tsx";
+import VerifyCodeEntry from "./_ui/verify.code.entry.tsx";
+import type { TwoFAState } from "./types.ts";
 
 export default function TwoFactorAuthPage() {
-  const [step, setNextStep] = useState<TwoFAState>("PHONE NUMBER ENTRY");
+  const [step, setNextStep] = useState<TwoFAState>("phone number entry");
 
-  if (step === "PHONE NUMBER ENTRY") {
-    return <PhoneNumberForm setNextStep={setNextStep} />;
+  if (step === "phone number entry") {
+    return <PhoneNumberEntry setNextStep={setNextStep} />;
   }
 
-  if (step === "VERIFY CODE ENTRY") {
-    return <VerifyCodeForm />;
+  if (step === "verify code entry") {
+    return <VerifyCodeEntry />;
   }
 }

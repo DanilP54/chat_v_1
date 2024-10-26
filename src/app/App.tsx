@@ -9,12 +9,10 @@ import { Toaster } from '@/shared/ui/toaster';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <>
-
         <React.StrictMode>
             <AppRouters />
             <Toaster />
         </React.StrictMode>
-
     </>
 
 )

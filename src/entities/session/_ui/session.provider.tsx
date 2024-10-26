@@ -1,26 +1,18 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { assertNonNullish } from "@/shared/types";
 import { User, createUser } from "@/entities/user/user";
 import { auth } from "@/shared/config/firebase.ts";
 import { onAuthStateChanged } from "firebase/auth";
-import { Session, createSession } from "./entities";
+import { Session, createSession } from "../session";
 import { nanoid } from "nanoid";
-import { useMemo } from "node_modules/react-resizable-panels/dist/declarations/src/vendor/react";
+import { useMemo } from "react";
 import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
 import { useNavigate } from "react-router-dom";
 
-function assertNonNullish<TValue>(
-  value: TValue,
-  message: string,
-): asserts value is NonNullable<TValue> {
-  if (value === null || value === undefined) {
-    throw new Error(message);
-  }
-}
-
 type SessionStatus =
-  | "AUTHENTICATION IN PROGRESS"
-  | "UNAUTHENTICATED"
-  | "AUTHENTICATED";
+  | "authentication in progress"
+  | "unauthenticated"
+  | "authenticated";
 
 type SessionValue = {
   currentUser: User | undefined;
@@ -34,34 +26,40 @@ export default function SessionProvider({
 }: {
   children: React.ReactNode;
 }) {
+  
   const [status, setStatus] = useState<SessionStatus>(
-    "AUTHENTICATION IN PROGRESS",
+    "authentication in progress",
   );
+  
   const [session, setSession] = useState<Session | null>(null);
 
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (status === "UNAUTHENTICATED") return;
+    
+    if (status === "unauthenticated") return;
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+
       if (!user) {
-        setStatus("UNAUTHENTICATED");
+        setStatus("unauthenticated");
         return navigation("/auth");
       }
 
       const { uid, phoneNumber } = user;
 
       assertNonNullish(phoneNumber, "User phone number not found");
-
+  
       const createdUser = createUser(uid, phoneNumber);
       const createdSession = createSession(nanoid(), createdUser);
-
+  
       setSession(createdSession);
-      setStatus("AUTHENTICATED");
+      setStatus("authenticated");
+      navigation('/')
     });
 
     return () => unsubscribe();
+  
   }, [status]);
 
   const value = useMemo(
@@ -74,7 +72,7 @@ export default function SessionProvider({
 
   return (
     <SessionContext.Provider value={value}>
-      {status === "AUTHENTICATION IN PROGRESS" ? <FullPageSpinner /> : children}
+      {status === "authentication in progress" ? <FullPageSpinner /> : children}
     </SessionContext.Provider>
   );
 }

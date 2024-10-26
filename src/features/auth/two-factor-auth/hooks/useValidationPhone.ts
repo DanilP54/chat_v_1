@@ -1,72 +1,54 @@
-import { useRef } from "react"
+import { useState, useCallback, useRef } from "react";
 
-type Error = {
-    title: string,
-    message: string
+interface ValidatePhoneError {
+    title: string;
+    message: string;
 }
 
-type ValidationStatusType = {
-    isValid: boolean,
-    error: Error
+interface ValidationStatus {
+    isValid: boolean;
+    error: ValidatePhoneError;
 }
+
+
 
 export const useValidationPhone = () => {
 
-    const validationStatus = useRef<ValidationStatusType>({ isValid: false, error: { title: 'Неверный формат номера', message: 'Введите номер телефона' } })
+    const validationStatus = useRef<ValidationStatus>({
+        isValid: false,
+        error: { title: 'Неверный формат номера', message: 'Введите номер телефона' }
+    });
+    
 
+    const handleValidPhoneNumber = (phoneNumber: string, country: object): boolean => {
 
-    const checkValidPhone = (numberPhone: string, country: object) => {
+        const expectedLength = country.format.replace(/[^.]/g, '').length;
+        const isValidFormat = phoneNumber.length === expectedLength;
+        const isValidDialCode = phoneNumber.startsWith(country.dialCode);
 
-        const checkPhoneFormat = country.format.match(/[.]/g)?.length === numberPhone.length
-        const checkPhoneStart = numberPhone.startsWith(country.dialCode)
+        if (!isValidFormat || !isValidDialCode) {
+            
+            const errorMessage = !isValidFormat && !isValidDialCode
+                ? `Номер телефона должен начинаться с ${country.dialCode} и содержать ${expectedLength} цифр`
+                : !isValidFormat
+                ? 'Номер телефона должен содержать правильный формат'
+                : `Номер телефона должен начинаться с +${country.dialCode}`;
 
-        if (!checkPhoneFormat && !checkPhoneStart) {
-            validationStatus.current = {
+           validationStatus.current = {
                 isValid: false,
-                error: {
-                    title: 'Неверный формат номера',
-                    description: `Номер телефона должен начинаться с ${country.dialCode} и содержать ${country.format.match(/[.]/g)?.length} цифр`
-                }
-            }
-            return false
-        }
-
-        if (!checkPhoneFormat) {
-            validationStatus.current = {
-                isValid: false,
-                error: {
-                    title: 'Неверный формат номера',
-                    message: `Номер телефона должен содержать правильный формат`
-                }
-            }
-            return false
-        }
-
-        if (!checkPhoneStart) {
-            validationStatus.current = {
-                isValid: false,
-                error: {
-                    title: 'Неверный формат номера',
-                    message: `Номер телефона должен начинаться с +${country.dialCode}`
-                }
-            }
-            return false
+                error: { title: 'Неверный формат номера', message: errorMessage }
+            };
+            return false;
         }
 
         validationStatus.current = {
             isValid: true,
-            error: {
-                title: '',
-                message: ''
-            }
-        }
-
-        return true
+            error: { title: '', message: '' }
+        };
+        
+        return true;
+    
     }
 
-
-
-    return { ...validationStatus.current, checkValidPhone }
-
-
+    return { ...validationStatus.current, handleValidPhoneNumber };
 }

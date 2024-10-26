@@ -1,34 +1,30 @@
 import { useState } from "react";
-import { useAuth } from "@/entities/session/application/authenticate";
+import { signInWithPhoneUseCase } from "@/entities/session/_application/use-cases/sign.in.with.phone.use.case";
 
 export const useSignInWithPhone = () => {
-
     const [isPending, setIsPending] = useState<boolean>(false);
-    const [isSuccess, setIsSuccess] = useState(false)
-
-    const authService = useAuth();
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const signIn = async (phoneNumber: string) => {
+        setIsPending(true);
+        setError(null);
 
-        // setIsPending(true)
-
-        return await authService.signInWithPhone(phoneNumber)
-            // .then(() => {
-            //     setIsSuccess(true)
-            // })
-            // .catch(() => {
-            //     setIsSuccess(false)
-            // })
-            // .finally(() => {
-            //     setIsPending(false)
-            // })
-
-
-    }
+        try {
+            await signInWithPhoneUseCase.exec(phoneNumber)
+            setIsSuccess(true);
+        } catch (err) {
+            setError(err.message || "An error occurred sign in phone");
+            setIsSuccess(false);
+        } finally {
+            setIsPending(false);
+        }
+    };
 
     return {
         isPending,
         isSuccess,
+        error,
         signIn
-    }
-}
+    };
+};

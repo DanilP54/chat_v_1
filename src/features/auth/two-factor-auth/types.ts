@@ -1,1 +1,2 @@
-export type TwoFAState = "PHONE NUMBER ENTRY" | "VERIFY CODE ENTRY";
+export type TwoFAState = "phone number entry" | "verify code entry";
+

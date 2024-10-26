@@ -7,10 +7,8 @@ export interface UserProfile extends User {
   avatar?: string;
 }
 
-export function createUserProfile(
-  userDto: UserDbModel,
-  id: string,
-): UserProfile {
+export function createUserProfile(userDto: UserDbModel, id: string,): UserProfile {
+  
   const { first_name, last_name, avatar_url, phone_number } = userDto;
 
   return {

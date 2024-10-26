@@ -8,9 +8,11 @@ import React, {
 } from "react";
 import { assertNonNullish } from "@/shared/types";
 import { UserProfile } from "../profile";
-import { useAppSession } from "@/entities/session/model/session.provider";
+import { useAppSession } from "@/entities/session/_ui/session.provider";
 import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
-// import { getUserProfileUseCase } from "../_application/use-cases/get.user.profile";
+import { getUserProfileUseCase } from "../_application/use-cases/get.user.profile";
+import { useNavigate } from "react-router-dom";
+
 
 type UserProfileStatus =
   | "checking for a profile"
@@ -32,15 +34,27 @@ export default function UserProfileProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [status, setStatus] = useState<UserProfileStatus>(
-    "checking for a profile",
-  );
+  const [status, setStatus] = useState<UserProfileStatus>("checking for a profile");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
+  const navigate = useNavigate()
+  
   const { getCurrentUser } = useAppSession();
 
+
   useEffect(() => {
+    
     if (status !== "checking for a profile") return;
+
+    const {id} = getCurrentUser()
+
+    getUserProfileUseCase.exec(id)
+      .then(response => {
+        navigate('/')
+      }).catch(err => {
+        navigate('/create-profile')
+      })
+    
   }, [status]);
 
   const value = useMemo(

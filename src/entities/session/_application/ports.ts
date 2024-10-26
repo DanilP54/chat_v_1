@@ -1,7 +1,5 @@
-import { UserCredential } from "firebase/auth";
-
-
-export interface PhoneAuthService {
-    signIn(phone: string): Promise<boolean>,
-    verifyCode(code: string): Promise<UserCredential | undefined>
-}F
+// output
+export interface SessionRepository<T, E> {
+    signInWithPhone(phone: string): Promise<T>,
+    verifyCode(otp: string): Promise<E>
+}

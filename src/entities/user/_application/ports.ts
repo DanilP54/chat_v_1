@@ -4,7 +4,7 @@ import { UserProfile } from "../profile";
 
 export interface ProfileRepository {
   // findUserByLastName(name: string): Promise<User[]>;
-  getUserProfileById(userId: string): Promise<UserProfile | undefined>;
+  getProfileById(userId: string): Promise<void>;
   // saveUserProfile(userId: string, data: User): Promise<void>;
   // saveAvatarOfViewer(viewerId: string, data: ViewerAvatar): Promise<void>
 }

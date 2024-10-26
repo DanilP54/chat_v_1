@@ -8,9 +8,8 @@ import {
 import { UserDbModel } from "@/shared/types/firestore.type.ts";
 import { UserProfile, createUserProfile } from "../profile";
 
-export class ProfileMap
-  implements FirestoreDataConverter<UserProfile, UserDbModel>
-{
+export class ProfileMap implements FirestoreDataConverter<UserProfile, UserDbModel> {
+  
   toFirestore(model: WithFieldValue<UserProfile>): WithFieldValue<UserDbModel> {
     return {
       first_name: model.first_name,
@@ -19,10 +18,8 @@ export class ProfileMap
       avatar_url: model.avatar,
     };
   }
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot,
-    options: SnapshotOptions,
-  ): UserProfile {
+  
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): UserProfile {
     const modelId = snapshot.id;
     const model = snapshot.data(options) as UserDbModel;
     return createUserProfile(model, modelId);

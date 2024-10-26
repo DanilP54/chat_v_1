@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { createProfileSchema } from "../lib/form-shema/create-profile-schema.ts";
 import { useToast } from "@/shared/ui/use-toast.ts";
-import { Loader } from "@/shared/ui/loader";
+// import { Loader } from "@/shared/ui/loader";
 import { useCreateProfileData } from "@/features/create-profile/lib/hooks/useCreateProfileData.ts";
 
 
@@ -16,7 +16,7 @@ export default function CreateProfileForm() {
 
     const { toast } = useToast()
 
-    const profileData = useCreateProfileData()
+    // const profileData = useCreateProfileData()
 
     const form = useForm<z.infer<typeof createProfileSchema>>({
         defaultValues: {
@@ -65,9 +65,9 @@ export default function CreateProfileForm() {
         }
     }
 
-    if (profileData.isPending) {
-        return <Loader />
-    }
+    // if (profileData.isPending) {
+    //     return <Loader />
+    // }
 
     return (
         <Form {...form}>

@@ -1,29 +1,16 @@
-import { collection, doc, getDoc, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, FirestoreDataConverter, DocumentData } from "firebase/firestore";
 import { db } from "../config/firebase";
 
-type DbCollections = string;
 
-export class DbClient {
-  private database = db;
 
-  constructor(
-    private collection: DbCollections,
-    private converter: null,
-  ) {
-    this.collection = collection;
-    this.converter = converter;
-  }
+type UserId = string
+type Path = string
 
-  async getById(id: string) {
-    const docRef = doc(this.database, this.collection, id);
-    return await getDoc(docRef.withConverter(this.converter));
-  }
-}
+export abstract class DbClient {
 
-export const dbClient = {
-  create() {},
+  constructor(){}
 
-  async get(path: string, converter, id: string) {
+  protected async get<T, E extends DocumentData>(path: Path, converter: FirestoreDataConverter<T, E>, id?: UserId) {
     if (id) {
       const docRef = doc(db, path).withConverter(converter);
       return await getDoc(docRef);
@@ -31,26 +18,5 @@ export const dbClient = {
       const q = query(collection(db, path)).withConverter(converter);
       return await getDocs(q);
     }
-  },
-  save(id: string) {
-    if(id) {
-      return 1
-    } else {
-      return 2
-    }
-  },
-  delete() {},
-};
-
-const profileDbClient = Object.create(dbClient);
-
-profileDbClient.path = "users";
-profileDbClient.converter = 'convert';
-
-profileDbClient.getAll = async function() {
-  const querySnapshot = await this.get(this.path, this.converter);
-;
-
-  profileDbClient.getById = async function (id: string) {
-    const doc = await this.get(this.path, this.converter, id)
   }
+}

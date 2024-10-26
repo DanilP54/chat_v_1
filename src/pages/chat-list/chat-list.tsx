@@ -27,11 +27,12 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import { ChatListProviders } from "./providers/providers";
 
 export default function ChatListPage() {
   return (
     <>
-
+    <ChatListProviders>
       <div className="h-full flex flex-col gap-4">
         <header className="flex justify-between items-center p-4">
           <DropdownMenu>
@@ -131,6 +132,7 @@ export default function ChatListPage() {
           <ChatHub />
         </main>
       </div>
+      </ChatListProviders>
     </>
   );
 }

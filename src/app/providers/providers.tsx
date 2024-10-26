@@ -1,4 +1,4 @@
-import SessionProvider from "@/entities/session/model/session.provider";
+import SessionProvider from "@/entities/session/_ui/session.provider";
 import { ThemeProvider } from "@/features/theme-toggle/ui/theme-provider";
 import React from "react";
 

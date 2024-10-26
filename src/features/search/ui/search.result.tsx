@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useFindUserForChatCreation } from "@/entities/user/application/find.users.for.chat.creation.ts";
-import { UserAvatar } from "@/entities/user/ui/user.avatar.tsx";
-import { UserProfile } from "@/entities/user/user.model.ts";
-import { UserDisplayName } from "@/entities/user/ui/user.display.name.tsx";
+// import { useFindUserForChatCreation } from "@/entities/user/application/find.users.for.chat.creation.ts";
+import { UserAvatar } from "@/entities/user/_ui/user.avatar";
+import { UserProfile } from "@/entities/user/profile";
+import { UserDisplayName } from "@/entities/user/_ui/user.display.name";
 
 
 
@@ -10,28 +10,28 @@ export const SearchResult: React.FC<{ query: string }> = ({ query }) => {
 
     const [users, setUsers] = useState<UserProfile[]>([])
     const [isPending, setIsPending] = useState<boolean>(false)
-    const fetchUsers = useFindUserForChatCreation();
+    // const fetchUsers = useFindUserForChatCreation();
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((users.length !== 0 && query === '') || query === '') {
-            return setUsers([])
-        }
+    //     if ((users.length !== 0 && query === '') || query === '') {
+    //         return setUsers([])
+    //     }
 
-        setIsPending(true)
+    //     setIsPending(true)
 
-        fetchUsers.execute(query)
-            .then(users => {
-                setUsers(users)
-            })
-            .catch(e => {
-                console.error(e)
-            }).finally(() => {
-                setIsPending(false)
-            })
+    //     fetchUsers.execute(query)
+    //         .then(users => {
+    //             setUsers(users)
+    //         })
+    //         .catch(e => {
+    //             console.error(e)
+    //         }).finally(() => {
+    //             setIsPending(false)
+    //         })
 
-    }, [query])
+    // }, [query])
 
 
     if (isPending) {
