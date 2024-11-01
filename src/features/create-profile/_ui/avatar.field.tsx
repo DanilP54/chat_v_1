@@ -9,7 +9,7 @@ export default function AvatarField({
   onSuccess,
   onError,
 }: {
-  value?: File;
+  value: File | null;
   onSuccess: (value?: File) => void;
   onError?: (type?: "big-size") => void;
 }) {

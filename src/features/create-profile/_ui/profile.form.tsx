@@ -16,10 +16,8 @@ export type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 
 export default function ProfileForm({
-  onSuccess,
   user,
 }: {
-  onSuccess: () => void;
   user: User
 }) {
 
@@ -28,7 +26,7 @@ export default function ProfileForm({
     defaultValues: {
       firstname: "",
       lastname: "",
-      avatar: undefined,
+      avatar: null,
     },
     mode: "onSubmit",
   });
@@ -38,13 +36,14 @@ export default function ProfileForm({
   const handleSubmit = form.handleSubmit(async (formData: ProfileFormValues) => {
 
     const parseResult = profileFormSchema.safeParse(formData)
-    console.log('handle')
+
     if (parseResult.success) {
+      
       await createProfile.create({
         data: parseResult.data,
         user
       });
-      onSuccess()
+
     } else {
       console.log(parseResult.error)
     }

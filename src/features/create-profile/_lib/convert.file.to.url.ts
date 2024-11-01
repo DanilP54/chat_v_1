@@ -1,4 +1,4 @@
-export const convertFileToUrl = (file?: File) => {
+export const convertFileToUrl = (file: File | null) => {
   if (file) {
     return URL.createObjectURL(file);
   }

@@ -13,7 +13,6 @@ import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "../_queries/get.user.profile";
-import { useGetUserProfile } from "../_queries/use.get.profile";
 
 type UserProfileStatus =
   | "checking for a profile"
@@ -35,6 +34,7 @@ export default function UserProfileProvider({
 }: {
   children: React.ReactNode;
 }) {
+
   const [status, setStatus] = useState<UserProfileStatus>("checking for a profile");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
@@ -42,29 +42,27 @@ export default function UserProfileProvider({
 
   const { getUser } = useAppSession();
 
-  const {profile, isPending} = useGetUserProfile(getUser().id)
+  const userId = getUser().id
 
-  // const { data, isPending } = useQuery({
-  //   ...getUserProfile(getUser().id),
-  //   retry: 0,
-  // })
+  const {data, isPending} = useQuery({
+    ...getUserProfile(userId),
+    retry: 0,
+    enabled: !!userId
+  })
 
 
   useEffect(() => {
-    if (status !== "checking for a profile") return;
+    if (isPending) return
 
-    if (isPending) return;
-
-    if (!profile) {
-      setStatus("not profile");
-      navigate("/create-profile");
-    } else {
-      setUserProfile(profile)
-      setStatus("profile created");
-      navigate("/");
+    if (!data) {
+      setStatus('not profile')
+      return navigate('/create-profile')
     }
+    setUserProfile(data)
+    setStatus('profile created')
+    return navigate('/')
 
-  }, [profile, isPending])
+  }, [data, isPending])
 
   const value = useMemo(
     () => ({
@@ -77,7 +75,7 @@ export default function UserProfileProvider({
 
   return (
     <UserProfileContext.Provider value={value}>
-      {status === "checking for a profile" ? <FullPageSpinner /> : children}
+      {status === 'checking for a profile' ? <FullPageSpinner /> : children}
     </UserProfileContext.Provider>
   );
 }

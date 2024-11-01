@@ -2,13 +2,14 @@ import { profileRepository } from "../../_repositories/profile.repository";
 
 export class GetUserProfileUseCase {
   async exec(userId: string) {
-    const profile = await profileRepository.getById(userId);
 
-    if (!profile) {
-      throw new Error("Profile not found in use case");
+    const profile = await profileRepository.getById(userId);
+    
+    if(profile.isFailure) {
+      return profile.errorValue()
     }
 
-    return profile;
+    return profile.getValue()
   }
 }
 

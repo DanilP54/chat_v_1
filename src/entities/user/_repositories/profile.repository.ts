@@ -1,27 +1,32 @@
-import { FirestoreCollections } from "@/shared/api/db";
+import { COLLECTIONS } from "@/shared/api/db";
 import { profileMap } from "../_mappers/profile.mapper";
 import { ProfileRepository } from "../_application/ports";
 import { DbClient } from "@/shared/api/db";
 import { UserProfile } from "../profile";
+import { safe } from "@/shared/lib/safe";
+import { Result } from "@/shared/lib/result";
 
 
 export class ProfileRepositoryImpl implements ProfileRepository {
 
-  private readonly path = FirestoreCollections.users;
+  private readonly collection = COLLECTIONS.USERS;
   private readonly dbClient = new DbClient(profileMap)
 
-  async getById(id: string) {
-    const profile = await this.dbClient.findById(this.path, id);
 
-    if (!profile.exists()) {
-      throw new Error("Error get Profile");
+  async getById(id: string) {
+
+    const result = await safe(this.dbClient.findById(this.collection, id));
+    
+    if(!result.success) {
+      return Result.fail<UserProfile>(result.error)
     }
 
-    return profile.data();
+    return Result.ok<UserProfile>(result.data.data())
+
   }
 
   async getAll() {
-    const profileList = await this.dbClient.findMany(this.path);
+    const profileList = await this.dbClient.findMany(this.collection);
 
     profileList.forEach((doc) => {
       const data = doc.data()
@@ -29,10 +34,7 @@ export class ProfileRepositoryImpl implements ProfileRepository {
 
   }
   async save(data: UserProfile, id: string) {
-    if (id) {
-      return await this.dbClient.update(this.path, data, id);
-    }
-    return await this.dbClient.create(this.path, data, id);
+    return await this.dbClient.create(this.collection, data, id);
   }
 }
 

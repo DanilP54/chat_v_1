@@ -1,14 +1,18 @@
 import { UserDbModel } from "@/shared/types/firestore.type";
-import { ProfileDto } from "./dto";
 import { User } from "./user";
 
+export type ProfileDto = {
+  firstname: string,
+  lastname: string,
+  avatar: string | null
+}
 
 export type UserProfile = {
   id: string;
   phone_number: string;
   first_name: string;
   last_name: string;
-  avatar?: string;
+  avatar: string | null;
 }
 
 export function createUserProfile(dto: ProfileDto, user: User): UserProfile {

@@ -7,5 +7,5 @@ export const profileFormSchema = z.object({
   lastname: z.string().max(20, {
     message: "Фамилия должна содержать максимум 30 букв",
   }),
-  avatar: z.instanceof(File).optional(),
+  avatar: z.instanceof(File).nullable(),
 });
