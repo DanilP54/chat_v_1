@@ -8,13 +8,13 @@ export type Session = {
   sessionId: SessionId;
   startTime: SessionStartTime;
   endTime?: SessionEndTime;
-  currentUser: User;
+  user: User;
 };
 
-export function createSession(sessionId: string, currentUser: User): Session {
+export function createSession(sessionId: string, user: User): Session {
   return {
     sessionId,
     startTime: new Date(),
-    currentUser,
+    user,
   };
 }

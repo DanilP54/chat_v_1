@@ -1,5 +1,10 @@
+import UserProfileProvider from "@/entities/user/_ui/profile.provider";
 import { CreateProfileForm } from "@/features/create-profile";
 
 export default function CreateProfilePage() {
-    return <CreateProfileForm />
+  return (
+    <UserProfileProvider>
+      <CreateProfileForm />
+    </UserProfileProvider>
+  );
 }

@@ -1,69 +1,39 @@
-// import { UserProfile } from "../profile.ts";
-import { ProfileRepository } from "../_application/ports.ts";
-import { profileDbClient } from "../_api/profile.db.ts";
+import { FirestoreCollections } from "@/shared/api/db";
+import { profileMap } from "../_mappers/profile.mapper";
+import { ProfileRepository } from "../_application/ports";
+import { DbClient } from "@/shared/api/db";
+import { UserProfile } from "../profile";
+
 
 export class ProfileRepositoryImpl implements ProfileRepository {
-  async getProfileById(userId: string) {
-  
-    const response = await profileDbClient.getById(userId)
 
-    console.log(response)
+  private readonly path = FirestoreCollections.users;
+  private readonly dbClient = new DbClient(profileMap)
 
+  async getById(id: string) {
+    const profile = await this.dbClient.findById(this.path, id);
+
+    if (!profile.exists()) {
+      throw new Error("Error get Profile");
+    }
+
+    return profile.data();
+  }
+
+  async getAll() {
+    const profileList = await this.dbClient.findMany(this.path);
+
+    profileList.forEach((doc) => {
+      const data = doc.data()
+    })
+
+  }
+  async save(data: UserProfile, id: string) {
+    if (id) {
+      return await this.dbClient.update(this.path, data, id);
+    }
+    return await this.dbClient.create(this.path, data, id);
   }
 }
 
 export const profileRepository = new ProfileRepositoryImpl();
-
-// export function useUserAdapter(): UserService {
-//   const userDbApi = new DatabaseAPI(
-//     DatabaseCollections.USERS,
-//     new UserConverter(),
-//   );
-
-//   return {
-//     async getUserProfileById(userId): Promise<UserProfile | undefined> {
-//       try {
-//         const viewerProfile = await userDbApi.getDocById(userId);
-
-//         if (viewerProfile.exists()) {
-//           return viewerProfile.data();
-//         }
-//       } catch (e) {
-//         console.error(e);
-//       }
-//     },
-
-//     async saveUserProfile(userId, data): Promise<void> {
-//       try {
-//         await userDbApi.updateDocById(userId, data);
-//       } catch (e) {
-//         console.error(e);
-//       }
-//     },
-
-//     async findUserByLastName(name: string): Promise<UserProfile[]> {
-//       try {
-//         const q = query(
-//           collection(db, DatabaseCollections.USERS),
-//           where(
-//             "last_name",
-//             "==",
-//             `${name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()}`,
-//           ),
-//         );
-
-//         const response = await getDocs(q);
-
-//         const users = response.docs.map((doc) => {
-//           const data = doc.data() as UserDbModel;
-//           return createUserProfile(data, doc.id);
-//         });
-
-//         return users;
-//       } catch (e) {
-//         console.error(e);
-//         return [];
-//       }
-//     },
-//   };
-// }

@@ -1,12 +1,10 @@
-import { DotLoader } from "react-spinners"
+import {PuffLoader} from "react-spinners"
 
 export function FullPageSpinner() {
 
     return (
         <div className="w-full h-full flex justify-center items-center">
-            <DotLoader color={'#333'} />
+            <PuffLoader color={'#1400ff'} />
         </div>
     )
-
-
 }

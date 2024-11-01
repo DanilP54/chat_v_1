@@ -6,41 +6,41 @@ import { FullPageSpinner } from "@/shared/ui/full-page-spinner.tsx";
 import "react-phone-input-2/lib/bootstrap.css";
 import PhoneInput from "react-phone-input-2";
 // hooks
-import { useValidationPhone } from "../hooks/useValidationPhone.ts";
-import { useSignInWithPhone } from "../hooks/useSignInWithPhone.ts";
-import { useShowToast } from "../hooks/useShowToast.ts";
+import { useValidationPhone } from "../hooks/use.validation.phone.ts";
+import { useSignInWithPhone } from "../hooks/use.sign.in.with.phone.ts";
+import { useShowToast } from "../hooks/use.show.toast.ts";
 // helpers
-import { formatPhone } from "../helpers/formatPhone.ts";
+import { formatPhone } from "../helpers/format.phone.ts";
 // type
 import type { TwoFAState } from "../types.ts";
 
-
 export default function PhoneNumberEntry({
-  setNextStep
+  setNextStep,
 }: {
   setNextStep: React.Dispatch<SetStateAction<TwoFAState>>;
 }) {
-  
   const [phone, setPhone] = useState("");
 
-  const {showSignInPhoneError,  showValidPhoneError} = useShowToast()
-  const {handleValidPhoneNumber, isValid: phoneIsValid, error: validError} = useValidationPhone();
-  const {signIn, isPending, error: signInError} = useSignInWithPhone();
+  const { showSignInPhoneError, showValidPhoneError } = useShowToast();
+  const {
+    handleValidPhoneNumber,
+    isValid: phoneIsValid,
+    error: validError,
+  } = useValidationPhone();
+  const { signIn, isPending, error: signInError } = useSignInWithPhone();
 
   const handlePhoneNumberSubmit = async () => {
-    
     if (!phoneIsValid) {
-      showValidPhoneError(validError)
-      return
+      showValidPhoneError(validError);
+      return;
     }
 
     try {
-      await signIn(formatPhone(phone))
+      await signIn(formatPhone(phone));
       setNextStep("verify code entry");
-    } catch { 
-      showSignInPhoneError(signInError)
+    } catch {
+      showSignInPhoneError(signInError);
     }
-
   };
 
   if (isPending) {
@@ -68,7 +68,7 @@ export default function PhoneNumberEntry({
             value={phone}
             onChange={(value) => setPhone(value)}
             isValid={(inputNumber, country) => {
-              return handleValidPhoneNumber(inputNumber, country)
+              return handleValidPhoneNumber(inputNumber, country);
             }}
             containerStyle={{
               backgroundColor: "transparent",

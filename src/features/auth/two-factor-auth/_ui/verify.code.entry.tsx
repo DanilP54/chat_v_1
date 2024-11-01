@@ -1,47 +1,37 @@
 import { useState } from "react";
 // ui
 import { Button } from "@/shared/ui/button.tsx";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from "@/shared/ui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/ui/input-otp";
 import { FullPageSpinner } from "@/shared/ui/full-page-spinner.tsx";
 // hooks
-import { useConfirmationCode } from "../hooks/useConfirmationCode.ts";
-import { useShowToast } from "../hooks/useShowToast.ts";
+import { useConfirmationCode } from "../hooks/use.confirmatio.code.ts";
+import { useShowToast } from "../hooks/use.show.toast.ts";
 import { useAppSession } from "@/entities/session/_ui/session.provider.tsx";
 
 const MAX_LENGTH_OTP = 6;
 
 export default function VerifyCodeEntry() {
-
   const [otp, setOtp] = useState("");
 
-  const {changeSessionStatus} = useAppSession()
-  const {showVerifyCodeError} = useShowToast()
-  const {confirmOtpFn, isPending, error, isSuccess} = useConfirmationCode();
+  const { changeSessionStatus } = useAppSession();
+  const { showVerifyCodeError } = useShowToast();
 
-
-  console.log(isSuccess)
+  const { confirmOtpFn, isPending, error, isSuccess } = useConfirmationCode();
 
   const handleChangeOtp = (value: string) => {
     setOtp(value);
   };
 
   const handleVerifyCodeSubmit = async (otp: string) => {
-    
     await confirmOtpFn(otp);
-    
+
     // if (!isSuccess) {
     //   showVerifyCodeError(error)
     //   return
     // }
 
-    changeSessionStatus('authentication in progress')
-
-    }
-
+    changeSessionStatus("authentication in progress");
+  };
 
   if (isPending) {
     return <FullPageSpinner />;

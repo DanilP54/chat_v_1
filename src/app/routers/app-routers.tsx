@@ -17,6 +17,11 @@ const routers = [
         index: true,
         element: <ChatListPage />,
       },
+      {
+        path: "create-profile",
+        element: <CreateProfilePage />,
+      },
+
       // {
       //   path: "convo/:id",
       //   element: <ChatRoom />,
@@ -25,10 +30,6 @@ const routers = [
       //   path: "chat-info/:id",
       //   element: <ChatDetails />,
       // },
-      {
-        path: "create-profile",
-        element: <CreateProfilePage />,
-      },
       // {
       //   path: "search",
       //   element: <SearchPage />,

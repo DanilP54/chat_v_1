@@ -4,10 +4,10 @@ import { User, createUser } from "@/entities/user/user";
 import { auth } from "@/shared/config/firebase.ts";
 import { onAuthStateChanged } from "firebase/auth";
 import { Session, createSession } from "../session";
-import { nanoid } from "nanoid";
 import { useMemo } from "react";
 import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
 import { useNavigate } from "react-router-dom";
+import { createId } from "@/shared/lib/id";
 
 type SessionStatus =
   | "authentication in progress"
@@ -15,7 +15,7 @@ type SessionStatus =
   | "authenticated";
 
 type SessionValue = {
-  currentUser: User | undefined;
+  user: User | undefined;
   setStatus: React.Dispatch<React.SetStateAction<SessionStatus>>;
 };
 
@@ -26,21 +26,18 @@ export default function SessionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  
   const [status, setStatus] = useState<SessionStatus>(
     "authentication in progress",
   );
-  
+
   const [session, setSession] = useState<Session | null>(null);
 
   const navigation = useNavigate();
 
   useEffect(() => {
-    
     if (status === "unauthenticated") return;
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-
       if (!user) {
         setStatus("unauthenticated");
         return navigation("/auth");
@@ -49,25 +46,24 @@ export default function SessionProvider({
       const { uid, phoneNumber } = user;
 
       assertNonNullish(phoneNumber, "User phone number not found");
-  
+
       const createdUser = createUser(uid, phoneNumber);
-      const createdSession = createSession(nanoid(), createdUser);
-  
+      const createdSession = createSession(createId(), createdUser);
+
       setSession(createdSession);
       setStatus("authenticated");
-      navigation('/')
+      navigation("/");
     });
 
     return () => unsubscribe();
-  
   }, [status]);
 
   const value = useMemo(
     () => ({
-      currentUser: session?.currentUser,
+      user: session?.user,
       setStatus,
     }),
-    [session?.currentUser, setStatus],
+    [session?.user, setStatus],
   );
 
   return (
@@ -84,11 +80,11 @@ export const useAppSession = () => {
     throw new Error("useAuthState must be used within a Provider");
   }
 
-  const { currentUser, setStatus } = contextValue;
+  const { user, setStatus } = contextValue;
 
-  const getCurrentUser = () => {
-    assertNonNullish(currentUser, "Current user not found");
-    return currentUser;
+  const getUser = () => {
+    assertNonNullish(user, "Current user not found");
+    return user;
   };
 
   const changeSessionStatus = (status: SessionStatus) => {
@@ -96,7 +92,7 @@ export const useAppSession = () => {
   };
 
   return {
-    getCurrentUser,
+    getUser,
     changeSessionStatus,
   };
 };
