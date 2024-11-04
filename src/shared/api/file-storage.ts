@@ -6,7 +6,10 @@ import {
 } from "firebase/storage";
 import { storage } from "../config/firebase";
 
-type FoldersStorage = "avatars";
+
+
+type FoldersStorage = "avatars" | "post"
+
 
 type PathStorage = {
   folder: FoldersStorage;
@@ -14,9 +17,9 @@ type PathStorage = {
 };
 
 class FileStorage {
-  async uploadImage(file: File | undefined, path: PathStorage) {
-    if(!file) return 
-    if(!(file instanceof File)) return
+  async uploadImage(file: File | null, path: PathStorage) {
+    if(!file) return null
+    if(!(file instanceof File)) return null
     const { ref } = await this.upload(file, `${path.folder}/${path.userId}`);
     return await this.getUrl(ref);
   }

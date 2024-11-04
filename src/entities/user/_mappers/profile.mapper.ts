@@ -15,7 +15,7 @@ export class ProfileMap implements FirestoreDataConverter<UserProfile, UserDbMod
       first_name: model.first_name,
       last_name: model.last_name,
       phone_number: model.phone_number,
-      avatar_url: model.avatar ?? null,
+      avatar_url: model.avatar ?? null, 
     };
   }
 

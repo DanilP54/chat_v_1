@@ -16,7 +16,8 @@ export const useConfirmationCode = () => {
             await verifyCodeUseCase.exec(otp)
             setIsSuccess(true);
         } catch (err) {
-            setError(err.message || "An error occurred otp");
+            console.log(err)
+            setError(err?.message || "An error occurred otp");
             setIsSuccess(false);
         } finally {
             setIsPending(false);

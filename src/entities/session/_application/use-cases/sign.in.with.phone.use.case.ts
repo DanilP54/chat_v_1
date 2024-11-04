@@ -1,9 +1,8 @@
-import { phoneAuthService } from "@/shared/api/auth";
+import { authClient } from "@/shared/api/auth";
 
 export class SignInWithPhoneUseCase {
   async exec(phoneNumber: string) {
-    await phoneAuthService.sendPhone(phoneNumber)
-
+    await authClient.phoneProvider.sendPhone(phoneNumber)
   }
 }
 

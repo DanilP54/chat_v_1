@@ -1,12 +1,12 @@
 import { fileStorage } from "@/shared/api/file-storage";
-import { profileRepository } from "../../_repositories/profile.repository";
-import { User } from "../../user";
-import { createUserProfile } from "../../profile";
+import { profileRepository } from "../_repositories/profile.repository";
+import { User } from "../user";
+import { createUserProfile } from "../profile";
 
 export type ProfileFormDto = {
   firstname: string,
   lastname: string,
-  avatar?: File
+  avatar: File | null
 }
 
 type CreateProfile = {

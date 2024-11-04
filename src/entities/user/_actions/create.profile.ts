@@ -1,6 +1,11 @@
-import { createUserProfileUseCase } from "@/entities/user/_application/use-cases/create.user.profile";
+import { createUserProfileUseCase } from "@/entities/user/_application/create.user.profile.use.case";
 import { User } from "@/entities/user/user";
-import { ProfileFormDto } from "../_application/dto";
+
+export type ProfileFormDto = {
+  firstname: string,
+  lastname: string,
+  avatar: File | null
+}
 
 type CreateProfileAction = {
   data: ProfileFormDto;

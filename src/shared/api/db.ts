@@ -22,8 +22,6 @@ export const COLLECTIONS = {
 
 export class DbClient<T, E extends DocumentData> {
   
-
-
   constructor(private readonly mapper: FirestoreDataConverter<T, E>) {}
 
   async findById(path: Path, id: UserId, onNext?: (entity: DocumentSnapshot<T, E>) => void) {

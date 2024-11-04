@@ -1,4 +1,4 @@
-import { profileRepository } from "../../_repositories/profile.repository";
+import { profileRepository } from "../_repositories/profile.repository";
 
 export class GetUserProfileUseCase {
   async exec(userId: string) {
