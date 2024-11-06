@@ -7,6 +7,7 @@ import { CreateProfilePage } from "@/pages/create-profile";
 // import { SearchPage } from "@/pages/new-chat/ui/search.page.tsx";
 import { TwoFactorAuthPage } from "@/features/auth/two-factor-auth";
 import AuthenticationLayout from "@/pages/auth/layout";
+import { ChatRoom } from "@/pages/chat-room";
 
 const routers = [
   {
@@ -22,10 +23,10 @@ const routers = [
         element: <CreateProfilePage />,
       },
 
-      // {
-      //   path: "convo/:id",
-      //   element: <ChatRoom />,
-      // },
+      {
+        path: "convo/:id",
+        element: <ChatRoom />,
+      },
       // {
       //   path: "chat-info/:id",
       //   element: <ChatDetails />,

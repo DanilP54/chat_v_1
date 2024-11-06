@@ -16,12 +16,12 @@ export default function ChatPreviewList({ chat }: ChatListProps) {
         {
           chat.map(chat => (
             <li key={chat.chatId}>
-              <Link to={`/chat/${chat.chatId}`} className="flex items-center gap-4 p-3 hover:bg-gray-300">
-                {/* <ChatCard
+              <Link to={`/convo/${chat.chatId}`} className="flex items-center gap-4 p-3 hover:bg-gray-300">
+               {/* <ChatCard
                   avatar={chat-room.receiver.avatar}
                   lastMessage={chat-room.lastMessage}
                   name={chat-room.receiver.name}
-                /> */}
+                /> */} 
               </Link>
             </li>
           ))

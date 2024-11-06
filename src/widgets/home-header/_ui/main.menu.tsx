@@ -1,49 +1,11 @@
-import { ChatHub } from "@/widgets/chat-hub";
-import {
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Menu,
-} from "lucide-react";
+import { DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent } from "@/shared/ui/dropdown-menu"
+import { User, Settings, Plus, UserPlus, Mail, MessageSquare, PlusCircle, LogOut } from "lucide-react"
+import { Link } from "react-router-dom"
 
-import { Button } from "@/shared/ui/button.tsx";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
-
-import { Link } from "react-router-dom";
-import { ChatListProviders } from "./providers/providers";
-
-export default function ChatListPage() {
-  return (
-    <>
-      <ChatListProviders>
-        <div className="h-full flex flex-col gap-4">
-          <header className="flex justify-between items-center p-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                  <Menu strokeWidth={3} size={30} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 ml-2 shadow-none border-[1px] border-gray-300 p-1 rounded-none">
-                <DropdownMenuLabel>Danil Putro</DropdownMenuLabel>
+export const MainMenu = () => {
+    return (
+        <>
+            <DropdownMenuLabel>Danil Putro</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem className="cursor-pointer hover:bg-gray-300">
@@ -55,7 +17,7 @@ export default function ChatListPage() {
                     className="cursor-pointer hover:bg-gray-300"
                   >
                     <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
+                    <span>Setzings</span>
                   </DropdownMenuItem>
                   <Link to="/search">
                     <DropdownMenuItem className="cursor-pointer hover:bg-gray-300">
@@ -116,14 +78,6 @@ export default function ChatListPage() {
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </header>
-          <main className="flex-1">
-            <ChatHub />
-          </main>
-        </div>
-      </ChatListProviders>
-    </>
-  );
+        </>
+    )
 }
