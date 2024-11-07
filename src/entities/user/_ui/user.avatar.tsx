@@ -12,7 +12,7 @@ export const UserAvatar = ({
     <>
       <Avatar className={cn(className)}>
         <AvatarImage src={url ?? ""} alt="avatar" className="object-cover" />
-        <AvatarFallback className="bg-cyan-900 text-white text-lg font-bold">
+        <AvatarFallback className="bg-cyan-900 text-white text-sm font-bold">
           DP
         </AvatarFallback>
       </Avatar>

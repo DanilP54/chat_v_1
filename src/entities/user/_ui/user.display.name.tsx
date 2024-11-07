@@ -1,3 +1,4 @@
+import { cn } from "@/shared/lib/cn";
 import React from "react";
 
 type UserDisplayNameType = {
@@ -6,5 +7,5 @@ type UserDisplayNameType = {
 }
 
 export const UserDisplayName: React.FC<UserDisplayNameType> = ({displayName, className = ''}) => {
-    return <span className={className}>{displayName}</span>
+    return <span className={cn(className)}>{displayName}</span>
 }

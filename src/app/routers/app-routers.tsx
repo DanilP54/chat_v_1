@@ -8,6 +8,7 @@ import { CreateProfilePage } from "@/pages/create-profile";
 import { TwoFactorAuthPage } from "@/features/auth/two-factor-auth";
 import AuthenticationLayout from "@/pages/auth/layout";
 import { ChatRoom } from "@/pages/chat-room";
+import { HomePage } from "@/pages/home/home";
 
 const routers = [
   {
@@ -16,7 +17,7 @@ const routers = [
     children: [
       {
         index: true,
-        element: <ChatListPage />,
+        element: <HomePage />,
       },
       {
         path: "create-profile",

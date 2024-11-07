@@ -28,7 +28,7 @@ import {
 } from "@/shared/ui/dropdown-menu";
 
 import { Link } from "react-router-dom";
-import { ChatListProviders } from "./providers/providers";
+import { ChatListProviders } from "../home/providers/providers";
 
 export default function ChatListPage() {
   return (
