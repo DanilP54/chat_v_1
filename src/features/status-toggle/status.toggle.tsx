@@ -1,42 +1,27 @@
-import { Button } from "@/shared/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip"
 import { useState } from "react"
-
-const ONLINE_COLOR = 'bg-blue-800'
-const OFFLINE_COLOR = 'bg-red-800'
-
 
 export const StatusToggle = () => {
 
     const [status, setStatus] = useState<'online' | 'offline'>('online')
 
+    const isOnline = status === 'online'
+
+    const handleChangeStatus = () => {
+        setStatus(status === 'online' ? 'offline' : 'online')
+    }
+
     return (
-        <>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant={"ghost"} size="sm">
-                        <span className={`w-3 h-3 ${status === 'online' ? ONLINE_COLOR : OFFLINE_COLOR} rounded-full`}></span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                        disabled={status === 'online'}
-                        className="flex items-center gap-3"
-                        onClick={() => setStatus("online")}
-                    >
-                        <span className={`w-2 h-2 ${ONLINE_COLOR} rounded-full`}></span>
-                        Online
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                        disabled={status === 'offline'}
-                        className="flex items-center gap-3"
-                        onClick={() => setStatus("offline")}
-                    >
-                        <span className={`w-2 h-2 ${OFFLINE_COLOR} rounded-full`}></span>
-                        Offline
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </>
+        <TooltipProvider>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <span onClick={handleChangeStatus} className={`w-2 h-2 ${isOnline ? 'bg-blue-800' : 'bg-red-800'} rounded-full mr-10 cursor-pointer`}></span>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={20}>
+                <span className="bg-black text-white p-2 text-sm font-bold rounded-lg">you is {status}</span>
+            </TooltipContent>
+        </Tooltip>
+    </TooltipProvider>
     )
+
 }

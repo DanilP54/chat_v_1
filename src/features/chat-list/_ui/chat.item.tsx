@@ -10,7 +10,7 @@ export const ChatItem = () => {
         </div>
         <div className="flex flex-col grow">
           <UserDisplayName displayName="Danil Putro" className="text-white text-lg font-bold" />
-          <span className="text-gray-400">ААааааааааааааааааааааааааааааааа...</span>
+          <span className="text-gray-400 overflow-hidden text-ellipsis block whitespace-nowrap max-w-56">Привет, я сегодня не приду, потому что я занят и вообще у меня не всё заябсь</span>
         </div>
       </div>
       <div>
