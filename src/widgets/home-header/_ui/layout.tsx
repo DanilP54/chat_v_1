@@ -1,4 +1,3 @@
-import { Button } from "@/shared/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 import { Menu } from "lucide-react"
 
