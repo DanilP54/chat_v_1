@@ -23,5 +23,4 @@ export const StatusToggle = () => {
         </Tooltip>
     </TooltipProvider>
     )
-
 }

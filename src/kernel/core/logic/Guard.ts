@@ -12,7 +12,7 @@ export type GuardArgumentCollection = IGuardArgument[];
 
 export class Guard {
     public static combine(guardResults: IGuardResult[]): IGuardResult {
-        for (let result of guardResults) {
+        for (const result of guardResults) {
             if (result.succeeded === false) return result;
         }
 
@@ -29,7 +29,7 @@ export class Guard {
     }
 
     public static againstNullOrUndefinedBulk(args: GuardArgumentCollection): IGuardResult {
-        for (let arg of args) {
+        for (const arg of args) {
             const result = this.againstNullOrUndefined(arg.argument, arg.argumentName);
             if (!result.succeeded) return result;
         }
@@ -39,7 +39,7 @@ export class Guard {
 
     public static isOneOf(value: any, validValues: any[], argumentName: string): IGuardResult {
         let isValid = false;
-        for (let validValue of validValues) {
+        for (const validValue of validValues) {
             if (value === validValue) {
                 isValid = true;
             }
