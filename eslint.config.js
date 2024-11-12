@@ -11,10 +11,8 @@ export default tseslint.config(
       globals: {
         ...globals.browser,
         ...globals.es2020,
+        ...globals.jest
       },
-      // parserOptions: {
-      //   project: ["tsconfig.json", "tsconfig.node.json"],
-      // },
     },
   },
   { ignores: ["node_modules", "eslint.config.js", "dist"] },
