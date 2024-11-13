@@ -1,17 +1,16 @@
-import { Config } from "jest";
+import type { Config } from "jest"
+
 
 const config: Config = {
-  rootDir: "./",
+  // collectCoverage: true,
+  // collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  // coverageDirectory: 'coverage',
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transform: {
-    "^.+\\.[t|j]sx?$": "babel-jest",
+    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
   },
-  transformIgnorePatterns: ["/node_modules/(?!some-module)"],
-  coverageProvider: "v8",
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-  },
-};
+  moduleFileExtensions: ['ts', "tsx", "js", "jsx"],
+}
 
-export default config;
+export default config
