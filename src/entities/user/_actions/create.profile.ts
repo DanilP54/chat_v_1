@@ -2,10 +2,10 @@ import { createUserProfileUseCase } from "@/entities/user/_application/create.us
 import { User } from "@/entities/user/user";
 
 export type ProfileFormDto = {
-  firstname: string,
-  lastname: string,
-  avatar: File | null
-}
+  firstname: string;
+  lastname: string;
+  avatar: File | null;
+};
 
 type CreateProfileAction = {
   data: ProfileFormDto;

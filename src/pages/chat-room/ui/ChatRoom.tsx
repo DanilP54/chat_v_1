@@ -7,6 +7,5 @@ export default function ChatRoom() {
       <TopBar />
       <ChatContent />
     </div>
-  )
+  );
 }
-

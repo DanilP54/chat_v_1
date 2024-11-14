@@ -4,7 +4,7 @@ export default function AuthenticationLayout() {
   return (
     <>
       <div className="h-full">
-          <Outlet />
+        <Outlet />
       </div>
     </>
   );

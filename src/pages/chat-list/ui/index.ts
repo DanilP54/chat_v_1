@@ -1,3 +1,3 @@
-import ChatListPage from "../chat-list.tsx"
- 
-export { ChatListPage }
+import ChatListPage from "../chat-list.tsx";
+
+export { ChatListPage };

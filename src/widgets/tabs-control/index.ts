@@ -1,3 +1,3 @@
-export * from './api'
-export * from './model'
-export { TabsControl } from './ui'
+export * from "./api";
+export * from "./model";
+export { TabsControl } from "./ui";

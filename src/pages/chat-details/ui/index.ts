@@ -1,3 +1,3 @@
-import ChatDetails from './ChatDetails.tsx'
+import ChatDetails from "./ChatDetails.tsx";
 
-export { ChatDetails }
+export { ChatDetails };

@@ -1,3 +1,3 @@
-import TabsControl from './TabsControl.tsx'
+import TabsControl from "./TabsControl.tsx";
 
-export { TabsControl }
+export { TabsControl };

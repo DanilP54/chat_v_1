@@ -1,3 +1,3 @@
-import ChatRoom from './ChatRoom.tsx'
+import ChatRoom from "./ChatRoom.tsx";
 
-export { ChatRoom }
+export { ChatRoom };

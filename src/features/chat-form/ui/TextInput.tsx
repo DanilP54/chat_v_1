@@ -3,48 +3,54 @@ import { z } from "zod";
 import { FormSchema } from "../lib/form-schema";
 import { FormEvent, useRef } from "react";
 
-
 interface TextInputProps {
-    placeholder: string;
-    field: ControllerRenderProps<z.infer<typeof FormSchema>, "text">;
+  placeholder: string;
+  field: ControllerRenderProps<z.infer<typeof FormSchema>, "text">;
 }
-
 
 const checkResizeTextBox = (property: string, currentValue: number): void => {
-    try {
-        const propertyValue = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue(`${property}`))
+  try {
+    const propertyValue = parseInt(
+      window
+        .getComputedStyle(document.documentElement)
+        .getPropertyValue(`${property}`),
+    );
 
-        if (currentValue !== propertyValue && currentValue < 300) {
-            document.documentElement.style.setProperty('--text-box-height', `${currentValue}px`);
-        }
-    } catch (error) {
-        console.log(error)
+    if (currentValue !== propertyValue && currentValue < 300) {
+      document.documentElement.style.setProperty(
+        "--text-box-height",
+        `${currentValue}px`,
+      );
     }
-}
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export default function TextInput({ placeholder, field }: TextInputProps) {
+  const textBoxRef = useRef<HTMLDivElement>(null);
 
-    const textBoxRef = useRef<HTMLDivElement>(null)
+  const handleInput = (e: FormEvent<HTMLDivElement>) => {
+    checkResizeTextBox("--text-box-height", e.currentTarget.scrollHeight);
+    field.onChange(e.currentTarget.textContent);
+  };
 
-    const handleInput = (e: FormEvent<HTMLDivElement>) => {
-        checkResizeTextBox("--text-box-height", e.currentTarget.scrollHeight)
-        field.onChange(e.currentTarget.textContent)
-    }
-
-    return (
-        <div className="h-full relative">
-            <div
-                ref={textBoxRef}
-                contentEditable={true}
-                className="text_box"
-                tabIndex={0}
-                role="textbox"
-                dir="auto"
-                onInput={handleInput}
-            ></div>
-            <span
-                className={`text_box__placeholder ${field.value ? 'opacity-0' : 'opacity-85'}`}
-            >{placeholder}</span>
-        </div>
-    )
+  return (
+    <div className="h-full relative">
+      <div
+        ref={textBoxRef}
+        contentEditable={true}
+        className="text_box"
+        tabIndex={0}
+        role="textbox"
+        dir="auto"
+        onInput={handleInput}
+      ></div>
+      <span
+        className={`text_box__placeholder ${field.value ? "opacity-0" : "opacity-85"}`}
+      >
+        {placeholder}
+      </span>
+    </div>
+  );
 }

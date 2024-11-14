@@ -1,3 +1,3 @@
 import ChatHub from "./chat-hub";
 
-export { ChatHub }
+export { ChatHub };
