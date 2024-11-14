@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["selector"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -15,7 +15,7 @@ module.exports = {
       lg: "425px",
       xl: "768px",
       "2xl": "1024px",
-      "3xl": "1440px"
+      "3xl": "1440px",
     },
     container: {
       center: true,
@@ -26,35 +26,35 @@ module.exports = {
     },
     extend: {
       colors: {
-        bg: '#daf5f0',
-        main: '#c4a1ff',
-        mainAccent: '#9e66ff', // not needed for shadcn
+        bg: "#daf5f0",
+        main: "#c4a1ff",
+        mainAccent: "#9e66ff", // not needed for shadcn
       },
       backgroundColor: {
-        destructive: 'hsl(var(--destructive))'
+        destructive: "hsl(var(--destructive))",
       },
       textColor: {
-        'destructive-foreground': 'hsl(var(--destructive-foreground))'
+        "destructive-foreground": "hsl(var(--destructive-foreground))",
       },
       borderRadius: {
-        base: '5px'
+        base: "5px",
       },
       boxShadow: {
-        base: '4px 4px 0px 0px rgba(0,0,0,1)',
+        base: "4px 4px 0px 0px rgba(0,0,0,1)",
       },
       translate: {
-        boxShadowX: '4px',
-        boxShadowY: '4px',
+        boxShadowX: "4px",
+        boxShadowY: "4px",
       },
       height: {
-        ["base-height"]: "var(--text-box-height)"
+        ["base-height"]: "var(--text-box-height)",
       },
       padding: {
-        ["base-padding"]: "var(--base-padding)"
+        ["base-padding"]: "var(--base-padding)",
       },
       fontWeight: {
-        base: '500',
-        heading: '700',
+        base: "500",
+        heading: "700",
       },
       keyframes: {
         "accordion-down": {
@@ -78,4 +78,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

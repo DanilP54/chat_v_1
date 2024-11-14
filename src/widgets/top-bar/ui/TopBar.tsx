@@ -14,7 +14,11 @@ export default function TopBar() {
           </Link>
         </div>
         <div className="flex items-center gap-3 w-full">
-          <Link to="/chatdetails/8e9nx9e38xnn8" state={{ prevId: "8e9nx9e38xnn8" }} className="flex gap-3 items-center">
+          <Link
+            to="/chatdetails/8e9nx9e38xnn8"
+            state={{ prevId: "8e9nx9e38xnn8" }}
+            className="flex gap-3 items-center"
+          >
             {/* <AvatarValueObject src="https://api.dicebear.com/8.x/pixel-art/svg?seed=Bandit" /> */}
             <div className="flex flex-col">
               <h3>Danil Putro</h3>
@@ -23,12 +27,12 @@ export default function TopBar() {
           </Link>
           <div className="ml-auto">
             <PopupMenu
-              buttonIcon={<EllipsisVertical className='ml-auto w-full' />}
+              buttonIcon={<EllipsisVertical className="ml-auto w-full" />}
               items={<ChatActionsMenu />}
             />
           </div>
         </div>
       </div>
     </header>
-  )
+  );
 }

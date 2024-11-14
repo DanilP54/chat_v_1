@@ -4,16 +4,15 @@ import { useUserProfile } from "@/entities/user/_ui/profile.provider";
 import { useMutation } from "@tanstack/react-query";
 
 export const useCreateProfile = () => {
+  const invalidateProfile = useInvalidateProfile();
 
-  const invalidateProfile = useInvalidateProfile()
-
-  const {updateProfileStatus} = useUserProfile()
+  const { updateProfileStatus } = useUserProfile();
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createProfileAction,
-    onSuccess: (_, {user}) => {
-      invalidateProfile(user.id)
-      updateProfileStatus('checking for a profile')
+    onSuccess: (_, { user }) => {
+      invalidateProfile(user.id);
+      updateProfileStatus("checking for a profile");
     },
   });
 

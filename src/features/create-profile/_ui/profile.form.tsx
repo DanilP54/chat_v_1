@@ -14,13 +14,7 @@ import { User } from "@/entities/user/user.ts";
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-
-export default function ProfileForm({
-  user,
-}: {
-  user: User
-}) {
-
+export default function ProfileForm({ user }: { user: User }) {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -33,21 +27,20 @@ export default function ProfileForm({
 
   const createProfile = useCreateProfile();
 
-  const handleSubmit = form.handleSubmit(async (formData: ProfileFormValues) => {
+  const handleSubmit = form.handleSubmit(
+    async (formData: ProfileFormValues) => {
+      const parseResult = profileFormSchema.safeParse(formData);
 
-    const parseResult = profileFormSchema.safeParse(formData)
-
-    if (parseResult.success) {
-      
-      await createProfile.create({
-        data: parseResult.data,
-        user
-      });
-
-    } else {
-      console.log(parseResult.error)
-    }
-  });
+      if (parseResult.success) {
+        await createProfile.create({
+          data: parseResult.data,
+          user,
+        });
+      } else {
+        console.log(parseResult.error);
+      }
+    },
+  );
 
   if (createProfile.isPending) {
     return <FullPageSpinner />;

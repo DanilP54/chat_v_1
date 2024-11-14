@@ -15,17 +15,19 @@ import { db } from "../config/firebase";
 type UserId = string;
 type Path = string;
 
-
 export const COLLECTIONS = {
-  USERS: 'users',
-}
+  USERS: "users",
+};
 
 export class DbClient<T, E extends DocumentData> {
-  
   constructor(private readonly mapper: FirestoreDataConverter<T, E>) {}
 
-  async findById(path: Path, id: UserId, onNext?: (entity: DocumentSnapshot<T, E>) => void) {
-    const docRef = doc(db, path, id).withConverter(this.mapper);    
+  async findById(
+    path: Path,
+    id: UserId,
+    onNext?: (entity: DocumentSnapshot<T, E>) => void,
+  ) {
+    const docRef = doc(db, path, id).withConverter(this.mapper);
     return await getDoc(docRef);
   }
 
@@ -44,4 +46,3 @@ export class DbClient<T, E extends DocumentData> {
     await setDoc(docRef, data);
   }
 }
-

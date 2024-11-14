@@ -1,82 +1,68 @@
 export type Safe<T> =
-    {
-        success: true
-        data: T
-    } |
-    {
-        success: false
-        error: string
+  | {
+      success: true;
+      data: T;
     }
+  | {
+      success: false;
+      error: string;
+    };
 
+export type ErrorType = string;
 
-export type ErrorType = string
-
-export function safe<T>(promise: Promise<T>, err?: string): Promise<Safe<T>>
-export function safe<T>(func: () => T, err?: string): Safe<T>
+export function safe<T>(promise: Promise<T>, err?: string): Promise<Safe<T>>;
+export function safe<T>(func: () => T, err?: string): Safe<T>;
 
 export function safe<T>(
-    promiseOrFunc: Promise<T> | (() => T),
-    err?: ErrorType
+  promiseOrFunc: Promise<T> | (() => T),
+  err?: ErrorType,
 ): Promise<Safe<T>> | Safe<T> {
+  if (promiseOrFunc instanceof Promise) {
+    return safeAsync(promiseOrFunc, err);
+  }
 
-    if (promiseOrFunc instanceof Promise) {
-        return safeAsync(promiseOrFunc, err)
-    }
-
-    return safeSync(promiseOrFunc, err)
+  return safeSync(promiseOrFunc, err);
 }
-
 
 async function safeAsync<T>(
-    promise: Promise<T>,
-    err?: string
+  promise: Promise<T>,
+  err?: string,
 ): Promise<Safe<T>> {
-    try {
+  try {
+    const data = await promise;
 
-        const data = await promise
+    return { success: true, data };
+  } catch (e) {
+    console.error(e);
 
-        return {success: true, data}
-
-    } catch (e) {
-
-        console.error(e)
-
-        if (err !== undefined) {
-            return {success: false, error: err}
-        }
-
-        if (e instanceof Error) {
-            return {success: false, error: e.message}
-        }
-
-        return {success: false, error: 'Something went wrong'}
+    if (err !== undefined) {
+      return { success: false, error: err };
     }
+
+    if (e instanceof Error) {
+      return { success: false, error: e.message };
+    }
+
+    return { success: false, error: "Something went wrong" };
+  }
 }
 
-async function safeSync<T>(
-    func: () => T,
-    err?: string
-): Promise<Safe<T>> {
-    try {
-        const data = func()
+async function safeSync<T>(func: () => T, err?: string): Promise<Safe<T>> {
+  try {
+    const data = func();
 
-        return {data, success: true}
+    return { data, success: true };
+  } catch (e) {
+    console.error(e);
 
-    } catch (e) {
-
-        console.error(e)
-
-        if (err !== undefined) {
-            return {success: false, error: err}
-        }
-
-        if (e instanceof Error) {
-            return {success: false, error: e.message}
-        }
-
-        return {success: false, error: 'Something went wrong'}
-
+    if (err !== undefined) {
+      return { success: false, error: err };
     }
+
+    if (e instanceof Error) {
+      return { success: false, error: e.message };
+    }
+
+    return { success: false, error: "Something went wrong" };
+  }
 }
-
-

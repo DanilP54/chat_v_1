@@ -1,3 +1,3 @@
-import ChatContent from './ChatContent.tsx'
+import ChatContent from "./ChatContent.tsx";
 
-export { ChatContent }
+export { ChatContent };

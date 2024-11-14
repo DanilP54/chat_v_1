@@ -1,3 +1,3 @@
-import ChatActionsMenu from './ChatActionsMenu.tsx'
+import ChatActionsMenu from "./ChatActionsMenu.tsx";
 
-export { ChatActionsMenu }
+export { ChatActionsMenu };

@@ -17,5 +17,5 @@ export default function ChatActionsMenu() {
         <span>Settings</span>
       </DropdownMenuItem>
     </>
-  )
+  );
 }

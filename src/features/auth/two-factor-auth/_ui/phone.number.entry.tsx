@@ -22,17 +22,17 @@ export default function PhoneNumberEntry({
   const [phone, setPhone] = useState("");
 
   const { showSignInPhoneError, showValidPhoneError } = useShowToast();
-  
+
   const {
     handleValidPhoneNumber,
     isValid: phoneIsValid,
     error: validError,
   } = useValidationPhone();
-  
+
   const { signIn, isPending, error: signInError } = useSignInWithPhone();
 
   const handlePhoneNumberSubmit = async () => {
-    console.log(phoneIsValid)
+    console.log(phoneIsValid);
     if (!phoneIsValid) {
       showValidPhoneError(validError);
       return;

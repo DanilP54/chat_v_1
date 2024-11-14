@@ -1,8 +1,7 @@
-import { PhoneAuthService } from "../services/phone.auth"
-
+import { PhoneAuthService } from "../services/phone.auth";
 
 export class AuthClient {
-    readonly phoneProvider = new PhoneAuthService()
+  readonly phoneProvider = new PhoneAuthService();
 }
 
-export const authClient = new AuthClient()
+export const authClient = new AuthClient();

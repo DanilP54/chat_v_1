@@ -1,3 +1,3 @@
-import TopBar from './TopBar.tsx'
+import TopBar from "./TopBar.tsx";
 
-export { TopBar }
+export { TopBar };

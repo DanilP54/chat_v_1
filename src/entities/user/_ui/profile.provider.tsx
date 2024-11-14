@@ -34,35 +34,34 @@ export default function UserProfileProvider({
 }: {
   children: React.ReactNode;
 }) {
-
-  const [status, setStatus] = useState<UserProfileStatus>("checking for a profile");
+  const [status, setStatus] = useState<UserProfileStatus>(
+    "checking for a profile",
+  );
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   const navigate = useNavigate();
 
   const { getUser } = useAppSession();
 
-  const userId = getUser().id
+  const userId = getUser().id;
 
-  const {data, isPending} = useQuery({
+  const { data, isPending } = useQuery({
     ...getUserProfile(userId),
     retry: 0,
-    enabled: !!userId
-  })
-
+    enabled: !!userId,
+  });
 
   useEffect(() => {
-    if (isPending) return
+    if (isPending) return;
 
     if (!data) {
-      setStatus('not profile')
-      return navigate('/create-profile')
+      setStatus("not profile");
+      return navigate("/create-profile");
     }
-    setUserProfile(data)
-    setStatus('profile created')
-    return navigate('/')
-
-  }, [data, isPending])
+    setUserProfile(data);
+    setStatus("profile created");
+    return navigate("/");
+  }, [data, isPending]);
 
   const value = useMemo(
     () => ({
@@ -75,7 +74,7 @@ export default function UserProfileProvider({
 
   return (
     <UserProfileContext.Provider value={value}>
-      {status === 'checking for a profile' ? <FullPageSpinner /> : children}
+      {status === "checking for a profile" ? <FullPageSpinner /> : children}
     </UserProfileContext.Provider>
   );
 }

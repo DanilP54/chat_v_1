@@ -3,4 +3,4 @@ import React from "react";
 
 export const HomeProviders = ({ children }: { children: React.ReactNode }) => {
   return <UserProfileProvider>{children}</UserProfileProvider>;
-}
+};

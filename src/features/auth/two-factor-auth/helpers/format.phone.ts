@@ -1,1 +1,1 @@
-export const formatPhone = (phone: string) => `+${phone}` 
+export const formatPhone = (phone: string) => `+${phone}`;

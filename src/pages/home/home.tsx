@@ -1,6 +1,6 @@
-import { HomeHeader } from "@/widgets/home-header/home.header"
-import { HomeProviders } from "./providers/providers"
-import { ChatList } from "@/features/chat-list/chat.list"
+import { HomeHeader } from "@/widgets/home-header/home.header";
+import { HomeProviders } from "./providers/providers";
+import { ChatList } from "@/features/chat-list/chat.list";
 
 export const HomePage = () => {
   return (
@@ -14,5 +14,5 @@ export const HomePage = () => {
         </div>
       </div>
     </HomeProviders>
-  )
-}
+  );
+};
