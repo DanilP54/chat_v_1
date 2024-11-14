@@ -5,7 +5,7 @@ const OFFLINE_COLOR = 'bg-red-800'
 
 
 export const StatusToggle = () => {
-
+    
     const [status, setStatus] = React.useState<'online' | 'offline'>('online')
 
     const isOnline = status === 'online'
