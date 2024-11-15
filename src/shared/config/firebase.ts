@@ -2,11 +2,11 @@ import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import {
-  initializeFirestore,
-  memoryLocalCache,
-  persistentLocalCache,
-} from "firebase/firestore";
+// import {
+//   initializeFirestore,
+//   memoryLocalCache,
+//   persistentLocalCache,
+// } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDokmSQFKlbID5QzkafWABDlAjAN4lFtiw",
