@@ -6,6 +6,7 @@ const config: Config = {
   // coverageDirectory: 'coverage',
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  modulePathIgnorePatterns: ["<rootDir>/tests/"],
   transform: {
     "^.+\\.(ts|tsx|js|jsx)$": "babel-jest",
   },
