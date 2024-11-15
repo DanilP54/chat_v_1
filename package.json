@@ -9,8 +9,8 @@
     "playwright": "playwright test",
     "test": "jest",
     "pretter": "prettier . --write",
-    "lint:fix": "yarn run pretter && yarn run lint",
-    "lint": "eslint --fix",
+    "lint": "eslint",
+    "lint:types": "tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {

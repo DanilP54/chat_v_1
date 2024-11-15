@@ -7,7 +7,6 @@ export const StatusToggle = () => {
   const [status, setStatus] = React.useState<"online" | "offline">("online");
 
   const isOnline = status === "online";
-
   const handleChangeStatus = () => {
     setStatus(status === "online" ? "offline" : "online");
   };
