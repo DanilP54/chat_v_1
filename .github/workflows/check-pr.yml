@@ -1,9 +1,6 @@
-name: Push Master
+name: Pull Request check
 on: 
-    push:
-        branches: 
-            - master
-            - main
+    pull_request:
 jobs:
     lint:
         runs-on: ubuntu-latest
@@ -14,10 +11,7 @@ jobs:
                 node-version: lts/*
                 cache: yarn
             - run: yarn install --frozen-lockfile
-            - run: yarn run prettier
+            - run: yarn run format
             - run: yarn run lint
             - run: yarn run lint:types
-            - run: yarn run test
-            - name: Check if all checks passed
-              if: ${{ failure() }}
-              run: echo "One or more checks failed, preventing merge"
+            - run: yarn run test:unit

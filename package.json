@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "playwright": "playwright test",
-    "test": "jest",
-    "prettier": "prettier . --write",
+    "test:e2e": "playwright test",
+    "test:unit": "jest",
+    "format": "prettier --write .",
     "lint": "eslint",
     "lint:types": "tsc --noEmit",
     "preview": "vite preview"

@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "../RootLayout";
-import ChatListPage from "@/pages/chat-list/chat-list";
+// import ChatListPage from "@/pages/chat-list/chat-list";
 // import { ChatRoom } from "@/pages/chat-room";
 // import { ChatDetails } from "@/pages/chat-details";
 import { CreateProfilePage } from "@/pages/create-profile";
