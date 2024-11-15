@@ -17,3 +17,6 @@ jobs:
             - run: yarn run lint
             - run: yarn run lint:types
             - run: yarn run test
+            - name: Check if all checks passed
+              if: ${{ failure() }}
+              run: echo "One or more checks failed, preventing merge"
