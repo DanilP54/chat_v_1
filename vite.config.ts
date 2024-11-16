@@ -4,6 +4,12 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
+  test: {
+    globals: true,
+    exclude: [ "node_modules", "dist", "tests", "tests-examples"],
+    environment: "jsdom",
+    setupFiles: "./test.setup.ts",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/shared/ui/popup-menu.tsx"],
+  "include": ["src", "src/shared/ui/popup-menu.tsx", "test.setup.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"

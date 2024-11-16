@@ -13,7 +13,6 @@ export const StatusToggle = () => {
 
   return (
     <>
-    <h1>2</h1>
       <span
         onClick={handleChangeStatus}
         className={`w-2 h-2 ${

@@ -1,4 +1,4 @@
-import tailwindAnimation from "tailwindcss-animate"
+import tailwindAnimation from "tailwindcss-animate";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
