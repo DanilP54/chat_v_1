@@ -11,6 +11,7 @@ interface ValidationStatus {
 }
 
 export const useValidationPhone = () => {
+  
   const validationStatus = useRef<ValidationStatus>({
     isValid: false,
     error: {
@@ -19,10 +20,11 @@ export const useValidationPhone = () => {
     },
   });
 
-  const handleValidPhoneNumber = (
+  const handle = (
     phoneNumber: string,
     country: object,
   ): boolean => {
+
     const expectedLength = country.format.replace(/[^.]/g, "").length;
     const isValidFormat = phoneNumber.length === expectedLength;
     const isValidDialCode = phoneNumber.startsWith(country.dialCode);
@@ -50,5 +52,5 @@ export const useValidationPhone = () => {
     return true;
   };
 
-  return { ...validationStatus.current, handleValidPhoneNumber };
+  return { ...validationStatus.current, handle };
 };

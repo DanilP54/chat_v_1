@@ -9,7 +9,7 @@ import { profileFormSchema } from "../_lib/schema.ts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AvatarField from "./avatar.field.tsx";
 import { useCreateProfile } from "../_hooks/use.create.profile.ts";
-import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
+import { FullPageLoader } from "@/shared/ui/full-page-loader.tsx";
 import { User } from "@/entities/user/user.ts";
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -43,7 +43,7 @@ export default function ProfileForm({ user }: { user: User }) {
   );
 
   if (createProfile.isPending) {
-    return <FullPageSpinner />;
+    return <FullPageLoader />;
   }
 
   return (

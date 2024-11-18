@@ -5,7 +5,7 @@ import { auth } from "@/shared/config/firebase.ts";
 import { onAuthStateChanged } from "firebase/auth";
 import { Session, createSession } from "../session";
 import { useMemo } from "react";
-import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
+import { FullPageLoader } from "@/shared/ui/full-page-loader";
 import { useNavigate } from "react-router-dom";
 import { createId } from "@/shared/lib/id";
 
@@ -68,7 +68,7 @@ export default function SessionProvider({
 
   return (
     <SessionContext.Provider value={value}>
-      {status === "authentication in progress" ? <FullPageSpinner /> : children}
+      {status === "authentication in progress" ? <FullPageLoader /> : children}
     </SessionContext.Provider>
   );
 }

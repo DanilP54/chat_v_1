@@ -9,7 +9,7 @@ import React, {
 import { assertNonNullish } from "@/shared/types";
 import { UserProfile } from "../profile";
 import { useAppSession } from "@/entities/session/_ui/session.provider";
-import { FullPageSpinner } from "@/shared/ui/full-page-spinner";
+import { FullPageLoader } from "@/shared/ui/full-page-loader";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "../_queries/get.user.profile";
@@ -74,7 +74,7 @@ export default function UserProfileProvider({
 
   return (
     <UserProfileContext.Provider value={value}>
-      {status === "checking for a profile" ? <FullPageSpinner /> : children}
+      {status === "checking for a profile" ? <FullPageLoader /> : children}
     </UserProfileContext.Provider>
   );
 }

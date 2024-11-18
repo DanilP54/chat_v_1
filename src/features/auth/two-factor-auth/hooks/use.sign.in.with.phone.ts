@@ -1,21 +1,33 @@
-import { useState } from "react";
+import {toast } from "@/shared/ui/use-toast"
+import { Dispatch, SetStateAction, useState } from "react";
 import { signInWithPhoneUseCase } from "@/entities/session/_application/use-cases/sign.in.with.phone.use.case";
+import { TwoFAState } from "../types";
 
-export const useSignInWithPhone = () => {
+type SignInProps = {
+  onSuccess: Dispatch<SetStateAction<TwoFAState>>
+  onError: (message: string | null) => ReturnType<typeof toast>
+}
+export const useSignInWithPhone = ({
+  onSuccess,
+  onError
+}: SignInProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const signIn = async (phoneNumber: string) => {
+  const handle = async (phoneNumber: string) => {
+    
     setIsPending(true);
-    setError(null);
 
     try {
       await signInWithPhoneUseCase.exec(phoneNumber);
-      setIsSuccess(true);
+      onSuccess('verify code entry');
     } catch (err) {
-      setError(err.message || "An error occurred sign in phone");
-      setIsSuccess(false);
+      
+      if(err instanceof Error) {
+        return onError(err.message)
+      };
+
+      return onError("An error occurred sign in phone")
+      
     } finally {
       setIsPending(false);
     }
@@ -23,8 +35,6 @@ export const useSignInWithPhone = () => {
 
   return {
     isPending,
-    isSuccess,
-    error,
-    signIn,
+    handle,
   };
 };

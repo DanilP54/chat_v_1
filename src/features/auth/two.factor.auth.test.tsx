@@ -1,3 +1,0 @@
-describe("Two Factor Auth", () => {
-    
-})

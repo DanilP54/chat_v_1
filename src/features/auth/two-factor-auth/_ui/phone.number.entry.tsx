@@ -1,7 +1,7 @@
 import React, { SetStateAction, useState } from "react";
 // ui
 import { Button } from "@/shared/ui/button";
-import { FullPageSpinner } from "@/shared/ui/full-page-spinner.tsx";
+import { FullPageLoader } from "@/shared/ui/full-page-loader.tsx";
 // lib
 import "react-phone-input-2/lib/bootstrap.css";
 import PhoneInput from "react-phone-input-2";
@@ -21,27 +21,25 @@ export default function PhoneNumberEntry({
 }) {
   const [phone, setPhone] = useState("");
 
-  const { showSignInPhoneError, showValidPhoneError } = useShowToast();
-  const {handleValidPhoneNumber,isValid: phoneIsValid,error: validError} = useValidationPhone();
-  const { signIn, isPending, error: signInError } = useSignInWithPhone();
+  const toast = useShowToast();
+  
+  const validatorPhone = useValidationPhone();
+  
+  const signIn = useSignInWithPhone({
+    onSuccess: setNextStep,
+    onError: toast.showSignInPhoneError,
+  });
 
   const handlePhoneNumberSubmit = async () => {
-
-    if (!phoneIsValid) {
-      showValidPhoneError(validError);
+    if (!validatorPhone.isValid) {
+      toast.showValidPhoneError(validatorPhone.error);
       return;
     }
-
-    try {
-      await signIn(formatPhone(phone));
-      setNextStep("verify code entry");
-    } catch {
-      showSignInPhoneError(signInError);
-    }
+    await signIn.handle(formatPhone(phone));
   };
 
-  if (isPending) {
-    return <FullPageSpinner />;
+  if (signIn.isPending) {
+    return <FullPageLoader />;
   }
 
   return (
@@ -55,6 +53,7 @@ export default function PhoneNumberEntry({
         </div>
         <div className="flex flex-col items-center gap-5">
           <PhoneInput
+            data-testId={"phone-input"}
             inputProps={{
               name: "phone",
               autoFocus: true,
@@ -65,7 +64,7 @@ export default function PhoneNumberEntry({
             value={phone}
             onChange={(value) => setPhone(value)}
             isValid={(inputNumber, country) => {
-              return handleValidPhoneNumber(inputNumber, country);
+              return validatorPhone.handle(inputNumber, country);
             }}
             containerStyle={{
               backgroundColor: "transparent",
