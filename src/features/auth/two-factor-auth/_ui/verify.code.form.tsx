@@ -1,29 +1,27 @@
 import { useState } from "react";
 // ui
-import { Button } from "@/shared/ui/button.tsx";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/ui/input-otp";
 import { FullPageLoader } from "@/shared/ui/full-page-loader.tsx";
 // hooks
 import { useConfirmationCode } from "../hooks/use.confirmatio.code.ts";
 import { useShowToast } from "../hooks/use.show.toast.ts";
 import { MAX_LENGTH_OTP } from "../_constant/index.ts";
+import { AuthButton } from "./auth.button.tsx";
 
-export default function VerifyCodeEntry() {
-  
+export default function VerifyCodeForm() {
   const [otp, setOtp] = useState("");
-
+console.log(otp)
   const toast = useShowToast();
 
-  const confirm = useConfirmationCode({
-    onError: toast.showVerifyCodeError
-  });
+  const confirm = useConfirmationCode();
 
-  const handleChangeOtp = (value: string) => {
-    setOtp(value);
-  };
-
-  const handleConfirmationSubmit = async (otp: string) => {
+  const handleOtpSubmit = async (otp: string) => {
+    
     await confirm.handle(otp);
+
+    if(confirm.isError) {
+      return toast.showVerifyCodeError(confirm.errorMessage)
+    }
   };
 
   if (confirm.isPending) {
@@ -33,14 +31,14 @@ export default function VerifyCodeEntry() {
   return (
     <div className="w-full h-full flex flex-col items-center gap-10 justify-center">
       <div className="flex flex-col items-center gap-2">
-        <h2 className=" font-thin text-lg text-gray-400">
+        <h2 className=" text-lg text-white font-bold">
           Введите код подтверждения:
         </h2>
       </div>
       <div className="flex flex-col items-center gap-8">
         <InputOTP
           value={otp}
-          onChange={handleChangeOtp}
+          onChange={setOtp}
           maxLength={MAX_LENGTH_OTP}
         >
           <InputOTPGroup>
@@ -49,13 +47,11 @@ export default function VerifyCodeEntry() {
             ))}
           </InputOTPGroup>
         </InputOTP>
-        <Button
+        <AuthButton
+          text="Подтвердить"
           disabled={otp.length < MAX_LENGTH_OTP}
-          onClick={() => handleConfirmationSubmit(otp)}
-          className="bg-emerald-700"
-        >
-          Активировать
-        </Button>
+          onClick={() => handleOtpSubmit(otp)}
+        />
       </div>
     </div>
   );

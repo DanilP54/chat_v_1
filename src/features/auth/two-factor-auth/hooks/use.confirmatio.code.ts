@@ -1,38 +1,30 @@
 import { useState } from "react";
 import { verifyCodeUseCase } from "@/entities/session/_application/use-cases/verify.code.use.case";
-import { toast } from "@/shared/ui/use-toast";
 import { useAppSession } from "@/entities/session/_ui/session.provider";
 
-type ConfirmProps = {
-  onSuccess?: () => void;
-  onError: (message: string | null) => ReturnType<typeof toast>;
-}
-
-export const useConfirmationCode = ({
-  onSuccess,
-  onError
-}: ConfirmProps) => {
-  
+export const useConfirmationCode = () => {
   const [isPending, setIsPending] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const { changeSessionStatus } = useAppSession();
-  
-  const handle = async (otp: string) => {
-    
-    setIsPending(true);
 
+  const handle = async (otp: string) => {
     try {
+      setIsPending(true);
+      setIsError(false);
+      setErrorMessage("");
+
       await verifyCodeUseCase.exec(otp);
-      changeSessionStatus('authentication in progress')
+
+      changeSessionStatus("authentication in progress");
     } catch (err) {
-      
-      console.log(err);
-      
-      if(err instanceof Error) {
-        return onError(err.message)
+      setIsError(true);
+
+      if (err instanceof Error) {
+        return setErrorMessage(err.message);
       }
 
-      onError("An error occurred otp")
-      
+      setErrorMessage("An error occurred otp");
     } finally {
       setIsPending(false);
     }
@@ -40,6 +32,8 @@ export const useConfirmationCode = ({
 
   return {
     isPending,
+    isError,
+    errorMessage,
     handle,
   };
 };

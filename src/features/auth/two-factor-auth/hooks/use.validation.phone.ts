@@ -1,31 +1,21 @@
 import { useRef } from "react";
 
-interface ValidatePhoneError {
-  title: string;
-  message: string;
-}
-
-interface ValidationStatus {
+export interface ValidationStatus {
   isValid: boolean;
-  error: ValidatePhoneError;
+  error: string;
 }
 
 export const useValidationPhone = () => {
   
-  const validationStatus = useRef<ValidationStatus>({
+  const state = useRef<ValidationStatus>({
     isValid: false,
-    error: {
-      title: "Неверный формат номера",
-      message: "Введите номер телефона",
-    },
+    error: "",
   });
 
-  const handle = (
-    phoneNumber: string,
-    country: object,
-  ): boolean => {
+  const handle = (phoneNumber: string, country: object): boolean => {
 
     const expectedLength = country.format.replace(/[^.]/g, "").length;
+
     const isValidFormat = phoneNumber.length === expectedLength;
     const isValidDialCode = phoneNumber.startsWith(country.dialCode);
 
@@ -37,20 +27,21 @@ export const useValidationPhone = () => {
             ? "Номер телефона должен содержать правильный формат"
             : `Номер телефона должен начинаться с +${country.dialCode}`;
 
-      validationStatus.current = {
+      state.current = {
         isValid: false,
-        error: { title: "Неверный формат номера", message: errorMessage },
+        error: errorMessage,
       };
+
       return false;
     }
 
-    validationStatus.current = {
+    state.current = {
       isValid: true,
-      error: { title: "", message: "" },
+      error: "",
     };
 
     return true;
   };
 
-  return { ...validationStatus.current, handle };
+  return { handle, ...state.current };
 };

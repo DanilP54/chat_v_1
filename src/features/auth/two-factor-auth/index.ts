@@ -1,3 +1,3 @@
-import TwoFactorAuthPage from "./two.factor.auth";
+import TwoFactorAuth from "./two.factor.auth";
 
-export { TwoFactorAuthPage };
+export { TwoFactorAuth as TwoFactorAuthPage };

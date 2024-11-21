@@ -1,19 +1,13 @@
 import { useToast } from "@/shared/ui/use-toast";
 
-
-interface ValidatePhoneError {
-  title: string;
-  message: string;
-}
-
 export function useShowToast() {
   const { toast } = useToast();
 
-  const showValidPhoneError = (error: ValidatePhoneError) => {
+  const showValidPhoneError = (message: string) => {
     return toast({
       variant: "destructive",
-      title: error.title,
-      description: error.message,
+      title: "Невалидный номер телефона",
+      description: message,
     });
   };
 
