@@ -1,24 +1,19 @@
 import React, { SetStateAction, useState } from "react";
-// ui
 import { FullPageLoader } from "@/shared/ui/full-page-loader.tsx";
-// lib
 import "react-phone-input-2/lib/bootstrap.css";
 import PhoneInput from "react-phone-input-2";
-// hooks
 import { useValidationPhone } from "../hooks/use.validation.phone.ts";
 import { useSignInWithPhone } from "../hooks/use.sign.in.with.phone.ts";
 import { useShowToast } from "../hooks/use.show.toast.ts";
-// helpers
 import { formatPhone } from "../helpers/format.phone.ts";
-// type
 import type { TwoFAState } from "../types.ts";
-import { AuthButton } from "./auth.button.tsx";
+import { AuthSubmitButton } from "./auth.button.tsx";
 
-export default function PhoneNumberForm({
-  setNextStep,
-}: {
+type ComponentProps = {
   setNextStep: React.Dispatch<SetStateAction<TwoFAState>>;
-}) {
+};
+
+export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
   const [phone, setPhone] = useState("");
 
   const toast = useShowToast();
@@ -40,7 +35,6 @@ export default function PhoneNumberForm({
     if (signIn.isError) {
       toast.showSignInPhoneError(signIn.errorMessage);
     }
-
   };
 
   if (signIn.isPending) {
@@ -79,10 +73,13 @@ export default function PhoneNumberForm({
               color: "white",
             }}
           />
-          <AuthButton text="Отправить" onClick={handlePhoneNumberSubmit} />
+          <AuthSubmitButton
+            text="Отправить"
+            onClick={handlePhoneNumberSubmit}
+          />
         </div>
         <div id="recaptcha_container"></div>
       </div>
     </>
   );
-}
+};

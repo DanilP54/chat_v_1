@@ -5,10 +5,10 @@ import RootLayout from "../RootLayout";
 // import { ChatDetails } from "@/pages/chat-details";
 import { CreateProfilePage } from "@/pages/create-profile";
 // import { SearchPage } from "@/pages/new-chat/ui/search.page.tsx";
-import { TwoFactorAuthPage } from "@/features/auth/two-factor-auth";
 import AuthenticationLayout from "@/pages/auth/layout";
 import { ChatRoom } from "@/pages/chat-room";
 import { HomePage } from "@/pages/home/home";
+import  AuthPage  from "@/pages/auth/page";
 
 const routers = [
   {
@@ -42,7 +42,7 @@ const routers = [
         children: [
           {
             index: true,
-            element: <TwoFactorAuthPage />,
+            element: <AuthPage />,
           },
         ],
       },

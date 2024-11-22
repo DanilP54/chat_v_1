@@ -1,26 +1,25 @@
 import { useState } from "react";
-// ui
+
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/shared/ui/input-otp";
 import { FullPageLoader } from "@/shared/ui/full-page-loader.tsx";
-// hooks
+
 import { useConfirmationCode } from "../hooks/use.confirmatio.code.ts";
 import { useShowToast } from "../hooks/use.show.toast.ts";
 import { MAX_LENGTH_OTP } from "../_constant/index.ts";
-import { AuthButton } from "./auth.button.tsx";
+import { AuthSubmitButton } from "./auth.button.tsx";
 
-export default function VerifyCodeForm() {
+export const VerifyCodeForm = () => {
   const [otp, setOtp] = useState("");
-console.log(otp)
+
   const toast = useShowToast();
 
   const confirm = useConfirmationCode();
 
   const handleOtpSubmit = async (otp: string) => {
-    
     await confirm.handle(otp);
 
-    if(confirm.isError) {
-      return toast.showVerifyCodeError(confirm.errorMessage)
+    if (confirm.isError) {
+      return toast.showVerifyCodeError(confirm.errorMessage);
     }
   };
 
@@ -36,18 +35,14 @@ console.log(otp)
         </h2>
       </div>
       <div className="flex flex-col items-center gap-8">
-        <InputOTP
-          value={otp}
-          onChange={setOtp}
-          maxLength={MAX_LENGTH_OTP}
-        >
+        <InputOTP value={otp} onChange={setOtp} maxLength={MAX_LENGTH_OTP}>
           <InputOTPGroup>
             {Array.from({ length: MAX_LENGTH_OTP }, (_, index) => (
               <InputOTPSlot key={index} index={index} />
             ))}
           </InputOTPGroup>
         </InputOTP>
-        <AuthButton
+        <AuthSubmitButton
           text="Подтвердить"
           disabled={otp.length < MAX_LENGTH_OTP}
           onClick={() => handleOtpSubmit(otp)}
@@ -55,4 +50,4 @@ console.log(otp)
       </div>
     </div>
   );
-}
+};

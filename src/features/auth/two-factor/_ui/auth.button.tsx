@@ -1,8 +1,11 @@
 import { Button } from "@/shared/ui/button";
 
 type ButtonProps = React.ComponentPropsWithoutRef<"button">;
-export const AuthButton = ({ text, ...otherProps }: {
-  text: string
+export const AuthSubmitButton = ({
+  text,
+  ...otherProps
+}: {
+  text: string;
 } & ButtonProps) => {
   return (
     <Button
