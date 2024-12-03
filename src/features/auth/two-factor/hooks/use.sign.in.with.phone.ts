@@ -3,9 +3,9 @@ import { signInWithPhoneUseCase } from "@/entities/session/_application/use-case
 import { TwoFAState } from "../types";
 
 export const useSignInWithPhone = ({
-  onSuccess,
+  next,
 }: {
-  onSuccess: Dispatch<SetStateAction<TwoFAState>>;
+  next: Dispatch<SetStateAction<TwoFAState>>;
 }) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -18,7 +18,7 @@ export const useSignInWithPhone = ({
 
       await signInWithPhoneUseCase.exec(phoneNumber);
       
-      onSuccess("verify code entry");
+      next("verify code entry");
     } catch (err) {
       
       setIsError(true);

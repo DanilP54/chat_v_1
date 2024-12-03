@@ -9,6 +9,7 @@ export function selectFile(contentType: string, multiple?: boolean) {
     const input = document.createElement("input");
 
     input.type = "file";
+    input.name = "avatar"
     input.multiple = multiple ?? false;
     input.accept = contentType;
 

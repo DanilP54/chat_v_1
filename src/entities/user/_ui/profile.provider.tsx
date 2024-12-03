@@ -53,7 +53,7 @@ export default function UserProfileProvider({
 
   useEffect(() => {
     if (isPending) return;
-
+    console.log(data)
     if (!data) {
       setStatus("not profile");
       return navigate("/create-profile");

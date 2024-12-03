@@ -6,10 +6,10 @@ export class SessionRepositoryImpl
   implements SessionRepository<ConfirmationResult, UserCredential>
 {
   async signInWithPhone(phone: string) {
-    return await authClient.phoneProvider.sendPhone(phone);
+    return await authClient.phoneProvider.signIn(phone);
   }
   async verifyCode(otp: string) {
-    return await authClient.phoneProvider.sendOtp(otp);
+    return await authClient.phoneProvider.verify(otp);
   }
 }
 

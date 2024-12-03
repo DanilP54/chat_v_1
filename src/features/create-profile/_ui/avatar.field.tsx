@@ -26,6 +26,7 @@ export default function AvatarField({
   return (
     <>
       <Button
+        data-testid="avatar-field"
         variant={"ghost"}
         onClick={handleFileSelect}
         type="button"

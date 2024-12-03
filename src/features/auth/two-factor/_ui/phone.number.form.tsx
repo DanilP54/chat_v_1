@@ -21,7 +21,7 @@ export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
   const validationPhone = useValidationPhone();
 
   const signIn = useSignInWithPhone({
-    onSuccess: setNextStep,
+    next: setNextStep,
   });
 
   const handlePhoneNumberSubmit = async () => {
@@ -54,14 +54,13 @@ export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
         </div>
         <div className="flex flex-col items-center gap-5">
           <PhoneInput
-            data-testId={"phone-input"}
             inputProps={{
               name: "phone",
               autoFocus: true,
               required: true,
             }}
             country={"ru"}
-            regions={"europe"}
+            // regions={"europe"}
             value={phone}
             onChange={setPhone}
             isValid={validationPhone.handle}
@@ -78,7 +77,7 @@ export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
             onClick={handlePhoneNumberSubmit}
           />
         </div>
-        <div id="recaptcha_container"></div>
+        <div id="recaptcha-container"></div>
       </div>
     </>
   );

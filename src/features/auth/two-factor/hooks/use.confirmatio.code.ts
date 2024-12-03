@@ -1,12 +1,15 @@
-import { useState } from "react";
 import { verifyCodeUseCase } from "@/entities/session/_application/use-cases/verify.code.use.case";
-import { useAppSession } from "@/entities/session/_ui/session.provider";
+import { SessionStatus } from "@/entities/session/_ui/session.provider";
+import { useState } from "react";
+type HookProps = {
+  next: (status: SessionStatus) => void
+}
 
-export const useConfirmationCode = () => {
+export const useConfirmationCode = ({next}: HookProps) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const { changeSessionStatus } = useAppSession();
+ 
 
   const handle = async (otp: string) => {
     try {
@@ -16,7 +19,7 @@ export const useConfirmationCode = () => {
 
       await verifyCodeUseCase.exec(otp);
 
-      changeSessionStatus("authentication in progress");
+      next("authentication in progress")
     } catch (err) {
       setIsError(true);
 

@@ -9,7 +9,7 @@ import { FullPageLoader } from "@/shared/ui/full-page-loader";
 import { useNavigate } from "react-router-dom";
 import { createId } from "@/shared/lib/id";
 
-type SessionStatus =
+export type SessionStatus =
   | "authentication in progress"
   | "unauthenticated"
   | "authenticated";

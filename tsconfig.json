@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/shared/ui/popup-menu.tsx", "test.setup.ts"],
+  "include": ["src", "src/shared/ui/popup-menu.tsx", "test.setup.ts", "tests/two.factor.auth.spec.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"
