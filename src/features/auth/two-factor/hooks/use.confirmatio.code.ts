@@ -1,42 +1,25 @@
 import { verifyCodeUseCase } from "@/entities/session/_application/use-cases/verify.code.use.case";
-import { SessionStatus } from "@/entities/session/_ui/session.provider";
-import { useState } from "react";
+import { useAppSession } from "@/entities/session/_ui/session.provider";
+import { useMutation } from "@tanstack/react-query";
+
 type HookProps = {
-  next: (status: SessionStatus) => void
+  onFailure: (error: Error) => void
 }
 
-export const useConfirmationCode = ({next}: HookProps) => {
-  const [isPending, setIsPending] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+
+
+export const useConfirmationCode = ({
+  onFailure
+}: HookProps) => {
+  
+  const { changeSessionStatus } = useAppSession();
+
+  const {isPending, mutate, isError} = useMutation({
+    mutationFn: async (otp: string) => await verifyCodeUseCase.exec(otp),
+    onSuccess: () => changeSessionStatus('authentication in progress'),
+    onError: (error: Error) => onFailure(error)
+  })
  
 
-  const handle = async (otp: string) => {
-    try {
-      setIsPending(true);
-      setIsError(false);
-      setErrorMessage("");
-
-      await verifyCodeUseCase.exec(otp);
-
-      next("authentication in progress")
-    } catch (err) {
-      setIsError(true);
-
-      if (err instanceof Error) {
-        return setErrorMessage(err.message);
-      }
-
-      setErrorMessage("An error occurred otp");
-    } finally {
-      setIsPending(false);
-    }
-  };
-
-  return {
-    isPending,
-    isError,
-    errorMessage,
-    handle,
-  };
+  return { isPending, mutate, isError};
 };

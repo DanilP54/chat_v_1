@@ -1,43 +1,57 @@
-import React, { SetStateAction, useState } from "react";
+import React from "react";
 import { FullPageLoader } from "@/shared/ui/full-page-loader.tsx";
 import "react-phone-input-2/lib/bootstrap.css";
 import PhoneInput from "react-phone-input-2";
 import { useValidationPhone } from "../hooks/use.validation.phone.ts";
 import { useSignInWithPhone } from "../hooks/use.sign.in.with.phone.ts";
-import { useShowToast } from "../hooks/use.show.toast.ts";
-import { formatPhone } from "../helpers/format.phone.ts";
 import type { TwoFAState } from "../types.ts";
 import { AuthSubmitButton } from "./auth.button.tsx";
+import { useNotfication } from "@/shared/lib/notification.ts";
 
 type ComponentProps = {
-  setNextStep: React.Dispatch<SetStateAction<TwoFAState>>;
+  setNextStep: React.Dispatch<React.SetStateAction<TwoFAState>>;
 };
 
 export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
-  const [phone, setPhone] = useState("");
+  
+  const { showNotification } = useNotfication();
 
-  const toast = useShowToast();
-
-  const validationPhone = useValidationPhone();
-
-  const signIn = useSignInWithPhone({
-    next: setNextStep,
+  const validationPhone = useValidationPhone({
+    initialPhoneValue: "",
   });
 
-  const handlePhoneNumberSubmit = async () => {
-    if (!validationPhone.isValid) {
-      toast.showValidPhoneError(validationPhone.error);
-      return;
+  const { mutate: signIn, isPending} = useSignInWithPhone({
+    onSuccess: setNextStep,
+    onFailure: (error: Error) => {
+      showNotification(
+        {
+          title: error?.message,
+        },
+        "error",
+      );
+    }
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const result = validationPhone.execute();
+
+    if (!result.isValid) {
+      return showNotification(
+        {
+          title: "Невалидный номер телефона",
+          description: result.issue,
+        },
+        "error",
+      );
     }
 
-    await signIn.handle(formatPhone(phone));
+    signIn(result.phone);
 
-    if (signIn.isError) {
-      toast.showSignInPhoneError(signIn.errorMessage);
-    }
   };
 
-  if (signIn.isPending) {
+  if (isPending) {
     return <FullPageLoader />;
   }
 
@@ -52,18 +66,18 @@ export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
             Код подтверждения будет отправлен на этот номер
           </p>
         </div>
-        <div className="flex flex-col items-center gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5">
           <PhoneInput
             inputProps={{
               name: "phone",
               autoFocus: true,
               required: true,
             }}
+            value={validationPhone.phoneValue}
+            onChange={(value, data, __, formattedValue) =>
+              validationPhone.handleOnChangePhoneInput(value, data, formattedValue)
+            }
             country={"ru"}
-            // regions={"europe"}
-            value={phone}
-            onChange={setPhone}
-            isValid={validationPhone.handle}
             containerStyle={{
               backgroundColor: "transparent",
             }}
@@ -72,11 +86,8 @@ export const PhoneNumberForm = ({ setNextStep }: ComponentProps) => {
               color: "white",
             }}
           />
-          <AuthSubmitButton
-            text="Отправить"
-            onClick={handlePhoneNumberSubmit}
-          />
-        </div>
+          <AuthSubmitButton text="Отправить" />
+        </form>
         <div id="recaptcha-container"></div>
       </div>
     </>

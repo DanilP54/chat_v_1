@@ -1,43 +1,30 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { signInWithPhoneUseCase } from "@/entities/session/_application/use-cases/sign.in.with.phone.use.case";
 import { TwoFAState } from "../types";
+import { useMutation } from "@tanstack/react-query";
 
 export const useSignInWithPhone = ({
-  next,
+  onSuccess,
+  onFailure,
 }: {
-  next: Dispatch<SetStateAction<TwoFAState>>;
+  onSuccess: Dispatch<SetStateAction<TwoFAState>>;
+  onFailure: (error: Error) => void
 }) => {
-  const [isPending, setIsPending] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const handle = async (phoneNumber: string) => {
-    try {
-      setIsPending(true);
-      setIsError(false);
-      setErrorMessage("");
 
-      await signInWithPhoneUseCase.exec(phoneNumber);
-      
-      next("verify code entry");
-    } catch (err) {
-      
-      setIsError(true);
 
-      if (err instanceof Error) {
-        return setErrorMessage(err.message);
-      }
-
-      return setErrorMessage("An error occurred sign in phone");
-    
-    } finally {  
-      setIsPending(false);
-    }
-  };
+  const { isPending, mutate } = useMutation({
+    mutationFn: async (phone: string) => {
+      return await signInWithPhoneUseCase.exec(phone);
+    },
+    onSuccess: () => {
+      onSuccess("verify code entry");
+    },
+    onError: (error: Error) => {
+      onFailure(error);
+  }});
 
   return {
     isPending,
-    isError,
-    errorMessage,
-    handle,
-  };
+    mutate,
+  }
 };

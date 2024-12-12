@@ -3,21 +3,31 @@ import { useInvalidateProfile } from "@/entities/user/_queries/get.user.profile"
 import { useUserProfile } from "@/entities/user/_ui/profile.provider";
 import { useMutation } from "@tanstack/react-query";
 
-export const useCreateProfile = () => {
+type HookComponent = {
+  onFailure: (error: Error) => void
+}
+
+export const useCreateProfile = ({
+  onFailure,
+}: HookComponent) => {
+  
   const invalidateProfile = useInvalidateProfile();
 
   const { updateProfileStatus } = useUserProfile();
 
-  const { mutateAsync, isPending } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: createProfileAction,
     onSuccess: (_, { user }) => {
       invalidateProfile(user.id);
       updateProfileStatus("checking for a profile");
     },
+    onError: (error: Error) => {
+      onFailure(error);
+    }
   });
 
   return {
-    create: mutateAsync,
+    createProfile: mutate,
     isPending,
   };
 };

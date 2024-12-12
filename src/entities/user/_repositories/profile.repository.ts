@@ -7,6 +7,7 @@ import { safe } from "@/shared/lib/safe";
 import { Result } from "@/shared/lib/result";
 
 export class ProfileRepositoryImpl implements ProfileRepository {
+  
   private readonly collection = COLLECTIONS.USERS;
   private readonly dbClient = new DbClient(profileMap);
 

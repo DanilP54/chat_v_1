@@ -11,7 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider>
         <SessionProvider>{children}</SessionProvider>
       </ThemeProvider>
-      <ReactQueryDevtools />
+      <ReactQueryDevtools position="left" buttonPosition="top-left" />
     </QueryClientProvider>
   );
 }
